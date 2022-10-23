@@ -1,0 +1,139 @@
+<resources>
+    //NameApp
+    <string name="app_name">Parce</string>
+
+    //Slider
+    <string name="Text_Tittle1">Bienvenido a PARCE, Programa Académico de Relacionamiento con Empresas</string>
+    <string name="Text_Content">Una alternativa para favorecer la relación simbiótica Universidad – Empresa, a través de una aplicación móvil.</string>
+
+    <string name="Text_Tittle2">El objetivo de PARCE es el desarrollo de competencias para afrontar de manera autónoma y confiable los retos del entorno laboral, permitiendo que los estudiantes asuman desafíos reales que probablemente enfrentarán en el ejercicio de su profesión.</string>
+
+    <string name="Text_Tittle3">PARCE está diseñado para estudiantes que se encuentran en su etapa de prácticas empresariales propiciando el desarrollo de habilidades duras y habilidades blandas para combatir el temor natural de enfrentarse a desempeños laborales quizás nunca antes experimentados.</string>
+
+    //Registro - Login
+    <string name="Text_Discover_your">¡Bienvenido a PARCE, Programa Académico de Relacionamiento con Empresas!</string>
+    //Button
+    <string name="Button_Login">Ingreso</string>
+    <string name="Button_Register">Registro</string>
+
+    //Registro
+    <string name="Text_Registration">Registro</string>
+    <string name="Text_Create_an_account_here">Crea una nueva cuenta aquí</string>
+    <string name="TextField_Role_Type">Tipo de rol</string>
+    <string name="TextField_Full_Name">Nombre Completo</string>
+    <string name="TextField_Email_address">Correo electrónico</string>
+    <string name="TextField_Password">Contraseña</string>
+    <string name="TextField_Confirm_Password">Confirmar Contraseña</string>
+    <string name="TextButton_You_accept_our_terms_of_use">Al registrarte, aceptas nuestros Términos de uso de la aplicación</string>
+    <string name="TextButton_Register">Registrarme</string>
+    <string name="Text_Already_have_an_account">¿Ya tengo una cuenta?</string>
+    <string name="TextButton_Enter">Ingresar</string>
+
+    //Ingreso
+    <string name="Text_Income">Ingreso</string>
+    <string name="Text_Welcome_back">Bienvenido de nuevo</string>
+    <string name="TextButton_Forgot_Password">Olvidé mi contraseña</string>
+    <string name="Text_Not_registered">¿No estoy registrado?</string>
+    <string name="Button_Register_me">Registrarme</string>
+    //Button
+    <string name="Button_Enter">Ingresar</string>
+
+    //Validacion de codigo de confirmacion
+    <string name="Text_Confirmation_code">Código de confirmación</string>
+    <string name="Text_Enter_the_confirmation_code_received">Ingrese el código de confirmación que ha recibido</string>
+    <string name="Text_Enter_verification_code">Introduce el código de verificación</string>
+    //TextButton
+    <string name="TextButton_Resend_code">Reenviar código</string>
+
+    //Perfil de empresa
+    <string name="Text_Company_profile">Empresa</string>
+    <string name="Text_We_need_some_data">Necesitamos algunos datos para completar la información requerida</string>
+    //TextField
+    <string name="TextField_Company_name">Razón social</string>
+    <string name="TextField_Company_type">Tipo de empresa</string>
+    <string name="TextField_Kind_company">Tipo de sociedad</string>
+    <string name="TextField_Economic_activity">Actividad económica</string>
+    <string name="TextField_Contact_person">Persona de contacto</string>
+    <string name="TextField_Department">Departamento</string>
+    <string name="TextField_Municipality">Municipio</string>
+    <string name="TextField_Address">Dirección</string>
+    <string name="TextField_Years_operation">Años de funcionamiento</string>
+
+    //Perfil de docente
+    <string name="Text_Teacher_profile">Docente</string>
+    <string name="TextField_full_name">Nombre Completo</string>
+    <string name="TextField_gender">Genero</string>
+    <string name="TextField_ethnic_group">Grupo etnico</string>
+    <string name="TextField_birthday_Teacher">Cumpleaños</string>
+    <string name="TextField_has_disability">Presenta Discapacidad</string>
+
+    //Perfil de estudiante
+    <string name="Text_Student_profile">Estudiante</string>
+    <string name="TextField_program_academic">Programa académico</string>
+
+    // Datos dos perfiles - docente / estudiante
+    //TextField
+    <string name="TextField_Profile_Full_Name">Nombre Completo</string>
+    <string name="TextField_age">Fecha de nacimiento</string>
+    <string name="TextField_gener">Genero</string>
+    <string name="TextField_group_etnical">Grupo étnico</string>
+    <string name="TextField_discapacidad">Presenta discapacidad</string>
+
+    // Datos Tres perfiles
+    //TextField
+    <string name="TextField_Email">Correo electrónico</string>
+    <string name="TextField_Identification_type">Tipo de identificación</string>
+    <string name="TextField_Id_number">*Numero de identificación</string>
+    <string name="TextField_Phone">*Teléfono</string>
+
+    //Requerimiento
+    <string name="TextField_Search_request">Buscar requerimiento</string>
+    <string name="TextField_Create_Requirement">Crear requerimiento</string>
+
+    <string name="TextField_Description_problem">Descripción del problema</string>
+    <string name="TextField_Area_intervention">Área de intervención</string>
+    <string name="TextField_causas_problems">Causas del problema</string>
+    <string name="TextField_efect_problems">Efectos del problema</string>
+    <string name="TextField_impact_problems">Impactos del problema</string>
+
+    //Intervencion
+    <string name="TextField_Type_intervention">Tipo de Intervención</string>
+
+    <string name="TextField_Document_adjunt">Archivo adjunto</string>
+    <string name="TextField_Description">Descripción</string>
+
+    //Recuperacion de contraseña
+    <string name="Text_Forgot_Your_Password">¿Has olvidado tu contraseña?</string>
+    <string name="Text_To_recover_your_password_you_need">Para recuperar su contraseña, necesita ingresar su dirección de correo electrónico registrada le enviaremos el código de recuperación a su correo electrónico.</string>
+    <string name="Text_Enter_your_email">Ingrese su dirección de correo electrónico</string>
+    <string name="Button_Send_activation_code">Enviar código de activación</string>
+
+    //Nueva contraseña
+    <string name="Text_Please_enter_your_new_password">Por favor ingrese su nueva contraseña. confírmalo para disfrutar de mucha seguridad.</string>
+    <string name="Text_Enter_new_password">Ingrese nueva clave</string>
+
+    <string name="Text_Forgot_password">Has olvidado tu contraseña</string>
+    <string name="Text_finish_data">Finaliza el formulario</string>
+    <string name="TextField_Date_create">Fecha de registro</string>
+
+    //Button
+    <string name="Button_Back">Atrás</string>
+    <string name="Button_Next">Siguiente</string>
+    <string name="Button_Siguiente">Siguiente</string>
+    <string name="Button_Lets_Start">Comencemos</string>
+    <string name="Button_Confirm_password">Confirmar contraseña</string>
+    <string name="Button_Save">Guardar</string>
+    <string name="Button_Back_to_home">Volver al inicio</string>
+
+    <!--  HomeScreen  -->
+    <string name="home_title">Characters</string>
+    <string name="previous_button">Anterior</string>
+    <string name="next_button">Siguiente</string>
+
+    //TextButton
+    <string name="TextButton_Back">Regresar</string>
+    <string name="TextButton_Skip">Omitir</string>
+
+    //OutlinedTextField
+    <string name="OutlinedTextField_X">X</string>
+</resources>

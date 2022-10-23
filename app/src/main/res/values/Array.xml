@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources >
+    <string-array name="Rol">
+        <item>Selecciona tu rol:</item>
+        <item>Estudiante</item>
+        <item>Docente</item>
+    </string-array>
+</resources>
