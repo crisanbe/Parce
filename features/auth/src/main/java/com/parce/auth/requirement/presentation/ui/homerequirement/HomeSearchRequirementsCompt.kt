@@ -47,7 +47,11 @@ fun HomeContent(nameUser: String?) {
         )
         TextField(
             value = textState.value,
-            onValueChange = { textState.value = it },
+            onValueChange = { textState.value = it
+                if (textState.value.text.isNotEmpty()) {
+                    // Perform search
+                }
+                            },
             placeholder = { Text(text = stringResource(R.string.TextField_Search_request)) },
             colors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = Color.Transparent,

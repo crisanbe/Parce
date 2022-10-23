@@ -80,7 +80,7 @@ fun HomeCompany(
         }
     }
     com.parce.components_ui.componets.alertdialog.DialogExit(
-        text = "Deseas salir de la sesión?",
+        text = "Deseas salir de la sesión ?",
         onClickYes = {
             showDialog = !showDialog
             lifecycleTokenScope.launch {
@@ -127,9 +127,6 @@ fun HomeCompany(
             isFloatingActionButtonDocked = true,
             bottomBar = {
                 HomeBottomBar(
-                    cutoutShape = MaterialTheme.shapes.small.copy(
-                        CornerSize(percent = 50)
-                    ),
                     showPrevious = state.showPrevious,
                     showNext = state.showNext,
                     onPreviousPressed = { viewModelGetRequirement.doGetRequirement(false) },
@@ -187,7 +184,7 @@ private fun RequirementsContent(
                 items(resultRequirement.size) { index ->
                     HomeRequirements(
                         resultRequirement = resultRequirement[index],
-                        onItemClicked = { onItemClicked(it)}
+                        onItemClicked = { onItemClicked(it) }
                     )
                 }
             }

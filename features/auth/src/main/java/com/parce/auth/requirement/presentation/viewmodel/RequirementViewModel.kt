@@ -34,6 +34,7 @@ class RequirementViewModel @Inject constructor(
     private val getRequirementUseCase: GetRequirementUseCase,
     private val getPaginationUseCase: GetPaginationUseCase
 ) : ViewModel() {
+
     var state = MutableStateFlow(RequirementState())
         private set
     var statePages = MutableStateFlow(GetPageState())
@@ -42,6 +43,26 @@ class RequirementViewModel @Inject constructor(
         private set
     var uiEvent = Channel<UiEvent>()
         private set
+
+    private var cachedRequirementList = GetRequirementState()
+    private var isSearchStarting = true
+    var isSearching = mutableStateOf(false)
+
+    fun searchRequirementList(query: String){
+        val listToSearch = if (isSearchStarting){
+            stateGetRequirement
+        }else{
+            cachedRequirementList
+        }
+        viewModelScope.launch(Dispatchers.Default) {
+            if (query.isEmpty()){
+                stateGetRequirement = cachedRequirementList
+                isSearching.value = false
+                isSearchStarting = true
+                return@launch
+            }
+        }
+    }
 
     private var currentPage = 1
     private var page = MutableStateFlow(0)

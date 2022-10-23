@@ -23,7 +23,6 @@ fun FloatingButtonHome(onClickFloatingButton: () -> Unit) {
     var extendedState by remember { mutableStateOf(value = true) }
     var secondsDisappear by remember { mutableStateOf(value = 2) }
     FloatingActionButton(
-        modifier = Modifier.offset(y = 35.dp),
         onClick = { onClickFloatingButton.invoke() },
         backgroundColor = Color(0xFF21120B)
     ) {
