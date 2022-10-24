@@ -52,7 +52,8 @@ fun HomeCompany(
     onItemClicked: (Int) -> Unit,
     onClickIconButton: (ScaffoldState) -> Unit,
     onClickDestination: (screen: String) -> Unit,
-    viewModelGetRequirement: RequirementViewModel = hiltViewModel()
+    viewModelGetRequirement: RequirementViewModel = hiltViewModel(),
+    resultRequirement: List<Result> = emptyList(),
 ) {
     val state = viewModelGetRequirement.stateGetRequirement
     val context = LocalContext.current
@@ -61,6 +62,7 @@ fun HomeCompany(
     var visible by remember { mutableStateOf(false) }
     val lifecycleTokenScope = rememberCoroutineScope()
     var showDialog by remember { mutableStateOf(false) }
+    var valueSearch by remember { mutableStateOf("") }
     val viemodel: ViewModelDialog = hiltViewModel()
     val systemUiController = rememberSystemUiController()
     SideEffect { systemUiController.setSystemBarsColor(color = com.parce.auth.theme.ColorLogin) }
@@ -140,7 +142,10 @@ fun HomeCompany(
                     .padding(horizontal = 20.dp)
                     .background(Color.Transparent),
             ) {
-                HomeContent(nameUser = nameUser.toString())
+                HomeSearchRequirements(
+                    nameUser = nameUser.toString(),
+                    textState = { valueSearch = it }
+                )
                 RequirementsContent(
                     isLoading = state.isLoading,
                     resultRequirement = state.getRequirement,

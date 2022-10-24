@@ -1,5 +1,6 @@
 package com.parce.auth.updateuser.presentation.ui.updateUser.student
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -50,6 +51,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun StudentProfile(
     navController: NavController,

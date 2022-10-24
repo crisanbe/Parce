@@ -41,8 +41,8 @@ data class Relations(
 data class Links(
     val first: String,
     val last: String,
-    val next: String,
-    val prev: Any
+    val next: String? = null,
+    val prev: Any? = null
 ) : Serializable
 
 data class Pagination(

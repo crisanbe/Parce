@@ -21,5 +21,4 @@ dependencies {
     implementation(Coil.coilCompose)
     implementation(Coil.coilAccompanist)
     implementation(Gson.gson)
-
 }

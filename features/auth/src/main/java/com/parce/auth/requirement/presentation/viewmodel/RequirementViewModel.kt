@@ -44,23 +44,34 @@ class RequirementViewModel @Inject constructor(
     var uiEvent = Channel<UiEvent>()
         private set
 
-    private var cachedRequirementList = GetRequirementState()
+    private var cachedRequirementList = stateGetRequirement
     private var isSearchStarting = true
     var isSearching = mutableStateOf(false)
 
-    fun searchRequirementList(query: String){
-        val listToSearch = if (isSearchStarting){
+    fun searchRequirementList(query: String) {
+        val listToSearch = if (isSearchStarting) {
             stateGetRequirement
-        }else{
+        } else {
             cachedRequirementList
         }
         viewModelScope.launch(Dispatchers.Default) {
-            if (query.isEmpty()){
+            if (query.isEmpty()) {
                 stateGetRequirement = cachedRequirementList
                 isSearching.value = false
                 isSearchStarting = true
                 return@launch
             }
+            val results = listToSearch.getRequirement.filter {
+                it.description.contains(query.trim(), ignoreCase = true) ||
+                        it.id.toString() == query.trim()
+            }
+            if (isSearchStarting) {
+                cachedRequirementList = stateGetRequirement
+                isSearchStarting = false
+            }
+            stateGetRequirement = GetRequirementState(getRequirement = results)
+            isSearching.value = true
+
         }
     }
 
@@ -126,10 +137,11 @@ class RequirementViewModel @Inject constructor(
                                 page.value = last_pages
                                 page.update { last_pages }
                                 stateGetRequirement = stateGetRequirement.copy(
-                                    getRequirement = result.data ?: emptyList(),
+                                    getRequirement = result.data?.data?.result ?: emptyList(),
                                     isLoading = false,
                                     showPrevious = showPrevious,
-                                    showNext = showNext < last_pages + 1,
+                                    showNext = showNext < (result.data?.data?.pagination?.last_page
+                                        ?: 1)
                                 )
                             }
                         }
@@ -158,10 +170,10 @@ class RequirementViewModel @Inject constructor(
         viewModelScope.launch {
             getPaginationUseCase(
                 token = token.toString(),
-            ).onEach { result ->
-                when (result) {
+            ).onEach { resultPage ->
+                when (resultPage) {
                     is Resource.Success -> {
-                        statePages.update { GetPageState(pagination = result.data) }
+                        statePages.update { GetPageState(pagination = resultPage.data) }
                     }
                     is Resource.Error -> {
                         stateGetRequirement = stateGetRequirement.copy(isLoading = false)

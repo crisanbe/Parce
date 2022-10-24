@@ -1,6 +1,7 @@
 package com.parce.auth.requirement.domain.repository
 
 import com.parce.auth.requirement.domain.model.RequirementReply
+import com.parce.auth.requirement.domain.model.getrequirement.GetRequirement
 import com.parce.auth.requirement.domain.model.getrequirement.Pagination
 import com.parce.auth.requirement.domain.model.getrequirement.Result
 import com.parce.shared.network.Resource
@@ -12,9 +13,10 @@ interface GetRequirementRepository {
     fun doGetRequirement(
         token: String,
         current_page: Int,
-    ): Flow<Resource<List<Result>>>
+    ): Flow<Resource<GetRequirement>>
 
     fun doGetPagination(
         token: String
     ): Flow<Resource<Pagination>>
+
 }

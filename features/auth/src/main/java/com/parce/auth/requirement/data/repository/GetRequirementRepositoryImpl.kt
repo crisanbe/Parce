@@ -34,11 +34,11 @@ class GetRequirementRepositoryImpl @Inject constructor(
     override fun doGetRequirement(
         token: String,
         current_page : Int
-    ): Flow<Resource<List<Result>>> = flow {
+    ): Flow<Resource<GetRequirement>> = flow {
         emit(Resource.Loading())
         try {
             val response = api.doGetRequirementApi(
-                token = token, current_page =current_page).toGetRequirements()
+                token = token, current_page =current_page).toGetRequirement()
             emit(Resource.Success(response))
         } catch (e: HttpException) {
             emit(
