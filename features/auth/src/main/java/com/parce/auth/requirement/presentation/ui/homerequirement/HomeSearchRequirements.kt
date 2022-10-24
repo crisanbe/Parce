@@ -16,8 +16,13 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.parce.auth.requirement.presentation.viewmodel.RequirementViewModel
 
@@ -28,8 +33,18 @@ fun HomeSearchRequirements(
     viewModelGetRequirement: RequirementViewModel = hiltViewModel(),
 ) {
     Surface(color = MaterialTheme.colors.background) {
-        Column() {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                text = "Hola, $nameUser",
+                fontFamily = FontFamily.Serif,
+                textAlign = TextAlign.Center,
+                style = TextStyle(
+                    color = colorResource(id = com.parce.components_ui.R.color.primary)
+                ),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.ExtraBold,
+            )
             SearchBar(
                 hint = "Search...",
                 modifier = Modifier
@@ -70,7 +85,7 @@ fun SearchBar(
                 .background(Color.White, CircleShape)
                 .padding(horizontal = 20.dp, vertical = 12.dp)
                 .onFocusChanged {
-                    isHintDisplayed = it.isFocused != it.isFocused && text.isNotEmpty()
+                    isHintDisplayed = (!it.isFocused) && text.isNotEmpty()
                 }
         )
         IconButton(onClick = { }) {
@@ -78,7 +93,7 @@ fun SearchBar(
                 imageVector = Icons.Outlined.Search,
                 contentDescription = null,
                 modifier = Modifier
-                    .offset(x = 263.dp, y = (-2).dp)
+                    .offset(x = 266.dp, y = (-2).dp)
                     .size(44.dp)
                     .clip(RoundedCornerShape(22.dp))
                     .background(Color(0xFF21120B))

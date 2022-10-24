@@ -1,9 +1,9 @@
 package com.parce.auth.requirement.data.remote.requirement
 
 import com.google.gson.annotations.SerializedName
-import com.parce.auth.requirement.domain.model.RequirementReply
-import com.parce.auth.requirement.domain.model.RequirementAnswer
-import com.parce.auth.requirement.domain.model.UserAnswer
+import com.parce.auth.requirement.domain.model.requirement.RequirementReply
+import com.parce.auth.requirement.domain.model.requirement.RequirementAnswer
+import com.parce.auth.requirement.domain.model.requirement.UserAnswer
 import java.io.Serializable
 
 data class RequirementResponse(

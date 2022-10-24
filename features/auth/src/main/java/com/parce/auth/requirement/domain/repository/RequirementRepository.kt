@@ -1,10 +1,9 @@
 package com.parce.auth.requirement.domain.repository
 
-import com.parce.auth.requirement.domain.model.RequirementReply
+import com.parce.auth.requirement.domain.model.requirement.RequirementReply
 import com.parce.shared.network.Resource
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
-import java.io.File
 
 interface RequirementRepository {
      fun doRequirement(

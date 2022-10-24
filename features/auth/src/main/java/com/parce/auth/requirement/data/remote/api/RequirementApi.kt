@@ -1,5 +1,6 @@
 package com.parce.auth.requirement.data.remote.api
 
+import com.parce.auth.requirement.data.remote.getdetailrequirement.GetDetailResponse
 import com.parce.auth.requirement.data.remote.getrequirement.GetRequirementResponse
 import com.parce.auth.requirement.data.remote.requirement.RequirementResponse
 import okhttp3.MultipartBody
@@ -24,5 +25,11 @@ interface RequirementApi {
         @Header("Authorization") token: String,
         @Query("page") current_page: Int? = null
     ): GetRequirementResponse
+
+    @GET("requierements/")
+    suspend fun doGetDetailRequirementApi(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int? = null
+    ): GetDetailResponse
 
 }

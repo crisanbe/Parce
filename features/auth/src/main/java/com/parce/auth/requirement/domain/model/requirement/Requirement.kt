@@ -1,5 +1,6 @@
-package com.parce.auth.requirement.domain.model
+package com.parce.auth.requirement.domain.model.requirement
 
+import com.parce.auth.requirement.domain.model.requirement.UserAnswer
 import java.io.Serializable
 
 data class RequirementAnswer(

@@ -1,8 +1,5 @@
 package com.parce.auth.requirement.presentation.state
 
-import com.parce.auth.requirement.domain.model.RequirementReply
-import com.parce.auth.requirement.domain.model.getrequirement.GetRequirement
-import com.parce.auth.requirement.domain.model.getrequirement.Pagination
 import com.parce.auth.requirement.domain.model.getrequirement.Result
 
 data class GetRequirementState(

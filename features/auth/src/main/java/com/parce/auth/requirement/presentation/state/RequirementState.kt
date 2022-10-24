@@ -1,8 +1,6 @@
 package com.parce.auth.requirement.presentation.state
 
-import com.parce.auth.requirement.domain.model.RequirementReply
-import com.parce.auth.requirement.domain.model.getrequirement.GetRequirement
-import com.parce.auth.requirement.domain.model.getrequirement.Result
+import com.parce.auth.requirement.domain.model.requirement.RequirementReply
 
 data class RequirementState(
     val isLoading: Boolean = false,

@@ -1,4 +1,4 @@
-package com.parce.auth.requirement.domain.model
+package com.parce.auth.requirement.domain.model.requirement
 
 import java.io.Serializable
 

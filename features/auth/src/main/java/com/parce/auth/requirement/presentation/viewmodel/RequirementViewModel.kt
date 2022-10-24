@@ -1,6 +1,6 @@
 package com.parce.auth.requirement.presentation.viewmodel
 
-import android.provider.Telephony.Mms.Part
+import com.parce.auth.requirement.domain.model.getrequirement.Result
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -56,7 +56,7 @@ class RequirementViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.Default) {
             if (query.isEmpty()) {
-                stateGetRequirement = cachedRequirementList
+                stateGetRequirement = stateGetRequirement
                 isSearching.value = false
                 isSearchStarting = true
                 return@launch
@@ -71,7 +71,6 @@ class RequirementViewModel @Inject constructor(
             }
             stateGetRequirement = GetRequirementState(getRequirement = results)
             isSearching.value = true
-
         }
     }
 

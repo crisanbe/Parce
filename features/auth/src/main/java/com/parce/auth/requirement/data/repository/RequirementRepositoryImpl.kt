@@ -1,26 +1,18 @@
 package com.parce.auth.requirement.data.repository
 
-import android.content.Context
-import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.parce.auth.requirement.data.remote.api.RequirementApi
 import com.parce.auth.requirement.data.remote.requirement.toRequirementResponse
-import com.parce.auth.requirement.domain.model.RequirementReply
+import com.parce.auth.requirement.domain.model.requirement.RequirementReply
 import com.parce.auth.requirement.domain.repository.RequirementRepository
 import com.parce.auth.requirement.presentation.state.RequirementState
 import com.parce.shared.network.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
-import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 

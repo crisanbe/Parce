@@ -1,28 +1,17 @@
 package com.parce.auth.requirement.data.repository
 
 import com.google.gson.Gson
-import com.parce.auth.login.presentation.viewmodel.LoginState
 import com.parce.auth.requirement.data.remote.api.RequirementApi
 import com.parce.auth.requirement.data.remote.getrequirement.toGetPagination
 import com.parce.auth.requirement.data.remote.getrequirement.toGetRequirement
-import com.parce.auth.requirement.data.remote.getrequirement.toGetRequirements
-import com.parce.auth.requirement.data.remote.requirement.toRequirementResponse
-import com.parce.auth.requirement.domain.model.RequirementReply
 import com.parce.auth.requirement.domain.model.getrequirement.GetRequirement
 import com.parce.auth.requirement.domain.model.getrequirement.Pagination
-import com.parce.auth.requirement.domain.model.getrequirement.Result
 import com.parce.auth.requirement.domain.repository.GetRequirementRepository
-import com.parce.auth.requirement.domain.repository.RequirementRepository
 import com.parce.auth.requirement.presentation.state.GetPageState
-import com.parce.auth.requirement.presentation.state.GetRequirementState
-import com.parce.auth.requirement.presentation.state.RequirementState
 import com.parce.shared.network.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
-import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 

@@ -53,7 +53,7 @@ fun HomeCompany(
     onClickIconButton: (ScaffoldState) -> Unit,
     onClickDestination: (screen: String) -> Unit,
     viewModelGetRequirement: RequirementViewModel = hiltViewModel(),
-    resultRequirement: List<Result> = emptyList(),
+    resultRequirement: Result? = null,
 ) {
     val state = viewModelGetRequirement.stateGetRequirement
     val context = LocalContext.current
@@ -139,7 +139,7 @@ fun HomeCompany(
             Column(
                 modifier = Modifier
                     .padding(PaddingValues)
-                    .padding(horizontal = 20.dp)
+                    .padding(horizontal = 18.dp)
                     .background(Color.Transparent),
             ) {
                 HomeSearchRequirements(
@@ -171,7 +171,7 @@ private fun RequirementsContent(
         color = MaterialTheme.colors.surface
     ) {
         LazyColumn(
-            contentPadding = PaddingValues(vertical = 1.dp, horizontal = 1.dp),
+            contentPadding = PaddingValues(horizontal = 1.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             content = {
                 item {
@@ -182,8 +182,8 @@ private fun RequirementsContent(
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(40.dp)
-                            .padding(vertical = 8.dp)
+                            .height(25.dp)
+                            .padding(vertical = 1.dp)
                     )
                 }
                 items(resultRequirement.size) { index ->
