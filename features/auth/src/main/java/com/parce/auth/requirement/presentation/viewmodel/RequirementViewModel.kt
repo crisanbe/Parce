@@ -9,9 +9,11 @@ import androidx.lifecycle.viewModelScope
 import com.parce.auth.login.presentation.components.logincomposables.userRepo
 import com.parce.auth.requirement.data.remote.requirement.RequirementRequest
 import com.parce.auth.requirement.di.HeaderRequirement
+import com.parce.auth.requirement.domain.usecase.DetailRequirementUseCase
 import com.parce.auth.requirement.domain.usecase.GetPaginationUseCase
 import com.parce.auth.requirement.domain.usecase.GetRequirementUseCase
 import com.parce.auth.requirement.domain.usecase.RequirementUseCase
+import com.parce.auth.requirement.presentation.state.DetailRequirementState
 import com.parce.auth.requirement.presentation.state.GetPageState
 import com.parce.auth.requirement.presentation.state.GetRequirementState
 import com.parce.auth.requirement.presentation.state.RequirementState
@@ -32,9 +34,11 @@ import javax.inject.Inject
 class RequirementViewModel @Inject constructor(
     private val requirementUseCase: RequirementUseCase,
     private val getRequirementUseCase: GetRequirementUseCase,
-    private val getPaginationUseCase: GetPaginationUseCase
+    private val getPaginationUseCase: GetPaginationUseCase,
+    private val getDetailRequirementUseCase: DetailRequirementUseCase
 ) : ViewModel() {
 
+    private var stateSearch = MutableStateFlow(DetailRequirementState())
     var state = MutableStateFlow(RequirementState())
         private set
     var statePages = MutableStateFlow(GetPageState())
@@ -44,33 +48,40 @@ class RequirementViewModel @Inject constructor(
     var uiEvent = Channel<UiEvent>()
         private set
 
-    private var cachedRequirementList = stateGetRequirement
-    private var isSearchStarting = true
-    var isSearching = mutableStateOf(false)
+    var query = mutableStateOf("")
 
-    fun searchRequirementList(query: String) {
-        val listToSearch = if (isSearchStarting) {
-            stateGetRequirement
-        } else {
-            cachedRequirementList
-        }
-        viewModelScope.launch(Dispatchers.Default) {
-            if (query.isEmpty()) {
-                stateGetRequirement = stateGetRequirement
-                isSearching.value = false
-                isSearchStarting = true
-                return@launch
+    fun onQueryChanged(query: String) {
+        setQuery(query)
+    }
+    private fun setQuery(query: String){
+        this.query.value = query
+    }
+
+    init {
+        doGetRequirement(increase = false)
+        doGetPagination()
+    }
+
+    fun searchRequirement(query: Int) {
+        val token = UpdateUserHeaders.getHeader()["Authorization"]
+        viewModelScope.launch {
+            getDetailRequirementUseCase(
+                token = token.toString(),
+                id = query
+            ).also { query->
+                when (query) {
+                    is Resource.Success -> {
+                        stateSearch.update { DetailRequirementState(detailRequirement = query.data) }
+                    }
+                    is Resource.Error -> {
+                        stateSearch.emit(DetailRequirementState(false))
+                    }
+                    is Resource.Loading -> {
+                        stateSearch.emit(DetailRequirementState(true))
+                    }
+                    else -> Unit
+                }
             }
-            val results = listToSearch.getRequirement.filter {
-                it.description.contains(query.trim(), ignoreCase = true) ||
-                        it.id.toString() == query.trim()
-            }
-            if (isSearchStarting) {
-                cachedRequirementList = stateGetRequirement
-                isSearchStarting = false
-            }
-            stateGetRequirement = GetRequirementState(getRequirement = results)
-            isSearching.value = true
         }
     }
 
@@ -114,20 +125,16 @@ class RequirementViewModel @Inject constructor(
         }
     }
 
-    init {
-        doGetRequirement(increase = false)
-        doGetPagination()
-    }
-
-    fun doGetRequirement(increase: Boolean) {
+    fun doGetRequirement(increase: Boolean? = null, query: String? = null) {
         val token = HeaderRequirement.getHeader()["Authorization"]
         viewModelScope.launch {
-            if (increase) currentPage++ else if (currentPage > 1) currentPage--
+            if (increase == true) currentPage++ else if (currentPage > 1) currentPage--
             val showPrevious = currentPage > 1
             val showNext = currentPage
             getRequirementUseCase(
                 token = token.toString(),
                 current_page = currentPage,
+                id = query
             ).onEach { result ->
                 when (result) {
                     is Resource.Success -> {

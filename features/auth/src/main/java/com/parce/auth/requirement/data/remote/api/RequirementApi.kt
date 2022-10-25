@@ -23,13 +23,14 @@ interface RequirementApi {
     @GET("requierements/")
     suspend fun doGetRequirementApi(
         @Header("Authorization") token: String,
+        @Query("id") id: String? = null,
         @Query("page") current_page: Int? = null
     ): GetRequirementResponse
 
-    @GET("requierements/")
+    @GET("requierements/{id}")
     suspend fun doGetDetailRequirementApi(
         @Header("Authorization") token: String,
-        @Path("id") id: Int? = null
+        @Path("id") id: Int
     ): GetDetailResponse
 
 }

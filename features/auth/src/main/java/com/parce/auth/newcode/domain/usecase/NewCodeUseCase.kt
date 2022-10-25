@@ -3,7 +3,6 @@ package com.parce.auth.newcode.domain.usecase
 import com.parce.auth.newcode.data.remote.dto.ReturnNewCodeDto
 import com.parce.auth.newcode.domain.repository.NewCodeRepository
 import com.parce.shared.network.Resource
-import dagger.hilt.android.scopes.ActivityScoped
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

@@ -21,6 +21,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -41,6 +42,7 @@ import com.parce.auth.profileUser.presentation.ui.ProfileCompany
 import com.parce.auth.register.presentation.ui.RegisterScreen
 import com.parce.auth.requirement.presentation.ui.homerequirement.ExitAlert
 import com.parce.auth.requirement.presentation.ui.homerequirement.RequirementScreen
+import com.parce.auth.requirement.presentation.ui.search.DetailScreen
 import com.parce.parce.ui.permission.PermissionScreen
 import com.parce.auth.sendemailforgotmypassword.presentation.components.resendnewcode.SendEmailForgotPasswordView
 import com.parce.auth.updateuser.presentation.ui.updateUser.company.CompanyRegistrationPageView
@@ -124,7 +126,24 @@ fun HolderScreen(onStatusBarColorChange: (color: Color) -> Unit) {
                     scaffoldState.drawerState.close()
                 }
             },
-            onItemClicked = {}
+            navigateToHome = {
+                controller.navigate(DrawerScreens.CompanyHome.route) {
+                    popUpTo(controller.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            },
+            navigateToDetail = { id: Int ->
+                controller.navigate(AppScreens.DetailScreen.passId(id)) {
+                    popUpTo(controller.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                }
+
+            }
         )
     }
 }
@@ -140,7 +159,8 @@ fun ScaffoldSection(
     controller: NavHostController,
     scaffoldState: ScaffoldState,
     onStatusBarColorChange: (color: Color) -> Unit,
-    onItemClicked: (Int) -> Unit,
+    navigateToHome: () -> Unit,
+    navigateToDetail: (Int) -> Unit,
     onClickIconButton: (ScaffoldState) -> Unit,
     onClickDestination: (screen: String) -> Unit
 ) {
@@ -176,7 +196,7 @@ fun ScaffoldSection(
                 }
                 composable(route = AppScreens.PermissionScreen.route) {
                     onStatusBarColorChange(MaterialTheme.colors.background)
-                    PermissionScreen(permissionsStates = permissionsState,controller)
+                    PermissionScreen(permissionsStates = permissionsState, controller)
                 }
                 composable(
                     route = AppScreens.LoginScreen.route + "?email={email}",
@@ -558,6 +578,15 @@ fun ScaffoldSection(
                         RequirementScreen(controller)
                     }
                 }
+                composable(
+                    route = AppScreens.DetailScreen.route,
+                    arguments = listOf(
+                        navArgument("id") { type = NavType.IntType }
+                    )
+                ) {
+                        onStatusBarColorChange(MaterialTheme.colors.background)
+                        DetailScreen(upPress = navigateToHome)
+                }
                 composable(route = AppScreens.TeacherProfile.route) {
                     EnterAnimation {
                         onStatusBarColorChange(MaterialTheme.colors.background)
@@ -591,7 +620,7 @@ fun ScaffoldSection(
                         onClickDestination = {
                             onClickDestination(it)
                         },
-                        onItemClicked = {}
+                        onItemClicked = { DetailIt -> navigateToDetail(DetailIt) }
                     )
                 }
                 composable(

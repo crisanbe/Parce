@@ -52,8 +52,7 @@ fun HomeCompany(
     onItemClicked: (Int) -> Unit,
     onClickIconButton: (ScaffoldState) -> Unit,
     onClickDestination: (screen: String) -> Unit,
-    viewModelGetRequirement: RequirementViewModel = hiltViewModel(),
-    resultRequirement: Result? = null,
+    viewModelGetRequirement: RequirementViewModel = hiltViewModel()
 ) {
     val state = viewModelGetRequirement.stateGetRequirement
     val context = LocalContext.current
@@ -65,6 +64,7 @@ fun HomeCompany(
     var valueSearch by remember { mutableStateOf("") }
     val viemodel: ViewModelDialog = hiltViewModel()
     val systemUiController = rememberSystemUiController()
+    val query = viewModelGetRequirement.query.value
     SideEffect { systemUiController.setSystemBarsColor(color = com.parce.auth.theme.ColorLogin) }
 
     BackHandler(true) { viemodel.showDialog() }
@@ -139,12 +139,15 @@ fun HomeCompany(
             Column(
                 modifier = Modifier
                     .padding(PaddingValues)
-                    .padding(horizontal = 18.dp)
+                    .padding(horizontal = 20.dp)
                     .background(Color.Transparent),
             ) {
-                HomeSearchRequirements(
+                SearchBar(
                     nameUser = nameUser.toString(),
-                    textState = { valueSearch = it }
+                    query = query,
+                    onSearch = {
+                        viewModelGetRequirement.doGetRequirement(null,it)
+                    }
                 )
                 RequirementsContent(
                     isLoading = state.isLoading,

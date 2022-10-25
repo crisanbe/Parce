@@ -15,19 +15,17 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-class GetRequirementRepositoryImpl @Inject constructor(
-    private val api: RequirementApi
-) :
+class GetRequirementRepositoryImpl @Inject constructor(private val api: RequirementApi) :
     GetRequirementRepository {
-
     override fun doGetRequirement(
         token: String,
-        current_page : Int
+        current_page : Int,
+        id : String?
     ): Flow<Resource<GetRequirement>> = flow {
         emit(Resource.Loading())
         try {
             val response = api.doGetRequirementApi(
-                token = token, current_page =current_page).toGetRequirement()
+                token = token, current_page =current_page, id = id).toGetRequirement()
             emit(Resource.Success(response))
         } catch (e: HttpException) {
             emit(
@@ -78,64 +76,3 @@ class GetRequirementRepositoryImpl @Inject constructor(
         }
     }
 }
-
-
-/*    RequirementRepository {
-    override suspend fun doRequirement(
-        token: String,
-        area_intervention: Int,
-        description: String,
-        cause_problem: String,
-        efect_problem: String,
-        impact_problem: String,
-        file: MultipartBody.Part
-    ): RequirementResponse {
-        return api.doRequirementApi(
-            token = token,
-            area_intervention = area_intervention,
-            description = description,
-            cause_problem = cause_problem,
-            efect_problem = efect_problem,
-            impact_problem = impact_problem,
-            document = file
-        )
-    }
-}*/
-
-/*
- class RequirementRepositoryImpl {
-
-    suspend fun requeriment(
-        token: String,
-        area_intervention: Int,
-        description: String,
-        cause_problem: String,
-        efect_problem: String,
-        impact_problem: String,
-        file: File
-    ): Boolean {
-        return try {
-            RequirementApi.instance.doRequirementApi(
-                token = token,
-                area_intervention = area_intervention,
-                description = description,
-                cause_problem = cause_problem,
-                efect_problem = efect_problem,
-                impact_problem = impact_problem,
-                document = MultipartBody.Part
-                    .createFormData(
-                        "document",
-                        file.name,
-                        file.asRequestBody()
-                    )
-            )
-            true
-        } catch (e: IOException) {
-            e.printStackTrace()
-            false
-        } catch (e: HttpException) {
-            e.printStackTrace()
-            false
-        }
-    }
-}*/

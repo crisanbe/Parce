@@ -9,6 +9,7 @@ interface GetRequirementRepository {
     fun doGetRequirement(
         token: String,
         current_page: Int,
+        id : String? = null
     ): Flow<Resource<GetRequirement>>
 
     fun doGetPagination(

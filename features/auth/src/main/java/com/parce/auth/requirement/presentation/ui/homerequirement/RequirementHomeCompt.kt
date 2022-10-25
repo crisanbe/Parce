@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -122,6 +123,13 @@ fun HomeRequirements(
                 Column(
                     modifier = modifier.fillMaxWidth()
                 ) {
+                    Text(
+                        text = resultRequirement.id.toString(),
+                        textAlign = TextAlign.End,
+                        fontSize = 16.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
                     Text(
                         text = resultRequirement.areaintervention.name,
                         fontSize = 16.sp,

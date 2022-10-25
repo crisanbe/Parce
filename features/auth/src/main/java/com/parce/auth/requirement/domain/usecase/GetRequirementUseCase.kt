@@ -12,11 +12,13 @@ class GetRequirementUseCase @Inject constructor(
 ) {
     operator fun invoke(
         token: String,
-        current_page: Int
+        current_page: Int,
+        id: String? = null
     ): Flow<Resource<GetRequirement>> {
         return repository.doGetRequirement(
             token = token,
-            current_page = current_page
+            current_page = current_page,
+            id = id
         )
     }
 }

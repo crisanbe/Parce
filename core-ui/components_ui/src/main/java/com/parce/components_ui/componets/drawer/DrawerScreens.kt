@@ -27,6 +27,11 @@ sealed class AppScreens(val route: String) {
     object UpdateStudentView : AppScreens(route = "UpdateStudentView")
     object RequirementScreen : AppScreens(route = "RequirementScreen")
     object PermissionScreen  : AppScreens(route = "PermissionScreen")
+    object DetailScreen  : AppScreens(route = "DetailScreen?id={id}"){
+        fun passId(id: Int): String {
+            return "detail?id=$id"
+        }
+    }
     object ExitAlert : AppScreens(route = "ExitAlert")
 }
 
