@@ -105,7 +105,9 @@ fun HomeRequirements(
     ) {
         Row(
             modifier = modifier
-                .clickable(onClick = { mToast(context, resultRequirement.id.toString()) })
+                .clickable(onClick = {
+                    mToast(context, resultRequirement.id.toString())
+                })
                 .clip(RoundedCornerShape(20.dp))
                 .background(Color(0xFFF5F5F5))
                 .fillMaxWidth()
@@ -146,7 +148,7 @@ fun HomeRequirements(
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {  onItemClicked(resultRequirement.id) },
                     colors = ButtonDefaults.buttonColors(Color(0xFF21120B)),
                     shape = RoundedCornerShape(50.dp),
                     modifier = Modifier

@@ -11,8 +11,6 @@ import com.parce.auth.requirement.presentation.state.DetailRequirementState
 import com.parce.auth.updateuser.di.UpdateUserHeaders
 import com.parce.shared.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,7 +27,7 @@ class DetailRequirementViewModel @Inject constructor(
         detailRequirement()
     }
 
-    private fun detailRequirement() {
+    fun detailRequirement() {
         val token = UpdateUserHeaders.getHeader()["Authorization"]
         savedStateHandle.get<Int>("id")?.let { characterId ->
             viewModelScope.launch {

@@ -92,7 +92,7 @@ fun SearchBar(
                         imageVector = Icons.Outlined.Search,
                         contentDescription = null,
                         modifier = Modifier
-                            .offset(x = 266.dp, y = (-2).dp)
+                            .offset(x = 302.dp, y = (-2).dp)
                             .size(44.dp)
                             .clip(RoundedCornerShape(22.dp))
                             .background(Color(0xFF21120B))

@@ -28,6 +28,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.parce.auth.login.presentation.components.logincomposables.userRepo
 import com.parce.auth.requirement.domain.model.getrequirement.Result
 import com.parce.auth.requirement.presentation.ui.homerequirement.*
+import com.parce.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
 import com.parce.auth.requirement.presentation.viewmodel.RequirementViewModel
 import com.parce.components_ui.componets.*
 import com.parce.components_ui.componets.alertdialog.ViewModelDialog
@@ -52,7 +53,8 @@ fun HomeCompany(
     onItemClicked: (Int) -> Unit,
     onClickIconButton: (ScaffoldState) -> Unit,
     onClickDestination: (screen: String) -> Unit,
-    viewModelGetRequirement: RequirementViewModel = hiltViewModel()
+    viewModelGetRequirement: RequirementViewModel = hiltViewModel(),
+    viewModel: DetailRequirementViewModel = hiltViewModel(),
 ) {
     val state = viewModelGetRequirement.stateGetRequirement
     val context = LocalContext.current
@@ -152,7 +154,8 @@ fun HomeCompany(
                 RequirementsContent(
                     isLoading = state.isLoading,
                     resultRequirement = state.getRequirement,
-                    onItemClicked = { onItemClicked(it) }
+                    onItemClicked = {
+                        onItemClicked(it) }
                 )
             }
         }

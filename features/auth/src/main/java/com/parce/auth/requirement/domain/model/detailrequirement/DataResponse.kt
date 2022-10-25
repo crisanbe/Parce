@@ -2,7 +2,7 @@ package com.parce.auth.requirement.domain.model.detailrequirement
 
 import java.io.Serializable
 
-data class Data(
+data class DataResponse(
     val areaintervention: Areaintervention,
     val cause_problem: String,
     val created_at: String,

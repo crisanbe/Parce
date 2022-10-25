@@ -62,7 +62,7 @@ class RequirementViewModel @Inject constructor(
         doGetPagination()
     }
 
-    fun searchRequirement(query: Int) {
+    /*fun searchRequirement(query: Int) {
         val token = UpdateUserHeaders.getHeader()["Authorization"]
         viewModelScope.launch {
             getDetailRequirementUseCase(
@@ -83,7 +83,7 @@ class RequirementViewModel @Inject constructor(
                 }
             }
         }
-    }
+    }*/
 
     private var currentPage = 1
     private var page = MutableStateFlow(0)

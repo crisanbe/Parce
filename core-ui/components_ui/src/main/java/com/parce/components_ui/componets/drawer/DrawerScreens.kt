@@ -26,12 +26,13 @@ sealed class AppScreens(val route: String) {
     object UpdateTeacherView : AppScreens(route = "UpdateTeacherView")
     object UpdateStudentView : AppScreens(route = "UpdateStudentView")
     object RequirementScreen : AppScreens(route = "RequirementScreen")
-    object PermissionScreen  : AppScreens(route = "PermissionScreen")
-    object DetailScreen  : AppScreens(route = "DetailScreen?id={id}"){
+    object PermissionScreen : AppScreens(route = "PermissionScreen")
+    object DetailScreen : AppScreens(route = "DetailScreen?id={id}") {
         fun passId(id: Int): String {
-            return "detail?id=$id"
+            return "DetailScreen?id=$id"
         }
     }
+
     object ExitAlert : AppScreens(route = "ExitAlert")
 }
 
@@ -39,8 +40,16 @@ sealed class DrawerScreens(
     val route: String,
     val title: String,
     val IconDrawer: ImageVector
-    ) {
-    object CompanyHome : DrawerScreens(route = "CompanyHome", title = "Home", IconDrawer = Icons.Outlined.Home)
-    object CompanyProfile : DrawerScreens(route = "CompanyProfile", title = "Profile", IconDrawer = Icons.Outlined.Person)
-    object EXIT : DrawerScreens(route = "Exit", title = "Salir", IconDrawer = Icons.Outlined.ExitToApp)
+) {
+    object CompanyHome :
+        DrawerScreens(route = "CompanyHome", title = "Home", IconDrawer = Icons.Outlined.Home)
+
+    object CompanyProfile : DrawerScreens(
+        route = "CompanyProfile",
+        title = "Profile",
+        IconDrawer = Icons.Outlined.Person
+    )
+
+    object EXIT :
+        DrawerScreens(route = "Exit", title = "Salir", IconDrawer = Icons.Outlined.ExitToApp)
 }

@@ -26,13 +26,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.accompanist.permissions.rememberPermissionState
 import com.parce.auth.codeverificationRegister.presentation.components.confirmationcode.VerificationView
 import com.parce.auth.login.presentation.components.logincomposables.LoginScreen
 import com.parce.auth.login.presentation.components.logincomposables.userRepo
@@ -43,7 +42,6 @@ import com.parce.auth.register.presentation.ui.RegisterScreen
 import com.parce.auth.requirement.presentation.ui.homerequirement.ExitAlert
 import com.parce.auth.requirement.presentation.ui.homerequirement.RequirementScreen
 import com.parce.auth.requirement.presentation.ui.search.DetailScreen
-import com.parce.parce.ui.permission.PermissionScreen
 import com.parce.auth.sendemailforgotmypassword.presentation.components.resendnewcode.SendEmailForgotPasswordView
 import com.parce.auth.updateuser.presentation.ui.updateUser.company.CompanyRegistrationPageView
 import com.parce.auth.updateuser.presentation.ui.updateUser.company.CompanyRegistrationView
@@ -57,6 +55,7 @@ import com.parce.auth.verificationcodevalidateemail.presentation.components.Veri
 import com.parce.components_ui.componets.drawer.AppScreens
 import com.parce.components_ui.componets.drawer.DrawerScreens
 import com.parce.parce.ui.animations.EnterAnimation
+import com.parce.parce.ui.permission.PermissionScreen
 import com.parce.parce.ui.providers.LocalNavHost
 import com.parce.parce.ui.view.ImageSliderView
 import com.parce.parce.ui.view.SplashScreenView
@@ -68,43 +67,8 @@ import kotlinx.coroutines.withContext
 @Composable
 fun HolderScreen(onStatusBarColorChange: (color: Color) -> Unit) {
     val controller = LocalNavHost.current
-
-    /** The current active navigation route */
-    // val currentRouteAsState = getActiveRoute(navController = controller)
-
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-
-    /** Dynamic snack bar color */
-    val (snackBarColor, setSnackBarColor) = remember {
-        mutableStateOf(Color.White)
-    }
-
-    /** SnackBar appear/disappear transition */
-    val snackBarTransition = updateTransition(
-        targetState = scaffoldState.snackbarHostState,
-        label = "SnackBarTransition"
-    )
-
-    /** SnackBar animated offset */
-    val snackBarOffsetAnim by snackBarTransition.animateDp(
-        label = "snackBarOffsetAnim",
-        transitionSpec = {
-            TweenSpec(
-                durationMillis = 300,
-                easing = LinearEasing,
-            )
-        }
-    ) {
-        when (it.currentSnackbarData) {
-            null -> {
-                100.dp
-            }
-            else -> {
-                0.dp
-            }
-        }
-    }
 
     Box {
         ScaffoldSection(
@@ -152,11 +116,12 @@ fun HolderScreen(onStatusBarColorChange: (color: Color) -> Unit) {
     ExperimentalAnimationApi::class,
     ExperimentalPermissionsApi::class,
     ExperimentalCoilApi::class,
-    ExperimentalPagerApi::class, ExperimentalComposeUiApi::class
+    ExperimentalPagerApi::class,
+    ExperimentalComposeUiApi::class
 )
 @Composable
 fun ScaffoldSection(
-    controller: NavHostController,
+    controller: NavHostController = rememberNavController(),
     scaffoldState: ScaffoldState,
     onStatusBarColorChange: (color: Color) -> Unit,
     navigateToHome: () -> Unit,
@@ -584,7 +549,6 @@ fun ScaffoldSection(
                         navArgument("id") { type = NavType.IntType }
                     )
                 ) {
-                        onStatusBarColorChange(MaterialTheme.colors.background)
                         DetailScreen(upPress = navigateToHome)
                 }
                 composable(route = AppScreens.TeacherProfile.route) {

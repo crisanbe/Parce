@@ -1,5 +1,6 @@
 package com.parce.auth.requirement.data.remote.api
 
+import com.parce.auth.requirement.data.remote.getdetailrequirement.Data
 import com.parce.auth.requirement.data.remote.getdetailrequirement.GetDetailResponse
 import com.parce.auth.requirement.data.remote.getrequirement.GetRequirementResponse
 import com.parce.auth.requirement.data.remote.requirement.RequirementResponse
@@ -23,14 +24,14 @@ interface RequirementApi {
     @GET("requierements/")
     suspend fun doGetRequirementApi(
         @Header("Authorization") token: String,
-        @Query("id") id: String? = null,
+        @Query("requierementId") id: String? = null,
         @Query("page") current_page: Int? = null
     ): GetRequirementResponse
 
-    @GET("requierements/{id}")
+    @GET("requierement/{requierementId}")
     suspend fun doGetDetailRequirementApi(
         @Header("Authorization") token: String,
-        @Path("id") id: Int
-    ): GetDetailResponse
+        @Path("requierementId") id: Int
+    ): Data
 
 }

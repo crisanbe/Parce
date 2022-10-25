@@ -1,10 +1,8 @@
 package com.parce.auth.requirement.presentation.state
 
-import com.parce.auth.requirement.domain.model.detailrequirement.Data
+import com.parce.auth.requirement.domain.model.detailrequirement.DataResponse
 
 data class DetailRequirementState(
-    val isLoading: Boolean = false,
-    val detailRequirement: Data? = null,
-    val error: String = "",
-    val message: String = ""
+    val detailRequirement: DataResponse? = null,
+    val isLoading: Boolean = false
 )
