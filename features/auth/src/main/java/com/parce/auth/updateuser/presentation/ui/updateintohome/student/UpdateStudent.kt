@@ -8,11 +8,9 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,20 +27,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.parce.auth.R
-import com.parce.auth.dropdownapi.dropacademicprograms.presentation.ui.DropAcademic
 import com.parce.auth.updateuser.data.remote.dto.ParameterUpdateUserDto
 import com.parce.auth.updateuser.presentation.viewmodel.UpdateUserViewModel
-import com.parce.components_ui.componets.CircularIndeterminateProgressBar
+import com.parce.components_ui.componets.progress.LinearProgressBar
 import com.parce.components_ui.componets.DividerIcon
 import com.parce.components_ui.componets.TopBar
-import com.parce.components_ui.componets.datatime.DataTimeAlternative
 import com.parce.components_ui.componets.datatime.DataTimeString
 import com.parce.components_ui.componets.drawer.Drawer
 import com.parce.components_ui.componets.drawer.DrawerScreens
-import com.parce.components_ui.componets.dropdown.DropDownAlternative
 import com.parce.components_ui.componets.dropdown.DropString
-import com.parce.components_ui.componets.state.TextFieldValueState
-import com.parce.components_ui.componets.state.ValueState
 import com.parce.core.util.UiEvent
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -166,7 +159,7 @@ fun UpdateStudentView(
                 )
             }
         }
-        CircularIndeterminateProgressBar(state.value.isLoading)
+        LinearProgressBar(state.value.isLoading)
     }
     LaunchedEffect(visible) {
         visible = true

@@ -1,6 +1,5 @@
 package com.parce.auth.requirement.presentation.viewmodel
 
-import com.parce.auth.requirement.domain.model.getrequirement.Result
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -133,8 +132,7 @@ class RequirementViewModel @Inject constructor(
             val showNext = currentPage
             getRequirementUseCase(
                 token = token.toString(),
-                current_page = currentPage,
-                id = query
+                current_page = currentPage
             ).onEach { result ->
                 when (result) {
                     is Resource.Success -> {

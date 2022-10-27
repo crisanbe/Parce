@@ -1,6 +1,6 @@
 @file:Suppress("UNUSED_EXPRESSION")
 
-package com.parce.components_ui.componets
+package com.parce.components_ui.componets.progress
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,7 +22,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
 @Composable
-fun CircularIndeterminateProgressBar(isDisplayed: Boolean) {
+fun LinearProgressBar(isDisplayed: Boolean) {
     if (isDisplayed) {
         Dialog(
             onDismissRequest = { isDisplayed },
@@ -53,5 +53,5 @@ fun CircularIndeterminateProgressBar(isDisplayed: Boolean) {
 @Preview(showBackground = true)
 @Composable
 fun ProgressPreview() {
-    CircularIndeterminateProgressBar(isDisplayed = true)
+    LinearProgressBar(isDisplayed = true)
 }

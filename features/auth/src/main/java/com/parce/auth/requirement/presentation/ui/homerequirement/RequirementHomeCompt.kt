@@ -29,7 +29,7 @@ import com.parce.auth.requirement.domain.model.getrequirement.Result
 import com.parce.auth.theme.ShimmerColorShades
 
 
- fun mToast(context: Context, text: String) {
+fun mToast(context: Context, text: String) {
     Toast.makeText(context, text, Toast.LENGTH_LONG).show()
 }
 
@@ -123,15 +123,26 @@ fun HomeRequirements(
                 horizontalAlignment = Alignment.End
             ) {
                 Column(
-                    modifier = modifier.fillMaxWidth()
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(5.dp)
                 ) {
-                    Text(
-                        text = resultRequirement.id.toString(),
-                        textAlign = TextAlign.End,
-                        fontSize = 16.sp,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Card(
+                        modifier = Modifier
+                            .widthIn(40.dp)
+                            .heightIn(20.dp),
+                        backgroundColor = Color.Black,
+                        shape = RoundedCornerShape(20.dp),
+                        elevation = 2.dp
+                    ) {
+                        Text(
+                            text = resultRequirement.id.toString(),
+                            textAlign = TextAlign.Center,
+                            fontSize = 16.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                     Text(
                         text = resultRequirement.areaintervention.name,
                         fontSize = 16.sp,
@@ -146,7 +157,6 @@ fun HomeRequirements(
                         color = Color.Gray,
                     )
                 }
-                Spacer(modifier = Modifier.height(4.dp))
                 Button(
                     onClick = {  onItemClicked(resultRequirement.id) },
                     colors = ButtonDefaults.buttonColors(Color(0xFF21120B)),

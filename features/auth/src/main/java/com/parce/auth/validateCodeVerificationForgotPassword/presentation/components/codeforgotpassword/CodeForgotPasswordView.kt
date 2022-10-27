@@ -28,6 +28,7 @@ import com.parce.auth.validateCodeVerificationForgotPassword.presentation.viewMo
 import com.parce.components_ui.componets.*
 import com.parce.components_ui.componets.alertdialog.ViewModelDialog
 import com.parce.components_ui.componets.drawer.AppScreens
+import com.parce.components_ui.componets.progress.LinearProgressBar
 import com.parce.core.util.UiEvent
 import kotlinx.coroutines.launch
 
@@ -120,8 +121,8 @@ fun CodeForgotPasswordView(
                     }
                 }
             )
-            CircularIndeterminateProgressBar(stateVerificationCode.value.isLoading)
-            CircularIndeterminateProgressBar(stateNewCode.value.isLoading)
+            LinearProgressBar(stateVerificationCode.value.isLoading)
+            LinearProgressBar(stateNewCode.value.isLoading)
         }
     }
 }

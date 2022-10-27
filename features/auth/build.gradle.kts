@@ -1,7 +1,6 @@
 import com.google.protobuf.gradle.generateProtoTasks
 import com.google.protobuf.gradle.protobuf
 import com.google.protobuf.gradle.protoc
-import org.jetbrains.kotlin.config.JvmAnalysisFlags.useIR
 
 plugins {
     id("com.android.library")
@@ -95,6 +94,7 @@ dependencies {
     implementation(Google.protobuf)
 
     implementation(Coil.coilCompose)
+    implementation(Coil.coilSvg)
     implementation(Coil.coilAccompanist)
 
     implementation(Retrofit.okHttp)

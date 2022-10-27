@@ -28,7 +28,7 @@ interface RequirementApi {
         @Query("page") current_page: Int? = null
     ): GetRequirementResponse
 
-    @GET("requierement/{requierementId}")
+    @GET("requierements/{requierementId}")
     suspend fun doGetDetailRequirementApi(
         @Header("Authorization") token: String,
         @Path("requierementId") id: Int

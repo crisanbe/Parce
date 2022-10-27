@@ -1,5 +1,6 @@
 package com.parce.auth.profileUser.presentation.ui
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -9,7 +10,6 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
@@ -28,6 +28,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.parce.auth.login.presentation.components.logincomposables.userRepo
 import com.parce.auth.requirement.domain.model.getrequirement.Result
 import com.parce.auth.requirement.presentation.ui.homerequirement.*
+import com.parce.auth.requirement.presentation.ui.homerequirement.search.SearchBar
 import com.parce.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
 import com.parce.auth.requirement.presentation.viewmodel.RequirementViewModel
 import com.parce.components_ui.componets.*
@@ -35,14 +36,16 @@ import com.parce.components_ui.componets.alertdialog.ViewModelDialog
 import com.parce.components_ui.componets.drawer.AppScreens
 import com.parce.components_ui.componets.drawer.Drawer
 import com.parce.components_ui.componets.drawer.DrawerScreens
+import com.parce.components_ui.componets.progress.CircularProgress
 import com.parce.components_ui.componets.progress.ProgressIndicator
 import com.parce.core.util.UiEvent
+import com.parce.shared.commons.Constant
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @ExperimentalAnimationApi
 @Composable
 fun HomeCompany(
@@ -61,9 +64,9 @@ fun HomeCompany(
     val eventFlow = viewModelGetRequirement.uiEvent.receiveAsFlow()
     val scaffold = rememberScaffoldState()
     var visible by remember { mutableStateOf(false) }
+    var value by remember { mutableStateOf("") }
     val lifecycleTokenScope = rememberCoroutineScope()
     var showDialog by remember { mutableStateOf(false) }
-    var valueSearch by remember { mutableStateOf("") }
     val viemodel: ViewModelDialog = hiltViewModel()
     val systemUiController = rememberSystemUiController()
     val query = viewModelGetRequirement.query.value
@@ -124,6 +127,7 @@ fun HomeCompany(
             },
             floatingActionButton = {
                 FloatingButtonHome(
+                    text = "Crear requerimiento",
                     onClickFloatingButton = {
                         navController.navigate(AppScreens.RequirementScreen.route)
                     })
@@ -148,15 +152,13 @@ fun HomeCompany(
                     nameUser = nameUser.toString(),
                     query = query,
                     onSearch = {
-                        viewModelGetRequirement.doGetRequirement(null,it)
+
                     }
                 )
                 RequirementsContent(
                     isLoading = state.isLoading,
                     resultRequirement = state.getRequirement,
-                    onItemClicked = {
-                        onItemClicked(it) }
-                )
+                    onItemClicked = { onItemClicked(it) })
             }
         }
     }
@@ -207,19 +209,4 @@ private fun RequirementsContent(
         }
     }
 }
-
-@Composable
-private fun FullScreenLoading(viewModel: RequirementViewModel = hiltViewModel()) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .wrapContentSize(Alignment.Center)
-    ) {
-        ProgressIndicator(
-            modifier = Modifier.offset(x = 150.dp, y = 90.dp),
-            isDisplayed = viewModel.stateGetRequirement.isLoading
-        )
-    }
-}
-
 

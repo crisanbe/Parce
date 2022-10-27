@@ -1,6 +1,6 @@
 @file:Suppress("UNUSED_EXPRESSION")
 
-package com.parce.components_ui.componets
+package com.parce.components_ui.componets.progress
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

@@ -25,24 +25,26 @@ fun GetDetailResponse.toGetDetailRequirement(): DetailResponse {
             created_at = data.created_at,
             efect_problem = data.efect_problem,
             impact_problem = data.impact_problem,
-            user = User(
-                name = data.user.name,
-                role = data.user.role
-            ),
+            user = data.user?.let {
+                User(
+                    name = it.name,
+                    role = data.user.role
+                )
+            },
             relations = Relations(
-                interventions = data.relations.interventions.mapIndexed { _, resultIntervention ->
+                interventions = data.relations?.interventions?.mapIndexed { _, resultIntervention ->
                     resultIntervention
                 },
-                users = data.relations.users.mapIndexed { _, resultUser ->
+                users = data.relations?.users?.mapIndexed { _, resultUser ->
                     resultUser
-                },
-                files = data.relations.files.mapIndexed { _, resultFiles ->
+                } ?: emptyList(),
+                files = data.relations?.files?.mapIndexed { _, resultFiles ->
                     File(
                         id = resultFiles.id,
                         url = resultFiles.url,
                         created_at = resultFiles.created_at
                     )
-                },
+                } ?: emptyList(),
             )
         )
     )

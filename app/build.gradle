@@ -82,6 +82,7 @@ dependencies {
     implementation(AndroidX.runtimeKtx)
 
     implementation(Coil.coilCompose)
+    implementation(Coil.coilSvg)
     implementation(Coil.coilAccompanist)
 
     implementation(Retrofit.okHttp)

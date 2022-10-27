@@ -33,7 +33,7 @@ import com.parce.auth.login.presentation.components.logincomposables.userRepo
 import com.parce.auth.protodata.ProtoUserRepoImpl
 import com.parce.auth.updateuser.data.remote.dto.ParameterUpdateUserDto
 import com.parce.auth.updateuser.presentation.viewmodel.UpdateUserViewModel
-import com.parce.components_ui.componets.CircularIndeterminateProgressBar
+import com.parce.components_ui.componets.progress.LinearProgressBar
 import com.parce.components_ui.componets.TopPart
 import com.parce.components_ui.componets.datatime.DataTimeString
 import com.parce.components_ui.componets.drawer.AppScreens
@@ -138,7 +138,7 @@ fun CompanyRegistrationPageView(
                     )
                 }
             }
-            CircularIndeterminateProgressBar(state.value.isLoading)
+            LinearProgressBar(state.value.isLoading)
         }
     }
 }

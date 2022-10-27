@@ -30,6 +30,7 @@ import com.parce.auth.verificationcodevalidateemail.presentation.viewmodel.Verif
 import com.parce.components_ui.componets.*
 import com.parce.components_ui.componets.alertdialog.ViewModelDialog
 import com.parce.components_ui.componets.drawer.AppScreens
+import com.parce.components_ui.componets.progress.LinearProgressBar
 import com.parce.core.util.UiEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -149,8 +150,8 @@ fun VerificationCodeValidateEmailView(
                     }
                 }
             )
-            CircularIndeterminateProgressBar(stateVerificationCode.value.isLoading)
-            CircularIndeterminateProgressBar(stateVerificationEmail.value.isLoading)
+            LinearProgressBar(stateVerificationCode.value.isLoading)
+            LinearProgressBar(stateVerificationEmail.value.isLoading)
         }
     }
 }

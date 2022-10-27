@@ -5,29 +5,25 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BorderColor
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.airbnb.lottie.model.content.Repeater
-import com.parce.auth.R
-import com.parce.auth.login.presentation.components.logincomposables.userRepo
 import com.parce.auth.profileUser.domain.model.User
 import com.parce.auth.profileUser.presentation.viewmodel.GetProfileViewModel
 import com.parce.auth.requirement.presentation.ui.homerequirement.AnimationEffect
@@ -35,14 +31,10 @@ import com.parce.components_ui.componets.FloatingButtonHome
 import com.parce.components_ui.componets.TopBar
 import com.parce.components_ui.componets.drawer.AppScreens
 import com.parce.components_ui.componets.drawer.Drawer
-import com.parce.components_ui.componets.progress.ProgressIndicator
 import com.parce.components_ui.componets.drawer.DrawerScreens
 import com.parce.core.util.UiEvent
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @ExperimentalAnimationApi
 @Composable
@@ -122,6 +114,7 @@ fun ProfileCompanyView(
             },
             floatingActionButton = {
                 FloatingButtonHome(
+                    text = "Crear requerimiento",
                     onClickFloatingButton = {
                         navController.navigate(AppScreens.RequirementScreen.route)
                     })

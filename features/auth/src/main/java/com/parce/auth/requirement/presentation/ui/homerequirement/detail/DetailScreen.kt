@@ -1,19 +1,17 @@
-package com.parce.auth.requirement.presentation.ui.search
+package com.parce.auth.requirement.presentation.ui.homerequirement.detail
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.EmojiPeople
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,9 +24,11 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.parce.auth.R
 import com.parce.auth.requirement.domain.model.detailrequirement.DataResponse
 import com.parce.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
 import com.parce.auth.theme.Dimension
+import com.parce.components_ui.componets.TopPart
 import com.parce.components_ui.componets.button.ButtonValidation
 import com.parce.components_ui.componets.card.CardView
 
@@ -57,39 +57,60 @@ private fun DetailContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(240.dp),
-                data = data
+                data = data,
+                upPress = {upPress()}
             )
             Body(data = data)
         }
-        Up(upPress)
+
     }
 }
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 private fun Header(
     modifier: Modifier = Modifier,
-    data: DataResponse?
+    data: DataResponse?,
+    upPress: () -> Unit
 ) {
-    Column(
-        modifier = modifier.background(Color(0xFF21130C)),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(modifier = Modifier.height(12.dp))
-        Text(
-            text = "Requerimiento #..",
-            textAlign = TextAlign.Center,
-            color = Color.White,
-            fontSize = 15.sp,
-            fontWeight = FontWeight.ExtraBold
-        )
-    }
+    val scaffoldState = rememberScaffoldState()
+    Scaffold(modifier = modifier, scaffoldState = scaffoldState, snackbarHost = {
+        SnackbarHost(it) { data ->
+            Snackbar(
+                actionColor = Color.White,
+                contentColor = Color.Yellow,
+                snackbarData = data,
+                modifier = Modifier.padding(10.dp),
+                shape = RoundedCornerShape(20),
+                backgroundColor = Color.Black
+            )
+        }
+    }, content = {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            TopPart(onClickAction = { upPress() })
+            Text(
+                text = stringResource(R.string.TextField_Requirement_Number),
+                fontSize = 22.sp,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 55.dp)
+            )
+        }
+    })
 }
 
+
 @Composable
-private fun Body(data: DataResponse?) {
+private fun Body(data: DataResponse?, modifier: Modifier = Modifier) {
+    val counter by remember { mutableStateOf(0) }
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(Color.White)
             .padding(Dimension.pagePadding),
@@ -128,7 +149,7 @@ private fun Body(data: DataResponse?) {
         )
         ButtonValidation(
             text = "Asignar",
-            onClick = { },
+            onClick = { println( counter)},
         )
     }
 }

@@ -5,10 +5,6 @@ package com.parce.parce.ui.navegation.holder
 import android.Manifest
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.TweenSpec
-import androidx.compose.animation.core.animateDp
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -20,7 +16,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -41,7 +36,7 @@ import com.parce.auth.profileUser.presentation.ui.ProfileCompany
 import com.parce.auth.register.presentation.ui.RegisterScreen
 import com.parce.auth.requirement.presentation.ui.homerequirement.ExitAlert
 import com.parce.auth.requirement.presentation.ui.homerequirement.RequirementScreen
-import com.parce.auth.requirement.presentation.ui.search.DetailScreen
+import com.parce.auth.requirement.presentation.ui.homerequirement.detail.DetailScreen
 import com.parce.auth.sendemailforgotmypassword.presentation.components.resendnewcode.SendEmailForgotPasswordView
 import com.parce.auth.updateuser.presentation.ui.updateUser.company.CompanyRegistrationPageView
 import com.parce.auth.updateuser.presentation.ui.updateUser.company.CompanyRegistrationView

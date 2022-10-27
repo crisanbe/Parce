@@ -13,7 +13,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ButtonValidation(text: String, fontSize: TextUnit = 20.sp, onClick: () -> Unit) {
+fun ButtonValidation(
+    text: String,
+    fontSize: TextUnit = 20.sp,
+    onClick: () -> Unit
+) {
     Button(
         onClick = { onClick.invoke() },
         shape = RoundedCornerShape(percent = 45),

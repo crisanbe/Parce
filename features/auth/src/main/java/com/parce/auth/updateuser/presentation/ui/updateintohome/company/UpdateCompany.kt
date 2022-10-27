@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.parce.auth.R
-import com.parce.auth.dropdownapi.dropacademicprograms.domain.model.dropmodel.Result
 import com.parce.auth.dropdownapi.dropacademicprograms.domain.model.locationmodel.ResultX
 import com.parce.auth.dropdownapi.dropacademicprograms.domain.model.locationmodel.Town
 import com.parce.auth.dropdownapi.dropacademicprograms.presentation.ui.DropLocationDpt
@@ -36,7 +35,7 @@ import com.parce.auth.login.presentation.components.logincomposables.userRepo
 import com.parce.auth.protodata.ProtoUserRepoImpl
 import com.parce.auth.updateuser.data.remote.dto.ParameterUpdateUserDto
 import com.parce.auth.updateuser.presentation.viewmodel.UpdateUserViewModel
-import com.parce.components_ui.componets.CircularIndeterminateProgressBar
+import com.parce.components_ui.componets.progress.LinearProgressBar
 import com.parce.components_ui.componets.DividerIcon
 import com.parce.components_ui.componets.TopBar
 import com.parce.components_ui.componets.datatime.DataTimeString
@@ -193,7 +192,7 @@ fun UpdateCompanyView(
                 }
             }
         }
-        CircularIndeterminateProgressBar(state.value.isLoading)
+        LinearProgressBar(state.value.isLoading)
     }
     LaunchedEffect(visible) {
         visible = true

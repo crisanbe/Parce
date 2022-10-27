@@ -54,7 +54,7 @@ data class Links(
 ) : Serializable
 
 data class Pagination(
-    @SerializedName("current_page") val current_page: Int,
+    @SerializedName("current_page") val current_page: Int? = null,
     @SerializedName("from") val from: Int,
     @SerializedName("last_page") val last_page: Int,
     @SerializedName("path") val path: String,
@@ -109,10 +109,10 @@ fun GetRequirementResponse.toGetRequirement(): GetRequirement {
         code = code,
         data = Data(
             links = Links(
-                first = data.links.first,
-                last = data.links.last,
-                next = data.links.next,
-                prev = data.links.prev
+                first = data.links?.first,
+                last = data.links?.last ?: "",
+                next = data.links?.next,
+                prev = data.links?.prev
             ),
             pagination = Pagination(
                 current_page = data.pagination.current_page,

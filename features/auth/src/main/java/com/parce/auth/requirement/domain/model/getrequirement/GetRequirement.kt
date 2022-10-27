@@ -11,7 +11,7 @@ data class GetRequirement(
 ) : Serializable
 
 data class Data(
-    val links: Links,
+    val links: Links? = null,
     val pagination: Pagination,
     val result: List<Result>
 ) : Serializable
@@ -39,14 +39,14 @@ data class Relations(
 ) : Serializable
 
 data class Links(
-    val first: String,
+    val first: String? = null,
     val last: String,
     val next: String? = null,
     val prev: Any? = null
 ) : Serializable
 
 data class Pagination(
-    val current_page: Int,
+    val current_page: Int? = null,
     val from: Int,
     val last_page: Int,
     val path: String,

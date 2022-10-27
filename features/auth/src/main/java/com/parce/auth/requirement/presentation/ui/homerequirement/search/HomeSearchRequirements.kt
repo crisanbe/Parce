@@ -1,4 +1,4 @@
-package com.parce.auth.requirement.presentation.ui.homerequirement
+package com.parce.auth.requirement.presentation.ui.homerequirement.search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -47,8 +47,8 @@ fun SearchBar(
         mutableStateOf(hint != "")
     }
     Surface(color = MaterialTheme.colors.background) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Spacer(modifier = Modifier.height(20.dp))
+        Column(horizontalAlignment = Alignment.Start) {
+            Spacer(modifier = Modifier.size(2.dp))
             Text(
                 text = "Hola, $nameUser",
                 fontFamily = FontFamily.Serif,
@@ -59,6 +59,7 @@ fun SearchBar(
                 fontSize = 20.sp,
                 fontWeight = FontWeight.ExtraBold,
             )
+            Spacer(modifier = Modifier.size(10.dp))
             Box(modifier = modifier) {
                 BasicTextField(
                     value = query,
@@ -71,7 +72,6 @@ fun SearchBar(
                     ),
                     keyboardActions = KeyboardActions(
                         onSearch = {
-                            viewModelGetRequirement.doGetRequirement(null,query)
                             keyboardController?.hide()
                         },
                     ),
@@ -104,8 +104,7 @@ fun SearchBar(
                     Text(
                         text = hint,
                         color = Color.LightGray,
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp, vertical = 12.dp)
+                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
                     )
                 }
             }

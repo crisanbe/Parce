@@ -30,6 +30,7 @@ import com.parce.components_ui.componets.*
 import com.parce.components_ui.componets.alertdialog.ViewModelDialog
 import com.parce.components_ui.componets.button.ButtonValidation
 import com.parce.components_ui.componets.drawer.AppScreens
+import com.parce.components_ui.componets.progress.LinearProgressBar
 import com.parce.core.util.UiEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -109,7 +110,7 @@ fun NewPasswordForgetView(
                     }
                 }
             )
-            CircularIndeterminateProgressBar(isDisplayed = state.value.isLoading)
+            LinearProgressBar(isDisplayed = state.value.isLoading)
         }
     }
 }

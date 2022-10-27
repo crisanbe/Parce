@@ -3,13 +3,13 @@ package com.parce.auth.requirement.domain.model.detailrequirement
 import java.io.Serializable
 
 data class DataResponse(
-    val areaintervention: Areaintervention,
-    val cause_problem: String,
-    val created_at: String,
-    val description: String,
-    val efect_problem: String,
-    val id: Int,
-    val impact_problem: String,
-    val relations: Relations,
-    val user: User
+    val areaintervention: Areaintervention? = null,
+    val cause_problem: String? = null,
+    val created_at: String? = null,
+    val description: String? = null,
+    val efect_problem: String? = null,
+    val id: Int? = null,
+    val impact_problem: String? = null,
+    val relations: Relations? = null,
+    val user: User? = null
 ): Serializable

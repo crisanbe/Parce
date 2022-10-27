@@ -32,40 +32,38 @@ fun HomeBottomBar(
     onNextPressed: () -> Unit
 ) {
     BottomAppBar(
+        backgroundColor = Color(0xFF21130C),
+        modifier = Modifier.background(Color.White),
         cutoutShape = MaterialTheme.shapes.small.copy(
             CornerSize(percent = 50)
         ),
         contentPadding = PaddingValues(
             start = 20.dp,
-            top = 12.dp,
+            top = 35.dp,
             end = 20.dp,
             bottom = 20.dp
         )
     ) {
         Surface(
-            shape = RoundedCornerShape(50.dp),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 20.dp)
                 .offset(x = (-10).dp, y = (-20).dp)
-                .background(Color.Transparent)
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0x00000000))
-                    .padding(horizontal = 50.dp),
+                    .background(Color(0xFF21130C))
+                    .padding(horizontal = 30.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 content = {
                     OutlinedButton(
                         modifier = Modifier
-                            .weight(3f)
-                            .heightIn(20.dp)
-                            .padding(horizontal = 10.dp)
+                            .weight(1f)
+                            .heightIn(10.dp)
                             .offset(y = (1).dp),
-                        elevation = ButtonDefaults.elevation(defaultElevation = 10.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = Color(0xFF0A090A)
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(0xFF21130C)
                         ),
                         enabled = showPrevious,
                         onClick = onPreviousPressed,
@@ -73,8 +71,8 @@ fun HomeBottomBar(
                             width = 2.dp,
                             brush = Brush.horizontalGradient(
                                 listOf(
-                                    Color(0xFF050303),
-                                    Color(0xFF000000)
+                                    Color(0xFFFFFFFF),
+                                    Color(0xFFFFFFFF)
                                 )
                             )
                         )
@@ -82,19 +80,18 @@ fun HomeBottomBar(
                         Icon(
                             Icons.Filled.SkipPrevious,
                             contentDescription = "Anterior",
-                            tint= Color.Black,
+                            tint = Color.White,
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
                     }
+                    Spacer(modifier = Modifier.size(10.dp))
                     OutlinedButton(
                         modifier = Modifier
-                            .weight(3f)
-                            .heightIn(30.dp)
-                            .padding(horizontal = 10.dp)
+                            .weight(1f)
+                            .heightIn(10.dp)
                             .offset(y = (1).dp),
-                        elevation = ButtonDefaults.elevation(defaultElevation = 10.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = Color(0xFF0D090E)
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(0xFF21130C)
                         ),
                         enabled = showNext,
                         onClick = onNextPressed,
@@ -102,16 +99,16 @@ fun HomeBottomBar(
                             width = 2.dp,
                             brush = Brush.horizontalGradient(
                                 listOf(
-                                    Color(0xFF000000),
-                                    Color(0xFF000000)
+                                    Color(0xFFFFFFFF),
+                                    Color(0xFFFFFFFF)
                                 )
                             )
                         )
                     ) {
                         Icon(
                             Icons.Filled.SkipNext,
-                            contentDescription = "Archivo",
-                            tint= Color.Black,
+                            contentDescription = "Siguiente",
+                            tint = Color.White,
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
                     }

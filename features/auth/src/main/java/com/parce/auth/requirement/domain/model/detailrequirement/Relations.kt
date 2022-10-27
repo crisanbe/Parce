@@ -4,6 +4,6 @@ import java.io.Serializable
 
 data class Relations(
     val files: List<File>,
-    val interventions: List<Any>,
+    val interventions: List<Any>? = emptyList(),
     val users: List<Any>
 ): Serializable

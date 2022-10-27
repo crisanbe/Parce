@@ -19,12 +19,12 @@ import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
-fun FloatingButtonHome(onClickFloatingButton: () -> Unit) {
+fun FloatingButtonHome(text: String, onClickFloatingButton: () -> Unit) {
     var extendedState by remember { mutableStateOf(value = true) }
     var secondsDisappear by remember { mutableStateOf(value = 2) }
     FloatingActionButton(
         onClick = { onClickFloatingButton.invoke() },
-        backgroundColor = Color(0xFF21120B)
+        backgroundColor = Color(0xFF030202)
     ) {
         Row(
             modifier = Modifier
@@ -37,7 +37,7 @@ fun FloatingButtonHome(onClickFloatingButton: () -> Unit) {
             )
             AnimatedVisibility(extendedState) {
                 Text(
-                    text = "Crear requerimiento",
+                    text = text,
                     color = Color.White,
                     modifier = Modifier
                         .padding(start = 8.dp, top = 3.dp)

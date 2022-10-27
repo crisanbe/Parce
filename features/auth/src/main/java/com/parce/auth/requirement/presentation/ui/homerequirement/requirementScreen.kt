@@ -5,14 +5,13 @@ package com.parce.auth.requirement.presentation.ui.homerequirement
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
-import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -20,12 +19,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Upload
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Feed
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -33,12 +33,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.google.accompanist.permissions.*
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.parce.auth.R
 import com.parce.auth.login.presentation.components.logincomposables.userRepo
 import com.parce.auth.requirement.data.remote.requirement.RequirementRequest
@@ -49,7 +50,7 @@ import com.parce.components_ui.componets.alertdialog.ViewModelDialog
 import com.parce.components_ui.componets.drawer.AppScreens
 import com.parce.components_ui.componets.drawer.DrawerScreens
 import com.parce.components_ui.componets.dropdown.DropString
-import com.parce.components_ui.componets.progress.ProgressIndicator
+import com.parce.components_ui.componets.progress.LinearProgressBar
 import com.parce.core.util.UiEvent
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -58,10 +59,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import org.apache.commons.io.FileUtils
-import java.io.BufferedReader
 import java.io.File
-import java.io.IOException
-import java.io.InputStreamReader
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @ExperimentalComposeUiApi
@@ -107,9 +105,9 @@ fun RequirementScreen(
                             temporalFile.asRequestBody("application/pdf".toMediaTypeOrNull())
                         )
                     )
-                    mToast(activity,"Se agrego el archivo ${temporalFile.toURI()}")
+                    mToast(activity, "Se agrego el archivo ${temporalFile.name}")
                 } else {
-                    mToast(activity,"Se agrego el archivo ")
+                    mToast(activity, "No se agrego el archivo ")
                 }
                 inputStream?.close()
             }
@@ -194,7 +192,7 @@ fun RequirementScreen(
                     keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
                     leadingIcon = {
                         Icon(
-                            imageVector = Icons.Outlined.Feed,
+                            imageVector = Icons.Outlined.SmsFailed,
                             contentDescription = "",
                         )
                         Divider(
@@ -214,7 +212,7 @@ fun RequirementScreen(
                     keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
                     leadingIcon = {
                         Icon(
-                            imageVector = Icons.Outlined.Feed,
+                            imageVector = Icons.Outlined.SyncProblem,
                             contentDescription = "",
                         )
                         Divider(
@@ -234,7 +232,7 @@ fun RequirementScreen(
                     keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
                     leadingIcon = {
                         Icon(
-                            imageVector = Icons.Outlined.Feed,
+                            imageVector = Icons.Outlined.Report,
                             contentDescription = "",
                         )
                         Divider(
@@ -244,8 +242,12 @@ fun RequirementScreen(
                                 .padding(start = 33.dp)
                         )
                     })
-                Spacer(Modifier.height(15.dp))
-                Button(
+                OutlinedButton(
+                    modifier = Modifier
+                        .widthIn(300.dp)
+                        .background(Color(0xFFFFFFFF), CircleShape)
+                        .padding(vertical = 20.dp)
+                        .shadow(3.dp, CircleShape),
                     onClick = {
                         permissionsState.permissions.forEach { perm ->
                             when (perm.permission) {
@@ -261,23 +263,18 @@ fun RequirementScreen(
                                 }
                             }
                         }
-                    },
-                    contentPadding = PaddingValues(
-                        start = 20.dp,
-                        top = 12.dp,
-                        end = 20.dp,
-                        bottom = 12.dp
-                    )
-                ) {
-                    Icon(
-                        Icons.Filled.Upload,
-                        contentDescription = "Archivo",
-                        modifier = Modifier.size(ButtonDefaults.IconSize)
-                    )
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Subir archivo🗂️")
+                    }
+                ){
+                        Icon(
+                            Icons.Filled.Upload,
+                            contentDescription = "Archivo"
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text("Subir archivo🗂️",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.ExtraBold
+                        )
                 }
-                Spacer(Modifier.height(15.dp))
                 Button(
                     onClick = {
                         hideKeyboard?.hide()
@@ -331,32 +328,5 @@ fun RequirementScreen(
             }
         }
     })
-    ProgressIndicator(
-        modifier = Modifier.offset(x = 150.dp, y = (-790).dp), isDisplayed = state.value.isLoading
-    )
-}
-
-private fun readTextFromUri(context: Context, uri: Uri) {
-    try {
-        val stringBuilder = StringBuilder()
-        context.contentResolver.openInputStream(uri)?.use { inputStream ->
-            BufferedReader(InputStreamReader(inputStream)).use { reader ->
-                var line: String? = reader.readLine()
-                while (line != null) {
-                    stringBuilder.append(line)
-                    line = reader.readLine()
-                }
-            }
-        }
-        val text = stringBuilder.toString()
-        Log.d("xxx", "text $text")
-    } catch (e: IOException) {
-        e.printStackTrace()
-    }
-}
-
-private fun uriPath(uri: Uri): String {
-    val file = File(uri.path.toString())
-    val absolutePath = file.absolutePath
-    return absolutePath.substring(absolutePath.indexOf(":") + 1)
+    LinearProgressBar(isDisplayed = state.value.isLoading)
 }
