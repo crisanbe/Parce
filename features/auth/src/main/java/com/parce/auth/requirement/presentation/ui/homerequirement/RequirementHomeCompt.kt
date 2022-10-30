@@ -28,7 +28,6 @@ import coil.transform.CircleCropTransformation
 import com.parce.auth.requirement.domain.model.getrequirement.Result
 import com.parce.auth.theme.ShimmerColorShades
 
-
 fun mToast(context: Context, text: String) {
     Toast.makeText(context, text, Toast.LENGTH_LONG).show()
 }

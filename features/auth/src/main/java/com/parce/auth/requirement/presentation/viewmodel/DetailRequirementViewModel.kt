@@ -27,7 +27,7 @@ class DetailRequirementViewModel @Inject constructor(
         detailRequirement()
     }
 
-    fun detailRequirement() {
+    private fun detailRequirement() {
         val token = UpdateUserHeaders.getHeader()["Authorization"]
         savedStateHandle.get<Int>("id")?.let { characterId ->
             viewModelScope.launch {

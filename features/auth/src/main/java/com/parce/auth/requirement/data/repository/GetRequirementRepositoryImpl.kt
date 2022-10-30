@@ -25,7 +25,7 @@ class GetRequirementRepositoryImpl @Inject constructor(private val api: Requirem
         emit(Resource.Loading())
         try {
             val response = api.doGetRequirementApi(
-                token = token, current_page =current_page, id = id).toGetRequirement()
+                token = token,id = id, current_page =current_page).toGetRequirement()
             emit(Resource.Success(response))
         } catch (e: HttpException) {
             emit(

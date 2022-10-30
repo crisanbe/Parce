@@ -1,6 +1,7 @@
 package com.parce.auth.profileUser.presentation.ui
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -10,16 +11,35 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,8 +49,10 @@ import com.parce.auth.login.presentation.components.logincomposables.userRepo
 import com.parce.auth.requirement.domain.model.getrequirement.Result
 import com.parce.auth.requirement.presentation.ui.homerequirement.*
 import com.parce.auth.requirement.presentation.ui.homerequirement.search.SearchBar
+import com.parce.auth.requirement.presentation.ui.homerequirement.search.SearchEvent
 import com.parce.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
 import com.parce.auth.requirement.presentation.viewmodel.RequirementViewModel
+import com.parce.components_ui.R
 import com.parce.components_ui.componets.*
 import com.parce.components_ui.componets.alertdialog.ViewModelDialog
 import com.parce.components_ui.componets.drawer.AppScreens
@@ -41,11 +63,13 @@ import com.parce.components_ui.componets.progress.ProgressIndicator
 import com.parce.core.util.UiEvent
 import com.parce.shared.commons.Constant
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Locale
 
-@SuppressLint("CoroutineCreationDuringComposition")
+@SuppressLint("CoroutineCreationDuringComposition", "StateFlowValueCalledInComposition")
 @ExperimentalAnimationApi
 @Composable
 fun HomeCompany(
@@ -59,12 +83,11 @@ fun HomeCompany(
     viewModelGetRequirement: RequirementViewModel = hiltViewModel(),
     viewModel: DetailRequirementViewModel = hiltViewModel(),
 ) {
-    val state = viewModelGetRequirement.stateGetRequirement
+    val state = viewModelGetRequirement.stateGetRequirement.collectAsState()
     val context = LocalContext.current
     val eventFlow = viewModelGetRequirement.uiEvent.receiveAsFlow()
     val scaffold = rememberScaffoldState()
     var visible by remember { mutableStateOf(false) }
-    var value by remember { mutableStateOf("") }
     val lifecycleTokenScope = rememberCoroutineScope()
     var showDialog by remember { mutableStateOf(false) }
     val viemodel: ViewModelDialog = hiltViewModel()
@@ -135,10 +158,10 @@ fun HomeCompany(
             isFloatingActionButtonDocked = true,
             bottomBar = {
                 HomeBottomBar(
-                    showPrevious = state.showPrevious,
-                    showNext = state.showNext,
-                    onPreviousPressed = { viewModelGetRequirement.doGetRequirement(false) },
-                    onNextPressed = { viewModelGetRequirement.doGetRequirement(true) }
+                    showPrevious = state.value.showPrevious,
+                    showNext = state.value.showNext,
+                    onPreviousPressed = { viewModelGetRequirement.doGetRequirement(null,false) },
+                    onNextPressed = { viewModelGetRequirement.doGetRequirement(null,true) }
                 )
             },
         ) { PaddingValues ->
@@ -148,16 +171,11 @@ fun HomeCompany(
                     .padding(horizontal = 20.dp)
                     .background(Color.Transparent),
             ) {
-                SearchBar(
+                RequirementsContent(
                     nameUser = nameUser.toString(),
                     query = query,
-                    onSearch = {
-
-                    }
-                )
-                RequirementsContent(
-                    isLoading = state.isLoading,
-                    resultRequirement = state.getRequirement,
+                    isLoading = state.value.isLoading,
+                    resultRequirement = state.value.getRequirement,
                     onItemClicked = { onItemClicked(it) })
             }
         }
@@ -167,13 +185,86 @@ fun HomeCompany(
     }
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun RequirementsContent(
     modifier: Modifier = Modifier,
+    nameUser: String,
+    query: String,
+    hint: String = "",
     isLoading: Boolean = false,
-    resultRequirement: List<Result> = emptyList(),
+    resultRequirement: List<Result> = ArrayList(),
+    viewModelGetRequirement: RequirementViewModel = hiltViewModel(),
     onItemClicked: (Int) -> Unit,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var isHintDisplayed by remember {
+        mutableStateOf(hint != "")
+    }
+    Surface(color = MaterialTheme.colors.background) {
+        Column(horizontalAlignment = Alignment.Start) {
+            Spacer(modifier = Modifier.size(2.dp))
+            Text(
+                text = "Hola, $nameUser",
+                fontFamily = FontFamily.Serif,
+                textAlign = TextAlign.Center,
+                style = TextStyle(
+                    color = colorResource(id = R.color.primary)
+                ),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.ExtraBold,
+            )
+            Spacer(modifier = Modifier.size(10.dp))
+            Box(modifier = modifier) {
+                BasicTextField(
+                    value = query,
+                    onValueChange = {viewModelGetRequirement.onQueryChanged(it)},
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Search
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onSearch = {
+                            viewModelGetRequirement.doGetRequirement(query)
+                            keyboardController?.hide()
+                        },
+                    ),
+                    maxLines = 1,
+                    singleLine = true,
+                    textStyle = TextStyle(color = Color.Black),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(5.dp, CircleShape)
+                        .background(Color.White, CircleShape)
+                        .padding(horizontal = 20.dp, vertical = 12.dp)
+                        .onFocusChanged {
+                            isHintDisplayed = (!it.isFocused) && query.isNotEmpty()
+                        }
+                )
+                IconButton(onClick = { viewModelGetRequirement.doGetRequirement(query)}) {
+                    Icon(
+                        imageVector = Icons.Outlined.Search,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .offset(x = 302.dp, y = (-2).dp)
+                            .size(44.dp)
+                            .clip(RoundedCornerShape(22.dp))
+                            .background(Color(0xFF21120B))
+                            .scale(scale = 0.6f),
+                        tint = Color.White
+                    )
+                }
+                if (isHintDisplayed) {
+                    Text(
+                        text = hint,
+                        color = Color.LightGray,
+                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
+                    )
+                }
+            }
+        }
+    }
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colors.surface
@@ -194,9 +285,11 @@ private fun RequirementsContent(
                             .padding(vertical = 1.dp)
                     )
                 }
-                items(resultRequirement.size) { index ->
+                itemsIndexed(
+                    items = resultRequirement
+                ) { _, resultRequirements ->
                     HomeRequirements(
-                        resultRequirement = resultRequirement[index],
+                        resultRequirement = resultRequirements,
                         onItemClicked = { onItemClicked(it) }
                     )
                 }

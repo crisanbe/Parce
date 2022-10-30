@@ -3,7 +3,7 @@ package com.parce.auth.requirement.domain.model.getrequirement
 import java.io.Serializable
 
 data class GetRequirement(
-    val code: String,
+    val code: String? = null,
     val data: Data,
     val message: String,
     val state: Boolean,
@@ -12,8 +12,8 @@ data class GetRequirement(
 
 data class Data(
     val links: Links? = null,
-    val pagination: Pagination,
-    val result: List<Result>
+    val pagination: Pagination? = null,
+    val result: List<Result>? = null
 ) : Serializable
 
 data class Result(

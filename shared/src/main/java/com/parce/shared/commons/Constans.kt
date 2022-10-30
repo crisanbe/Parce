@@ -6,7 +6,6 @@ object Constant {
 
     //HEADERS
     const val AUTHORIZATION: String = "Authorization"
-    const val prueba: String = ""
     const val ACCEPT: String = "Accept"
     const val CONTENT_TYPE: String = "Content-Type"
     const val ACCEPT_ENCODING: String = "Accept-Encoding"

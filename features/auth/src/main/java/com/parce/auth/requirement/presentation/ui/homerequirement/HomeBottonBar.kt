@@ -32,14 +32,14 @@ fun HomeBottomBar(
     onNextPressed: () -> Unit
 ) {
     BottomAppBar(
-        backgroundColor = Color(0xFF21130C),
+        backgroundColor = Color(0xFFC7C7C7),
         modifier = Modifier.background(Color.White),
         cutoutShape = MaterialTheme.shapes.small.copy(
             CornerSize(percent = 50)
         ),
         contentPadding = PaddingValues(
             start = 20.dp,
-            top = 35.dp,
+            top = 30.dp,
             end = 20.dp,
             bottom = 20.dp
         )
@@ -53,7 +53,7 @@ fun HomeBottomBar(
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFF21130C))
+                    .background(Color(0xFFC7C7C7))
                     .padding(horizontal = 30.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 content = {

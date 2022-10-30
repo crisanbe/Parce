@@ -37,10 +37,12 @@ import com.parce.auth.requirement.presentation.viewmodel.RequirementViewModel
 fun SearchBar(
     modifier: Modifier = Modifier,
     hint: String = "",
+    isLoading: Boolean = false,
     nameUser: String,
     query: String,
     viewModelGetRequirement: RequirementViewModel = hiltViewModel(),
-    onSearch: (String) -> Unit = {}
+    getCharacters: (String, Boolean) -> Unit,
+    onEvent: (SearchEvent) -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var isHintDisplayed by remember {
@@ -63,9 +65,7 @@ fun SearchBar(
             Box(modifier = modifier) {
                 BasicTextField(
                     value = query,
-                    onValueChange = { newValue ->
-                        viewModelGetRequirement.onQueryChanged(newValue)
-                    },
+                    onValueChange = { onEvent(SearchEvent.EnteredCharacter(it))},
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Search
@@ -87,7 +87,7 @@ fun SearchBar(
                             isHintDisplayed = (!it.isFocused) && query.isNotEmpty()
                         }
                 )
-                IconButton(onClick = {onSearch(query)}) {
+                IconButton(onClick = {}) {
                     Icon(
                         imageVector = Icons.Outlined.Search,
                         contentDescription = null,

@@ -6,6 +6,8 @@ import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 
 sealed class AppScreens(val route: String) {
     object SplashScreen : AppScreens(route = "SplashScreen")
@@ -34,6 +36,27 @@ sealed class AppScreens(val route: String) {
     }
 
     object ExitAlert : AppScreens(route = "ExitAlert")
+}
+
+class RequirementActions(navController: NavController) {
+    val navigateToHome: () -> Unit = {
+        navController.navigate(DrawerScreens.CompanyHome.route) {
+            popUpTo(navController.graph.findStartDestination().arguments.size) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
+    val navigateToDetail = { id: Int ->
+        navController.navigate(AppScreens.DetailScreen.passId(id)) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+        }
+    }
 }
 
 sealed class DrawerScreens(

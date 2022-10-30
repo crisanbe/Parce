@@ -49,9 +49,11 @@ import com.parce.auth.validateCodeVerificationForgotPassword.presentation.compon
 import com.parce.auth.verificationcodevalidateemail.presentation.components.VerificationCodeValidateEmailView
 import com.parce.components_ui.componets.drawer.AppScreens
 import com.parce.components_ui.componets.drawer.DrawerScreens
+import com.parce.components_ui.componets.drawer.RequirementActions
 import com.parce.parce.ui.animations.EnterAnimation
 import com.parce.parce.ui.permission.PermissionScreen
 import com.parce.parce.ui.providers.LocalNavHost
+import com.parce.parce.ui.theme.ParceTheme
 import com.parce.parce.ui.view.ImageSliderView
 import com.parce.parce.ui.view.SplashScreenView
 import com.parce.parce.ui.view.StartUpView
@@ -64,46 +66,35 @@ fun HolderScreen(onStatusBarColorChange: (color: Color) -> Unit) {
     val controller = LocalNavHost.current
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
+    ParceTheme {
+        val navigationActions = remember(controller) {
+            RequirementActions(controller)
+        }
 
-    Box {
-        ScaffoldSection(
-            controller = controller,
-            scaffoldState = scaffoldState,
-            onStatusBarColorChange = onStatusBarColorChange,
-            onClickIconButton = { scope.launch { scaffoldState.drawerState.open() } },
-            onClickDestination = {
-                controller.navigate(it) {
-                    controller.graph.startDestinationRoute?.let { route ->
-                        popUpTo(route) {
-                            saveState = false
+        Box {
+            ScaffoldSection(
+                controller = controller,
+                scaffoldState = scaffoldState,
+                onStatusBarColorChange = onStatusBarColorChange,
+                onClickIconButton = { scope.launch { scaffoldState.drawerState.open() } },
+                onClickDestination = {
+                    controller.navigate(it) {
+                        controller.graph.startDestinationRoute?.let { route ->
+                            popUpTo(route) {
+                                saveState = false
+                            }
                         }
+                        launchSingleTop = true
+                        restoreState = true
                     }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-                scope.launch {
-                    scaffoldState.drawerState.close()
-                }
-            },
-            navigateToHome = {
-                controller.navigate(DrawerScreens.CompanyHome.route) {
-                    popUpTo(controller.graph.findStartDestination().id) {
-                        saveState = true
+                    scope.launch {
+                        scaffoldState.drawerState.close()
                     }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            },
-            navigateToDetail = { id: Int ->
-                controller.navigate(AppScreens.DetailScreen.passId(id)) {
-                    popUpTo(controller.graph.findStartDestination().id) {
-                        saveState = true
-                    }
-                    launchSingleTop = true
-                }
-
-            }
-        )
+                },
+                navigateToHome = navigationActions.navigateToHome,
+                navigateToDetail = navigationActions.navigateToDetail
+            )
+        }
     }
 }
 
@@ -544,7 +535,7 @@ fun ScaffoldSection(
                         navArgument("id") { type = NavType.IntType }
                     )
                 ) {
-                        DetailScreen(upPress = navigateToHome)
+                    DetailScreen(upPress = navigateToHome)
                 }
                 composable(route = AppScreens.TeacherProfile.route) {
                     EnterAnimation {

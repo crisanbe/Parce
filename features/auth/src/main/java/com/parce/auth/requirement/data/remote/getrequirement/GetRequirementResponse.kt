@@ -11,7 +11,7 @@ import com.parce.auth.requirement.domain.model.getrequirement.User
 import java.io.Serializable
 
 data class GetRequirementResponse(
-    @SerializedName("code") val code: String,
+    @SerializedName("code") val code: String? = null,
     @SerializedName("data") val `data`: Data,
     @SerializedName("message") val message: String,
     @SerializedName("state") val state: Boolean,
@@ -21,7 +21,7 @@ data class GetRequirementResponse(
 data class Data(
     @SerializedName("links") val links: Links,
     @SerializedName("pagination") val pagination: Pagination,
-    @SerializedName("result") val result: List<Result>
+    @SerializedName("result") val result: List<Result>? = null
 ) : Serializable
 
 data class Result(
@@ -67,8 +67,8 @@ data class Areaintervention(
     @SerializedName("name") val name: String
 ) : Serializable
 
-fun GetRequirementResponse.toGetRequirements(): List<Result> {
-    val result = data.result.mapIndexed { _, result ->
+fun GetRequirementResponse.toGetRequirements(): List<Result>? {
+    val result = data.result?.mapIndexed { _, result ->
         Result(
             areaintervention = result.areaintervention,
             cause_problem = result.cause_problem,
@@ -94,13 +94,13 @@ fun GetRequirementResponse.toGetRequirements(): List<Result> {
 
 fun GetRequirementResponse.toGetPagination(): Pagination {
     return Pagination(
-        current_page = data.pagination.current_page,
-        from = data.pagination.from,
-        last_page = data.pagination.last_page,
-        path = data.pagination.path,
-        per_page = data.pagination.per_page,
-        to = data.pagination.to,
-        total = data.pagination.total
+        current_page = data.pagination?.current_page,
+        from = data.pagination?.from ?: 0,
+        last_page = data.pagination?.last_page ?: 0,
+        path = data.pagination?.path ?: "pagination",
+        per_page = data.pagination?.per_page ?: 0,
+        to = data.pagination?.to ?: 0,
+        total = data.pagination?.total ?: 0
     )
 }
 
@@ -115,15 +115,15 @@ fun GetRequirementResponse.toGetRequirement(): GetRequirement {
                 prev = data.links?.prev
             ),
             pagination = Pagination(
-                current_page = data.pagination.current_page,
-                from = data.pagination.from,
-                last_page = data.pagination.last_page,
-                path = data.pagination.path,
-                per_page = data.pagination.per_page,
-                to = data.pagination.to,
-                total = data.pagination.total
+                current_page = data.pagination?.current_page,
+                from = data.pagination?.from ?: 0,
+                last_page = data.pagination?.last_page ?: 0,
+                path = data.pagination?.path ?: "pagination",
+                per_page = data.pagination?.per_page ?: 0,
+                to = data.pagination?.to ?: 0,
+                total = data.pagination?.total ?: 0
             ),
-            result = data.result.mapIndexed { _, result ->
+            result = data.result?.mapIndexed { _, result ->
                 Result(
                     areaintervention = result.areaintervention,
                     cause_problem = result.cause_problem,

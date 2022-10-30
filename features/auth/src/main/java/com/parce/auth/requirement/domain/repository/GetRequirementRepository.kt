@@ -15,5 +15,4 @@ interface GetRequirementRepository {
     fun doGetPagination(
         token: String
     ): Flow<Resource<Pagination>>
-
 }
