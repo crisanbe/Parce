@@ -80,8 +80,7 @@ fun HomeCompany(
     onItemClicked: (Int) -> Unit,
     onClickIconButton: (ScaffoldState) -> Unit,
     onClickDestination: (screen: String) -> Unit,
-    viewModelGetRequirement: RequirementViewModel = hiltViewModel(),
-    viewModel: DetailRequirementViewModel = hiltViewModel(),
+    viewModelGetRequirement: RequirementViewModel = hiltViewModel()
 ) {
     val state = viewModelGetRequirement.stateGetRequirement.collectAsState()
     val context = LocalContext.current
@@ -160,8 +159,8 @@ fun HomeCompany(
                 HomeBottomBar(
                     showPrevious = state.value.showPrevious,
                     showNext = state.value.showNext,
-                    onPreviousPressed = { viewModelGetRequirement.doGetRequirement(null,false) },
-                    onNextPressed = { viewModelGetRequirement.doGetRequirement(null,true) }
+                    onPreviousPressed = { viewModelGetRequirement.doGetRequirement(null, false) },
+                    onNextPressed = { viewModelGetRequirement.doGetRequirement(null, true) }
                 )
             },
         ) { PaddingValues ->
@@ -172,11 +171,12 @@ fun HomeCompany(
                     .background(Color.Transparent),
             ) {
                 RequirementsContent(
+                    onItemClicked = { onItemClicked(it) },
                     nameUser = nameUser.toString(),
                     query = query,
                     isLoading = state.value.isLoading,
-                    resultRequirement = state.value.getRequirement,
-                    onItemClicked = { onItemClicked(it) })
+                    resultRequirement = state.value.getRequirement
+                )
             }
         }
     }
@@ -190,13 +190,13 @@ fun HomeCompany(
 @Composable
 private fun RequirementsContent(
     modifier: Modifier = Modifier,
+    onItemClicked: (Int) -> Unit,
     nameUser: String,
     query: String,
     hint: String = "",
     isLoading: Boolean = false,
     resultRequirement: List<Result> = ArrayList(),
-    viewModelGetRequirement: RequirementViewModel = hiltViewModel(),
-    onItemClicked: (Int) -> Unit,
+    viewModelGetRequirement: RequirementViewModel = hiltViewModel()
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var isHintDisplayed by remember {
@@ -219,7 +219,7 @@ private fun RequirementsContent(
             Box(modifier = modifier) {
                 BasicTextField(
                     value = query,
-                    onValueChange = {viewModelGetRequirement.onQueryChanged(it)},
+                    onValueChange = { viewModelGetRequirement.onQueryChanged(it) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Search
@@ -242,7 +242,7 @@ private fun RequirementsContent(
                             isHintDisplayed = (!it.isFocused) && query.isNotEmpty()
                         }
                 )
-                IconButton(onClick = { viewModelGetRequirement.doGetRequirement(query)}) {
+                IconButton(onClick = { viewModelGetRequirement.doGetRequirement(query) }) {
                     Icon(
                         imageVector = Icons.Outlined.Search,
                         contentDescription = null,

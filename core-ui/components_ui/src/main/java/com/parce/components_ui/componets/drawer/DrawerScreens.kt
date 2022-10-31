@@ -30,11 +30,8 @@ sealed class AppScreens(val route: String) {
     object RequirementScreen : AppScreens(route = "RequirementScreen")
     object PermissionScreen : AppScreens(route = "PermissionScreen")
     object DetailScreen : AppScreens(route = "DetailScreen?id={id}") {
-        fun passId(id: Int): String {
-            return "DetailScreen?id=$id"
-        }
+        fun passId(id: Int): String { return "DetailScreen?id=$id" }
     }
-
     object ExitAlert : AppScreens(route = "ExitAlert")
 }
 
@@ -50,7 +47,11 @@ class RequirementActions(navController: NavController) {
     }
 
     val navigateToDetail = { id: Int ->
-        navController.navigate(AppScreens.DetailScreen.passId(id)) {
+        navController.navigate(
+            AppScreens.DetailScreen.passId(
+                id
+            )
+        ) {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true
             }

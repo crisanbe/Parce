@@ -17,7 +17,7 @@ data class Data(
     @SerializedName("impact_problem") val impact_problem: String,
     @SerializedName("relations") val relations: Relations? = null,
     @SerializedName("user") val user: User? = null
-): Serializable
+)
 
 fun Data.toGetDetail(): DataResponse {
     return DataResponse(

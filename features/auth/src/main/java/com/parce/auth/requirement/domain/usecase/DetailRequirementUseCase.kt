@@ -9,9 +9,6 @@ class DetailRequirementUseCase @Inject constructor(
     private val repository: DetailRequirementRepository
 ) {
     suspend operator fun invoke(token: String, id: Int): Resource<DataResponse> {
-        return repository.doDetailRequirement(
-            token = token,
-            id = id
-        )
+        return repository.doDetailRequirement(token = token, id = id)
     }
 }

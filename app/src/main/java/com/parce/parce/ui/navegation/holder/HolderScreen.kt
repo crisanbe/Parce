@@ -16,7 +16,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -532,10 +531,17 @@ fun ScaffoldSection(
                 composable(
                     route = AppScreens.DetailScreen.route,
                     arguments = listOf(
-                        navArgument("id") { type = NavType.IntType }
+                        navArgument("id") {
+                            type = NavType.IntType
+                            defaultValue = 0
+                        }
                     )
                 ) {
-                    DetailScreen(upPress = navigateToHome)
+                    DetailScreen(
+                        navController = controller,
+                        upPress = navigateToHome,
+                        id = it.arguments?.getInt("id").toString()
+                    )
                 }
                 composable(route = AppScreens.TeacherProfile.route) {
                     EnterAnimation {
@@ -564,13 +570,14 @@ fun ScaffoldSection(
                         navController = controller,
                         scaffoldState = scaffoldState,
                         nameUser = it.arguments?.getString("user"),
-                        onClickIconButton = {
-                            onClickIconButton(it)
+                        onClickIconButton = { itScaffold ->
+                            onClickIconButton(itScaffold)
                         },
-                        onClickDestination = {
-                            onClickDestination(it)
+                        onClickDestination = { itString ->
+                            onClickDestination(itString)
                         },
-                        onItemClicked = { DetailIt -> navigateToDetail(DetailIt) }
+                        onItemClicked = { navigateToDetail(it)
+                        }
                     )
                 }
                 composable(

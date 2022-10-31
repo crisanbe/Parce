@@ -22,11 +22,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import com.parce.auth.requirement.domain.model.getrequirement.Result
 import com.parce.auth.theme.ShimmerColorShades
+import com.parce.components_ui.componets.drawer.AppScreens
 
 fun mToast(context: Context, text: String) {
     Toast.makeText(context, text, Toast.LENGTH_LONG).show()
@@ -157,11 +159,11 @@ fun HomeRequirements(
                     )
                 }
                 Button(
-                    onClick = {  onItemClicked(resultRequirement.id) },
-                    colors = ButtonDefaults.buttonColors(Color(0xFF21120B)),
-                    shape = RoundedCornerShape(50.dp),
                     modifier = Modifier
-                        .padding(end = 5.dp)
+                        .padding(end = 5.dp),
+                    onClick = { onItemClicked(resultRequirement.id) },
+                    colors = ButtonDefaults.buttonColors(Color(0xFF21120B)),
+                    shape = RoundedCornerShape(50.dp)
                 ) {
                     Text(
                         text = "Detalles",

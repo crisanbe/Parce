@@ -16,11 +16,10 @@ class GetDetailRequirementRepositoryImpl @Inject constructor(
         id: Int
     ): Resource<DataResponse> {
         val response = try {
-            val response = api.doGetDetailRequirementApi(token = token, id = id)
-            Resource.Success(response)
+            api.doGetDetailRequirementApi(token = token, id = id)
         } catch (e: Exception) {
-            Resource.Error("An unknown error occurred")
+            return Resource.Error("An unknown error occurred")
         }
-        return Resource.Success(response.data?.toGetDetail())
+        return Resource.Success(response.toGetDetail())
     }
 }

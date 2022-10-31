@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.parce.auth.R
 import com.parce.auth.requirement.domain.model.detailrequirement.DataResponse
 import com.parce.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
@@ -31,17 +32,21 @@ import com.parce.auth.theme.Dimension
 import com.parce.components_ui.componets.TopPart
 import com.parce.components_ui.componets.button.ButtonValidation
 import com.parce.components_ui.componets.card.CardView
+import com.parce.components_ui.componets.drawer.DrawerScreens
 
 @Composable
 fun DetailScreen(
+    navController: NavController,
     viewModel: DetailRequirementViewModel = hiltViewModel(),
-    upPress: () -> Unit
+    upPress: () -> Unit,
+    id: String,
 ) {
-    BackHandler(true) {}
+    BackHandler(true) { navController.navigate(DrawerScreens.CompanyHome.route) }
     val state = viewModel.state
     DetailContent(
         data = state.detailRequirement,
-        upPress = upPress
+        upPress = upPress,
+        id = id
     )
 }
 
@@ -49,6 +54,7 @@ fun DetailScreen(
 private fun DetailContent(
     modifier: Modifier = Modifier,
     data: DataResponse?,
+    id: String? = null,
     upPress: () -> Unit
 ) {
     Box(modifier.fillMaxSize()) {
@@ -58,7 +64,8 @@ private fun DetailContent(
                     .fillMaxWidth()
                     .height(240.dp),
                 data = data,
-                upPress = {upPress()}
+                upPress = { upPress() },
+                id = id.toString()
             )
             Body(data = data)
         }
@@ -70,6 +77,7 @@ private fun DetailContent(
 @Composable
 private fun Header(
     modifier: Modifier = Modifier,
+    id: String,
     data: DataResponse?,
     upPress: () -> Unit
 ) {
@@ -93,7 +101,7 @@ private fun Header(
         ) {
             TopPart(onClickAction = { upPress() })
             Text(
-                text = stringResource(R.string.TextField_Requirement_Number),
+                text = stringResource(R.string.TextField_Requirement_Number) + " #️⃣$id",
                 fontSize = 22.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
@@ -149,7 +157,7 @@ private fun Body(data: DataResponse?, modifier: Modifier = Modifier) {
         )
         ButtonValidation(
             text = "Asignar",
-            onClick = { println( counter)},
+            onClick = { println(counter) },
         )
     }
 }
