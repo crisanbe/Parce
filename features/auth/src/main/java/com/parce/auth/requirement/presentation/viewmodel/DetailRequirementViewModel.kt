@@ -31,21 +31,23 @@ class DetailRequirementViewModel @Inject constructor(
         val token = UpdateUserHeaders.getHeader()["Authorization"]
         savedStateHandle.get<Int>("id")?.let { characterId ->
             viewModelScope.launch {
-                getDetailRequirementUseCase(token = token.toString(), id = characterId).also { query ->
-                    when (query) {
+                getDetailRequirementUseCase(
+                    token = token.toString(),
+                    id = characterId
+                ).also { query ->
+                    state = when (query) {
                         is Resource.Success -> {
-                            state = state.copy(
-                                    detailRequirement = query.data,
-                                    isLoading = false,
-                                )
+                            state.copy(
+                                detailRequirement = query.data,
+                                isLoading = false,
+                            )
                         }
                         is Resource.Error -> {
-                            state = state.copy(isLoading = false)
+                            state.copy(isLoading = false)
                         }
                         is Resource.Loading -> {
-                            state = state.copy(isLoading = true)
+                            state.copy(isLoading = true)
                         }
-                        else -> Unit
                     }
                 }
             }

@@ -109,6 +109,11 @@ private fun Header(
                     .fillMaxWidth()
                     .padding(start = 55.dp)
             )
+            Text(
+                text = data?.description ?: "",
+                style = MaterialTheme.typography.h5,
+                color = Color.White
+            )
         }
     })
 }

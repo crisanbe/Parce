@@ -20,6 +20,6 @@ class GetDetailRequirementRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             return Resource.Error("An unknown error occurred")
         }
-        return Resource.Success(response.toGetDetail())
+        return Resource.Success(response.data.toGetDetail())
     }
 }

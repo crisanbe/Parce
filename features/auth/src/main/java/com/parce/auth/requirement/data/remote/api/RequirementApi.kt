@@ -32,6 +32,6 @@ interface RequirementApi {
     suspend fun doGetDetailRequirementApi(
         @Header("Authorization") token: String,
         @Path("requierementId") id: Int
-    ): Data
+    ): GetDetailResponse
 
 }

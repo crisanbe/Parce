@@ -145,7 +145,7 @@ fun HomeRequirements(
                         )
                     }
                     Text(
-                        text = resultRequirement.areaintervention.name,
+                        text = resultRequirement.areaintervention?.name ?: "name",
                         fontSize = 16.sp,
                         color = Color.Black,
                         fontWeight = FontWeight.Bold
