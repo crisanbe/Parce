@@ -148,7 +148,11 @@ fun HomeCompany(
                 )
             },
             floatingActionButton = {
-                FloatingButtonHome(
+                LaunchedEffect(true) {
+                  val job =  userRepo?.getRolLogin()?.collect { rol ->
+                            withContext(Dispatchers.Main) {} }
+                }
+                FloatingButton(
                     text = "Crear requerimiento",
                     onClickFloatingButton = {
                         navController.navigate(AppScreens.RequirementScreen.route)

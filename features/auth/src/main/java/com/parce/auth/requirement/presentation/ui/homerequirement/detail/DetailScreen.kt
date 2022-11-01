@@ -182,13 +182,17 @@ private fun Body(data: DataResponse?, modifier: Modifier = Modifier, navControll
             valueText = "Causa del problema",
             icon = rememberAsyncImagePainter(model = com.parce.components_ui.R.drawable.cause)
         )
-        Column() {
-            ButtonValidation(
-                text = "Ver intervenciones",
-                onClick = { navController.navigate(AppScreens.InterventionScreen.route) },
-            )
+        when (data?.user?.role) {
+            "empresa" -> { }
+            else -> {
+                Column() {
+                    ButtonValidation(
+                        text = "Ver intervenciones",
+                        onClick = { navController.navigate(AppScreens.InterventionScreen.route) },
+                    )
+                }
+            }
         }
-
     }
 }
 
