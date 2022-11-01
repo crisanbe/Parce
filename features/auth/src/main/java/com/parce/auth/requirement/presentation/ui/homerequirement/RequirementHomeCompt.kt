@@ -175,3 +175,87 @@ fun HomeRequirements(
     }
     Spacer(modifier = Modifier.height(8.dp))
 }
+
+@Composable
+fun HomeInterventions(
+    modifier: Modifier = Modifier,
+    resultInterventions: Result,
+    onItemClicked: (Int) -> Unit
+) {
+    val context = LocalContext.current
+    Card(
+        modifier = modifier,
+        elevation = 5.dp,
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        Row(
+            modifier = modifier
+                .clickable(onClick = {
+                    mToast(context, resultInterventions.id.toString())
+                })
+                .clip(RoundedCornerShape(20.dp))
+                .background(Color(0xFFF5F5F5))
+                .fillMaxWidth()
+                .height(130.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Spacer(modifier = Modifier.width(1.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.End
+            ) {
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(5.dp)
+                ) {
+                    Card(
+                        modifier = Modifier
+                            .widthIn(40.dp)
+                            .heightIn(20.dp),
+                        backgroundColor = Color.Black,
+                        shape = RoundedCornerShape(20.dp),
+                        elevation = 2.dp
+                    ) {
+                        Text(
+                            text = resultInterventions.id.toString(),
+                            textAlign = TextAlign.Center,
+                            fontSize = 16.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Text(
+                        text = resultInterventions.areaintervention?.name ?: "name",
+                        fontSize = 16.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = resultInterventions.description,
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        color = Color.Gray,
+                    )
+                }
+                Button(
+                    modifier = Modifier
+                        .padding(end = 5.dp),
+                    onClick = { onItemClicked(resultInterventions.id) },
+                    colors = ButtonDefaults.buttonColors(Color(0xFF21120B)),
+                    shape = RoundedCornerShape(50.dp)
+                ) {
+                    Text(
+                        text = "Detalles",
+                        color = Color.White
+                    )
+                }
+            }
+        }
+    }
+    Spacer(modifier = Modifier.height(8.dp))
+}

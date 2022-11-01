@@ -36,6 +36,7 @@ import com.parce.auth.register.presentation.ui.RegisterScreen
 import com.parce.auth.requirement.presentation.ui.homerequirement.ExitAlert
 import com.parce.auth.requirement.presentation.ui.homerequirement.RequirementScreen
 import com.parce.auth.requirement.presentation.ui.homerequirement.detail.DetailScreen
+import com.parce.auth.requirement.presentation.ui.intervention.InterventionScreen
 import com.parce.auth.sendemailforgotmypassword.presentation.components.resendnewcode.SendEmailForgotPasswordView
 import com.parce.auth.updateuser.presentation.ui.updateUser.company.CompanyRegistrationPageView
 import com.parce.auth.updateuser.presentation.ui.updateUser.company.CompanyRegistrationView
@@ -539,10 +540,23 @@ fun ScaffoldSection(
                 ) {
                     DetailScreen(
                         navController = controller,
-                        upPress = navigateToHome,
-                        id = it.arguments?.getInt("id").toString()
+                        upPress = navigateToHome
                     )
                 }
+                composable(route = AppScreens.InterventionScreen.route) {
+                    InterventionScreen(
+                        navController = controller,
+                        scaffoldState = scaffoldState,
+                        onClickIconButton = { itScaffold ->
+                            onClickIconButton(itScaffold)
+                        },
+                        onClickDestination = { itString ->
+                            onClickDestination(itString)
+                        },
+                        onItemClicked = {}
+                    )
+                }
+
                 composable(route = AppScreens.TeacherProfile.route) {
                     EnterAnimation {
                         onStatusBarColorChange(MaterialTheme.colors.background)

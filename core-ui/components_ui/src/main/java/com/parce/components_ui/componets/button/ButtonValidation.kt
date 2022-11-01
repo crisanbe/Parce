@@ -57,4 +57,24 @@ fun ButtonValidationLogin(
             fontSize = fontSize
         )
     }
+
+    @Composable
+    fun ButtonDetail(
+        text: String,
+        fontSize: TextUnit = 20.sp,
+        onClick: () -> Unit
+    ) {
+        Button(
+            onClick = { onClick.invoke() },
+            shape = RoundedCornerShape(percent = 45),
+            modifier = Modifier.size(height = 30.dp, width = 300.dp),
+            colors = ButtonDefaults.textButtonColors(backgroundColor = Color.Black)
+        ) {
+            Text(
+                text = text,
+                color = Color.White,
+                fontSize = fontSize
+            )
+        }
+    }
 }

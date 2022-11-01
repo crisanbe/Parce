@@ -1,5 +1,6 @@
 package com.parce.auth.requirement.data.remote.api
 
+import com.parce.auth.requirement.data.remote.assignrequirement.request.AssignRequest
 import com.parce.auth.requirement.data.remote.getdetailrequirement.Data
 import com.parce.auth.requirement.data.remote.getdetailrequirement.GetDetailResponse
 import com.parce.auth.requirement.data.remote.getrequirement.GetRequirementResponse
@@ -34,4 +35,15 @@ interface RequirementApi {
         @Path("requierementId") id: Int
     ): GetDetailResponse
 
+    @GET("requierements-assign")
+    suspend fun doAssignRequirementApi(
+        @Header("Authorization") token: String,
+        @Body user: AssignRequest,
+    ): GetDetailResponse
+
+    @GET("interventions")
+    suspend fun doInterventionApi(
+        @Header("Authorization") token: String,
+        @Body user: AssignRequest,
+    ): GetDetailResponse
 }
