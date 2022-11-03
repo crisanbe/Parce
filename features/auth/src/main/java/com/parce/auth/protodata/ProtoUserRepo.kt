@@ -17,6 +17,4 @@ interface ProtoUserRepo {
     suspend fun deleteTokenRegister()
     suspend fun saveNameUser(status: String?)
     suspend fun getNameUser(): Flow<String>
-    suspend fun savePages(page: Int?)
-    suspend fun getPage(): Flow<Int>
 }

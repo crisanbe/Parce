@@ -167,25 +167,4 @@ class ProtoUserRepoImpl(
                 protoBuilder.nameUser
             }
     }
-
-    override suspend fun savePages(page: Int?) {
-        protoDataStore.updateData { pages ->
-            pages.toBuilder()
-                .setPages(page!!)
-                .build()
-        }
-    }
-
-    override suspend fun getPage(): Flow<Int> {
-        return protoDataStore.data
-            .catch { exp ->
-                if (exp is IOException) {
-                    emit(UserStore.getDefaultInstance())
-                } else {
-                    throw exp
-                }
-            }.map { protoBuilder ->
-                protoBuilder.pages
-            }
-    }
 }

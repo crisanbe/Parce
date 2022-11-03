@@ -7,8 +7,7 @@ message UserStore {
     bool is_logged_in = 1;
     string token_autentication = 2;
     string token_register = 3;
-    int32 pages = 4;
-    string email_user = 5;
-    string rol = 6;
-    string nameUser = 7;
+    string email_user = 4;
+    string rol = 5;
+    string nameUser = 6;
 }

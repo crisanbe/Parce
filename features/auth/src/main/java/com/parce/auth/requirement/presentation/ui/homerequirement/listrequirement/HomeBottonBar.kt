@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Upload
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -32,14 +33,13 @@ fun HomeBottomBar(
     onNextPressed: () -> Unit
 ) {
     BottomAppBar(
-        backgroundColor = Color(0xFFC7C7C7),
-        modifier = Modifier.background(Color.White),
-        cutoutShape = MaterialTheme.shapes.small.copy(
-            CornerSize(percent = 50)
-        ),
+        modifier = Modifier
+            .background(Color.White)
+            .shadow(elevation = 10.dp, RoundedCornerShape(30.dp)),
+        backgroundColor = Color(0xFFE2E1E1),
         contentPadding = PaddingValues(
             start = 20.dp,
-            top = 30.dp,
+            top = 10.dp,
             end = 20.dp,
             bottom = 20.dp
         )
@@ -47,13 +47,13 @@ fun HomeBottomBar(
         Surface(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 20.dp)
-                .offset(x = (-10).dp, y = (-20).dp)
+                .padding(top = 10.dp)
+                .offset(y = (-0).dp)
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFC7C7C7))
+                    .background(Color(0xFFE2E1E1))
                     .padding(horizontal = 30.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 content = {
@@ -61,7 +61,7 @@ fun HomeBottomBar(
                         modifier = Modifier
                             .weight(1f)
                             .heightIn(10.dp)
-                            .offset(y = (1).dp),
+                            .offset(y = (5).dp),
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Color(0xFF21130C)
                         ),
@@ -89,7 +89,7 @@ fun HomeBottomBar(
                         modifier = Modifier
                             .weight(1f)
                             .heightIn(10.dp)
-                            .offset(y = (1).dp),
+                            .offset(y = (5).dp),
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Color(0xFF21130C)
                         ),

@@ -40,11 +40,13 @@ fun DropAcademic(
             placeholder = { Text(text = text, color = Color.Black) },
             trailingIcon = {
                 rotateIcon = if (expanded) 180f else 0f
-                Image(
-                    painter = mainIcon!!,
-                    contentDescription = null,
-                    modifier = Modifier.rotate(rotateIcon)
-                )
+                if (mainIcon != null) {
+                    Image(
+                        painter = mainIcon,
+                        contentDescription = null,
+                        modifier = Modifier.rotate(rotateIcon)
+                    )
+                }
             })
         Box {
             ExposedDropdownMenu(

@@ -2,6 +2,7 @@ package com.parce.auth.profileUser.presentation.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -20,6 +21,7 @@ fun FloatingButton(text: String, onClickFloatingButton: () -> Unit) {
     var extendedState by remember { mutableStateOf(value = true) }
     var secondsDisappear by remember { mutableStateOf(value = 2) }
     FloatingActionButton(
+        modifier = Modifier.offset(y = 42.dp),
         onClick = { onClickFloatingButton.invoke() },
         backgroundColor = Color(0xFF030202)
     ) {

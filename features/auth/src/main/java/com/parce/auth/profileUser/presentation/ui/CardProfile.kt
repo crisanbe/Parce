@@ -59,7 +59,7 @@ fun CardProfile(
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = item.role,
+                        text = item.role.toString(),
                         style = MaterialTheme.typography.body1,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -75,7 +75,7 @@ fun CardProfile(
                     .align(Alignment.CenterHorizontally)
             ) {
                 CardView(
-                    item = item.type_document,
+                    item = item.type_document.toString(),
                     elevation = 10.dp,
                     text = "Tipo de documento: ",
                     border = BorderStroke(1.dp, Color.Black)
@@ -87,7 +87,7 @@ fun CardProfile(
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.phone,
+                    item = item.phone.toString(),
                     elevation = 10.dp,
                     text = "Telefono: ",
                     border = BorderStroke(1.dp, Color.Black)
@@ -105,13 +105,13 @@ fun CardProfile(
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.group_etnic,
+                    item = item.group_etnic.toString(),
                     elevation = 10.dp,
                     text = "Grupo etnico: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.presents_disability,
+                    item = item.presents_disability.toString(),
                     elevation = 10.dp,
                     text = "Discapacidad: ",
                     border = BorderStroke(1.dp, Color.Black)

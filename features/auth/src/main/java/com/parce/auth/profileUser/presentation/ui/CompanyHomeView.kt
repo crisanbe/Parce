@@ -152,24 +152,19 @@ fun HomeCompany(
                 )
             },
             floatingActionButton = {
-
-                val rol = HeaderRequirement.getRol()["rol"]
-                if (rol == "empresa") {
-                    FloatingButton(
-                        text = "Crear requerimiento",
-                        onClickFloatingButton = {
-                            navController.navigate(AppScreens.RequirementScreen.route)
-                        })
-                } else {
-                    FloatingButton(
-                        text = "Asignar requerimiento",
-                        onClickFloatingButton = {
-                            navController.navigate(AppScreens.RequirementScreen.route)
-                        })
+                when (HeaderRequirement.getRol()["rol"]) {
+                    "empresa" -> {
+                        FloatingButton(
+                            text = "Crear requerimiento",
+                            onClickFloatingButton = {
+                                navController.navigate(AppScreens.RequirementScreen.route)
+                            })
+                    }
+                    else -> { }
                 }
 
             },
-            isFloatingActionButtonDocked = true,
+            floatingActionButtonPosition = FabPosition.Center,
             bottomBar = {
                 HomeBottomBar(
                     showPrevious = state.value.showPrevious,

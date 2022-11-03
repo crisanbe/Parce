@@ -33,6 +33,7 @@ import com.parce.auth.newpasswordforget.presentation.components.newpassword.NewP
 import com.parce.auth.profileUser.presentation.ui.HomeCompany
 import com.parce.auth.profileUser.presentation.ui.ProfileCompany
 import com.parce.auth.register.presentation.ui.RegisterScreen
+import com.parce.auth.requirement.presentation.ui.homerequirement.assign.AssignScreen
 import com.parce.auth.requirement.presentation.ui.homerequirement.detail.DetailScreen
 import com.parce.auth.requirement.presentation.ui.homerequirement.listrequirement.ExitAlert
 import com.parce.auth.requirement.presentation.ui.homerequirement.listrequirement.RequirementScreen
@@ -539,6 +540,14 @@ fun ScaffoldSection(
                     )
                 ) {
                     DetailScreen(
+                        navController = controller,
+                        upPress = navigateToHome
+                    )
+                }
+                composable(
+                    route = AppScreens.AssignScreen.route
+                ) {
+                    AssignScreen(
                         navController = controller,
                         upPress = navigateToHome
                     )

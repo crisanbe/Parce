@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,13 +42,18 @@ import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.parce.auth.R
+import com.parce.auth.profileUser.presentation.ui.FloatingButton
+import com.parce.auth.requirement.di.HeaderRequirement
 import com.parce.auth.requirement.domain.model.detailrequirement.DataResponse
 import com.parce.auth.requirement.domain.model.detailrequirement.FileResponse
 import com.parce.auth.requirement.presentation.ui.homerequirement.detail.dowloadfile.FileDownloadWorker
 import com.parce.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
 import com.parce.components_ui.componets.TopPart
+import com.parce.components_ui.componets.button.ButtonValidation
+import com.parce.components_ui.componets.drawer.AppScreens
 import com.parce.components_ui.componets.drawer.DrawerScreens
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun DetailScreen(
     navController: NavController,
@@ -56,14 +62,11 @@ fun DetailScreen(
 ) {
     BackHandler(true) { navController.navigate(DrawerScreens.CompanyHome.route) }
     val state = viewModel.state
-    state.detailRequirement?.relations?.files?.get(0)?.let {
-        DetailContent(
+    DetailContent(
         data = state.detailRequirement,
-        file = it,
         upPress = upPress,
         navController = navController
     )
-    }
 }
 
 @Composable
@@ -71,7 +74,6 @@ private fun DetailContent(
     navController: NavController,
     modifier: Modifier = Modifier,
     data: DataResponse?,
-    file: FileResponse,
     upPress: () -> Unit
 ) {
     Box(modifier.fillMaxSize()) {
@@ -83,7 +85,7 @@ private fun DetailContent(
                 data = data,
                 upPress = { upPress() }
             )
-            Body(data = data, navController = navController, file = file)
+            Body(data = data, navController = navController)
         }
 
     }
@@ -120,9 +122,8 @@ private fun Header(
                 fontSize = 22.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 55.dp)
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     })
@@ -133,7 +134,6 @@ private fun Header(
 @Composable
 private fun Body(
     data: DataResponse?,
-    file: FileResponse,
     modifier: Modifier = Modifier,
     navController: NavController
 ) {
@@ -186,73 +186,80 @@ private fun Body(
             text = data?.impact_problem.toString(),
             valueText = "Impacto del problema",
             icon = rememberAsyncImagePainter(
-                model = com.parce.components_ui.R.drawable.impact)
+                model = com.parce.components_ui.R.drawable.impact
+            )
         )
         FormValueComp(
             ValueState = { data?.efect_problem },
             text = data?.efect_problem.toString(),
             valueText = "Efecto del problema",
             icon = rememberAsyncImagePainter(
-                model = com.parce.components_ui.R.drawable.effect)
+                model = com.parce.components_ui.R.drawable.effect
+            )
         )
         FormValueComp(
             ValueState = { data?.cause_problem },
             text = data?.cause_problem.toString(),
             valueText = "Causa del problema",
             icon = rememberAsyncImagePainter(
-                model = com.parce.components_ui.R.drawable.cause)
+                model = com.parce.components_ui.R.drawable.cause
+            )
         )
 
-        ItemFile(
-            file = file,
-            startDownload = {
-                startDownloadingFile(
-                    file = file,
-                    success = {
-                        file.copy().apply {
-                            isDownloading = false
-                            downloadedUri = it
-                        }
-                    },
-                    failed = {
-                        file.copy().apply {
-                            isDownloading = false
-                            downloadedUri = null
-                        }
-                    },
-                    running = {
-                        file.copy().apply {
-                            isDownloading = true
-                        }
-                    }
-                )
-            },
-            openFile = {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setDataAndType(it.downloadedUri?.toUri(),"application/pdf")
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                try {
-                    context.startActivity(intent)
-                }catch (e: ActivityNotFoundException){
-                    Toast.makeText(
-                        context,
-                        "Can't open Pdf",
-                        Toast.LENGTH_SHORT
-                    ).show()
+//        ItemFile(
+//            file = file,
+//            startDownload = {
+//                startDownloadingFile(
+//                    file = file,
+//                    success = {
+//                        file.copy().apply {
+//                            isDownloading = false
+//                            downloadedUri = it
+//                        }
+//                    },
+//                    failed = {
+//                        file.copy().apply {
+//                            isDownloading = false
+//                            downloadedUri = null
+//                        }
+//                    },
+//                    running = {
+//                        file.copy().apply {
+//                            isDownloading = true
+//                        }
+//                    }
+//                )
+//            },
+//            openFile = {
+//                val intent = Intent(Intent.ACTION_VIEW)
+//                intent.setDataAndType(it.downloadedUri?.toUri(), "application/pdf")
+//                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//                try {
+//                    context.startActivity(intent)
+//                } catch (e: ActivityNotFoundException) {
+//                    Toast.makeText(
+//                        context,
+//                        "Can't open Pdf",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//            }
+//        )
+        when (HeaderRequirement.getRol()["rol"]) {
+            "empresa" -> {
+                ButtonValidation(text = "Ver intervenciones") {
+                    navController.navigate(AppScreens.InterventionScreen.route)
                 }
             }
-        )
-        /*when (data?.user?.role) {
-            "empresa" -> {}
             else -> {
-                Column() {
-                    ButtonValidation(
-                        text = "Ver intervenciones",
-                        onClick = { navController.navigate(AppScreens.InterventionScreen.route) },
-                    )
+                ButtonValidation(text = "Ver intervenciones") {
+                    navController.navigate(AppScreens.InterventionScreen.route)
+                }
+                ButtonValidation(text = "Asignar requerimiento") {
+                    navController.navigate(AppScreens.AssignScreen.route)
                 }
             }
-        }*/
+        }
     }
 }
 
@@ -284,8 +291,8 @@ fun mirroringIcon(ltrIcon: ImageVector, rtlIcon: ImageVector): ImageVector =
 @Composable
 fun ItemFile(
     file: FileResponse,
-    startDownload:(FileResponse) -> Unit,
-    openFile:(FileResponse) -> Unit
+    startDownload: (FileResponse) -> Unit,
+    openFile: (FileResponse) -> Unit
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -319,9 +326,9 @@ fun ItemFile(
                 )
 
                 Row {
-                    val description = if (file.isDownloading){
+                    val description = if (file.isDownloading) {
                         "Downloading..."
-                    }else{
+                    } else {
                         if (file.downloadedUri.isNullOrEmpty()) "Tap to download the file" else "Tap to open file"
                     }
                     Text(
@@ -332,7 +339,7 @@ fun ItemFile(
 
             }
 
-            if (file.isDownloading){
+            if (file.isDownloading) {
                 CircularProgressIndicator(
                     color = Color.Blue,
                     modifier = Modifier
@@ -348,9 +355,9 @@ fun ItemFile(
 
 private fun startDownloadingFile(
     file: FileResponse,
-    success:(String) -> Unit,
-    failed:(String) -> Unit,
-    running:() -> Unit
+    success: (String) -> Unit,
+    failed: (String) -> Unit,
+    running: () -> Unit
 ) {
     val data = Data.Builder()
 
@@ -378,11 +385,14 @@ private fun startDownloadingFile(
     )
     val lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner as LifecycleOwner
     workManager.getWorkInfoByIdLiveData(fileDownloadWorker.id)
-        .observe(lifeCycleOwner){ info->
+        .observe(lifeCycleOwner) { info ->
             info?.let {
                 when (it.state) {
                     WorkInfo.State.SUCCEEDED -> {
-                        success(it.outputData.getString(FileDownloadWorker.FileParams.KEY_FILE_URI) ?: "")
+                        success(
+                            it.outputData.getString(FileDownloadWorker.FileParams.KEY_FILE_URI)
+                                ?: ""
+                        )
                     }
                     WorkInfo.State.FAILED -> {
                         failed("Downloading failed!")

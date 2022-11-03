@@ -293,8 +293,6 @@ fun RequirementScreen(
                                 when (event) {
                                     is UiEvent.Success -> {
                                         viewModel.doGetPagination()
-                                        val pages = statePages.value.pagination?.last_page
-                                        userRepo?.savePages((pages))
                                         navController.navigate(
                                             DrawerScreens.CompanyHome.route
                                         )
