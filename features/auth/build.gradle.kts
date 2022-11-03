@@ -74,6 +74,7 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:5.2.0")
     implementation("com.google.accompanist:accompanist-placeholder:0.26.1-alpha")
     implementation("androidx.preference:preference-ktx:1.2.0")
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
     kapt(DaggerHilt.hiltCompiler)
     kapt(DaggerHilt.hiltCompilerAndroidx)
 

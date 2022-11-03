@@ -33,9 +33,9 @@ import com.parce.auth.newpasswordforget.presentation.components.newpassword.NewP
 import com.parce.auth.profileUser.presentation.ui.HomeCompany
 import com.parce.auth.profileUser.presentation.ui.ProfileCompany
 import com.parce.auth.register.presentation.ui.RegisterScreen
-import com.parce.auth.requirement.presentation.ui.homerequirement.ExitAlert
-import com.parce.auth.requirement.presentation.ui.homerequirement.RequirementScreen
 import com.parce.auth.requirement.presentation.ui.homerequirement.detail.DetailScreen
+import com.parce.auth.requirement.presentation.ui.homerequirement.listrequirement.ExitAlert
+import com.parce.auth.requirement.presentation.ui.homerequirement.listrequirement.RequirementScreen
 import com.parce.auth.requirement.presentation.ui.intervention.InterventionScreen
 import com.parce.auth.sendemailforgotmypassword.presentation.components.resendnewcode.SendEmailForgotPasswordView
 import com.parce.auth.updateuser.presentation.ui.updateUser.company.CompanyRegistrationPageView
@@ -638,10 +638,3 @@ fun ScaffoldSection(
         }
     }
 }
-
-/*
-@Composable
-fun getActiveRoute(navController: NavHostController): String {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    return navBackStackEntry?.destination?.route ?: "SplashScreen"
-}*/

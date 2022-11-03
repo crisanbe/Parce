@@ -26,35 +26,40 @@ import com.parce.components_ui.componets.state.TextFieldValueState
 import com.parce.components_ui.componets.state.ValueState
 
 @Composable
-fun FormValueComp(icon: AsyncImagePainter? = null, ValueState: (String) -> Unit, text: String, valueText: String? = null) {
-        val focusManager = LocalFocusManager.current
-        TextField(
-            value = text,
-            onValueChange = {
-                if (it.length <= 10) ValueState(it)
-            },
-            label = { Text(valueText.toString()) },
-            colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next,
-                keyboardType = KeyboardType.Number
-            ),
-            keyboardActions = KeyboardActions(onDone = {
-                focusManager.moveFocus(FocusDirection.Down)
-            }),
-            maxLines = 1,
-            leadingIcon = {
-                icon?.let {
-                    Icon(
-                        painter = it,
-                        contentDescription = text,
-                    )
-                }
-                Divider(
-                    modifier = Modifier
-                        .width(34.3.dp)
-                        .height(30.dp)
-                        .padding(start = 33.dp)
+fun FormValueComp(
+    icon: AsyncImagePainter? = null,
+    ValueState: (String) -> Unit,
+    text: String?, valueText: String? = null
+) {
+    val focusManager = LocalFocusManager.current
+    TextField(
+        value = text ?: "",
+        onValueChange = {
+            if (it.length <= 10) ValueState(it)
+        },
+        label = { Text(valueText.toString()) },
+        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Next,
+            keyboardType = KeyboardType.Number
+        ),
+        keyboardActions = KeyboardActions(onDone = {
+            focusManager.moveFocus(FocusDirection.Down)
+        }),
+        maxLines = 1,
+        leadingIcon = {
+            icon?.let {
+                Icon(
+                    painter = it,
+                    contentDescription = text,
+                    tint = Color.Black
                 )
-            })
+            }
+            Divider(
+                modifier = Modifier
+                    .width(34.3.dp)
+                    .height(30.dp)
+                    .padding(start = 33.dp)
+            )
+        })
 }

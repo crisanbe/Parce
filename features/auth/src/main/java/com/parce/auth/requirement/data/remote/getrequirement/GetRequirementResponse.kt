@@ -67,7 +67,7 @@ data class Areaintervention(
     @SerializedName("name") val name: String
 ) : Serializable
 
-fun GetRequirementResponse.toGetRequirements(): List<Result>? {
+/*fun GetRequirementResponse.toGetRequirements(): List<Result>? {
     val result = data.result?.mapIndexed { _, result ->
         Result(
             areaintervention = result.areaintervention,
@@ -90,7 +90,7 @@ fun GetRequirementResponse.toGetRequirements(): List<Result>? {
         )
     }
     return result
-}
+}*/
 
 fun GetRequirementResponse.toGetPagination(): Pagination {
     return Pagination(

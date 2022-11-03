@@ -1,6 +1,6 @@
 @file:Suppress("BlockingMethodInNonBlockingContext") @file:OptIn(ExperimentalPermissionsApi::class)
 
-package com.parce.auth.requirement.presentation.ui.homerequirement
+package com.parce.auth.requirement.presentation.ui.homerequirement.listrequirement
 
 import android.Manifest
 import android.annotation.SuppressLint

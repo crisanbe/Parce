@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.parce.auth.requirement.domain.model.getrequirement.Result
-import com.parce.auth.requirement.presentation.ui.homerequirement.AnimationEffect
-import com.parce.auth.requirement.presentation.ui.homerequirement.HomeRequirements
+import com.parce.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
+import com.parce.auth.requirement.presentation.ui.homerequirement.listrequirement.HomeRequirements
 import com.parce.auth.requirement.presentation.viewmodel.RequirementViewModel
 import com.parce.components_ui.componets.TopBar
 import com.parce.components_ui.componets.drawer.Drawer

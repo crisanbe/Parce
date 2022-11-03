@@ -30,4 +30,21 @@ object HeaderRequirement : ViewModel() {
         }
         return head
     }
+
+    fun getRol(): Map<String, String> {
+        var head = mapOf<String, String>()
+        viewModelScope.launch() {
+            userRepo?.getRolLogin()?.collect { rol ->
+                withContext(Dispatchers.Main) {
+                    val state = MutableStateFlow(rol)
+                    state.update { rol }
+                    val headers: HashMap<String, String> = hashMapOf(
+                        "rol" to rol,
+                    )
+                    head = headers
+                }
+            }
+        }
+        return head
+    }
 }

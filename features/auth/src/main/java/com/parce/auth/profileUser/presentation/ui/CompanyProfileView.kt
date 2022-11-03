@@ -26,7 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.parce.auth.profileUser.domain.model.User
 import com.parce.auth.profileUser.presentation.viewmodel.GetProfileViewModel
-import com.parce.auth.requirement.presentation.ui.homerequirement.AnimationEffect
+import com.parce.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
 import com.parce.components_ui.componets.FloatingButtonHome
 import com.parce.components_ui.componets.TopBar
 import com.parce.components_ui.componets.drawer.AppScreens

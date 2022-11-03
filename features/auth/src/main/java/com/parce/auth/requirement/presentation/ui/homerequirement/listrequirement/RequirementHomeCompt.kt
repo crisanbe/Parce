@@ -1,4 +1,4 @@
-package com.parce.auth.requirement.presentation.ui.homerequirement
+package com.parce.auth.requirement.presentation.ui.homerequirement.listrequirement
 
 import android.content.Context
 import android.widget.Toast

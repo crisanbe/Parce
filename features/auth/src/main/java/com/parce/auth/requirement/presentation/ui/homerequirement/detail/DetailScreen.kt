@@ -1,48 +1,51 @@
 package com.parce.auth.requirement.presentation.ui.homerequirement.detail
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.ArrowForward
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import coil.compose.ImagePainter
+import androidx.work.*
 import coil.compose.rememberAsyncImagePainter
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.parce.auth.R
 import com.parce.auth.requirement.domain.model.detailrequirement.DataResponse
+import com.parce.auth.requirement.domain.model.detailrequirement.FileResponse
+import com.parce.auth.requirement.presentation.ui.homerequirement.detail.dowloadfile.FileDownloadWorker
 import com.parce.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
-import com.parce.auth.theme.Dimension
 import com.parce.components_ui.componets.TopPart
-import com.parce.components_ui.componets.button.ButtonValidation
-import com.parce.components_ui.componets.card.CardView
-import com.parce.components_ui.componets.drawer.AppScreens
 import com.parce.components_ui.componets.drawer.DrawerScreens
 
 @Composable
@@ -53,11 +56,14 @@ fun DetailScreen(
 ) {
     BackHandler(true) { navController.navigate(DrawerScreens.CompanyHome.route) }
     val state = viewModel.state
-    DetailContent(
+    state.detailRequirement?.relations?.files?.get(0)?.let {
+        DetailContent(
         data = state.detailRequirement,
+        file = it,
         upPress = upPress,
         navController = navController
     )
+    }
 }
 
 @Composable
@@ -65,6 +71,7 @@ private fun DetailContent(
     navController: NavController,
     modifier: Modifier = Modifier,
     data: DataResponse?,
+    file: FileResponse,
     upPress: () -> Unit
 ) {
     Box(modifier.fillMaxSize()) {
@@ -76,7 +83,7 @@ private fun DetailContent(
                 data = data,
                 upPress = { upPress() }
             )
-            Body(data = data, navController = navController)
+            Body(data = data, navController = navController, file = file)
         }
 
     }
@@ -122,10 +129,19 @@ private fun Header(
 }
 
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalPermissionsApi::class)
 @Composable
-private fun Body(data: DataResponse?, modifier: Modifier = Modifier, navController: NavController) {
+private fun Body(
+    data: DataResponse?,
+    file: FileResponse,
+    modifier: Modifier = Modifier,
+    navController: NavController
+) {
+    val context = LocalContext.current as Activity
     val hideKeyboard = LocalSoftwareKeyboardController.current
+    val permissionsState = rememberMultiplePermissionsState(
+        permissions = listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+    )
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -134,7 +150,7 @@ private fun Body(data: DataResponse?, modifier: Modifier = Modifier, navControll
         verticalArrangement = Arrangement.spacedBy(15.dp),
     ) {
         FormValueComp(
-            ValueState = { data?.areaintervention?.name },
+            ValueState = { data?.areaintervention?.name.toString() },
             text = data?.areaintervention?.name.toString(),
             valueText = "Area de intervencion",
             icon = rememberAsyncImagePainter(model = com.parce.components_ui.R.drawable.area)
@@ -155,6 +171,7 @@ private fun Body(data: DataResponse?, modifier: Modifier = Modifier, navControll
                     painter = rememberAsyncImagePainter(
                         model = com.parce.components_ui.R.drawable.description
                     ),
+                    tint = Color.Black,
                     contentDescription = "",
                 )
                 Divider(
@@ -168,22 +185,65 @@ private fun Body(data: DataResponse?, modifier: Modifier = Modifier, navControll
             ValueState = { data?.impact_problem },
             text = data?.impact_problem.toString(),
             valueText = "Impacto del problema",
-            icon = rememberAsyncImagePainter(model = com.parce.components_ui.R.drawable.impact)
+            icon = rememberAsyncImagePainter(
+                model = com.parce.components_ui.R.drawable.impact)
         )
         FormValueComp(
             ValueState = { data?.efect_problem },
             text = data?.efect_problem.toString(),
             valueText = "Efecto del problema",
-            icon = rememberAsyncImagePainter(model = com.parce.components_ui.R.drawable.effect)
+            icon = rememberAsyncImagePainter(
+                model = com.parce.components_ui.R.drawable.effect)
         )
         FormValueComp(
             ValueState = { data?.cause_problem },
             text = data?.cause_problem.toString(),
             valueText = "Causa del problema",
-            icon = rememberAsyncImagePainter(model = com.parce.components_ui.R.drawable.cause)
+            icon = rememberAsyncImagePainter(
+                model = com.parce.components_ui.R.drawable.cause)
         )
-        when (data?.user?.role) {
-            "empresa" -> { }
+
+        ItemFile(
+            file = file,
+            startDownload = {
+                startDownloadingFile(
+                    file = file,
+                    success = {
+                        file.copy().apply {
+                            isDownloading = false
+                            downloadedUri = it
+                        }
+                    },
+                    failed = {
+                        file.copy().apply {
+                            isDownloading = false
+                            downloadedUri = null
+                        }
+                    },
+                    running = {
+                        file.copy().apply {
+                            isDownloading = true
+                        }
+                    }
+                )
+            },
+            openFile = {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setDataAndType(it.downloadedUri?.toUri(),"application/pdf")
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                try {
+                    context.startActivity(intent)
+                }catch (e: ActivityNotFoundException){
+                    Toast.makeText(
+                        context,
+                        "Can't open Pdf",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        )
+        /*when (data?.user?.role) {
+            "empresa" -> {}
             else -> {
                 Column() {
                     ButtonValidation(
@@ -192,7 +252,7 @@ private fun Body(data: DataResponse?, modifier: Modifier = Modifier, navControll
                     )
                 }
             }
-        }
+        }*/
     }
 }
 
@@ -220,3 +280,153 @@ fun mirroringBackIcon() = mirroringIcon(
 @Composable
 fun mirroringIcon(ltrIcon: ImageVector, rtlIcon: ImageVector): ImageVector =
     if (LocalLayoutDirection.current == LayoutDirection.Ltr) ltrIcon else rtlIcon
+
+@Composable
+fun ItemFile(
+    file: FileResponse,
+    startDownload:(FileResponse) -> Unit,
+    openFile:(FileResponse) -> Unit
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = Color.White)
+            .border(width = 2.dp, color = Color.Blue, shape = RoundedCornerShape(16.dp))
+            .clickable {
+                if (!file.isDownloading) {
+                    if (file.downloadedUri.isNullOrEmpty()) {
+                        startDownload(file)
+                    } else {
+                        openFile(file)
+                    }
+                }
+            }
+            .padding(16.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+            ) {
+                Text(
+                    text = file.url,
+                    color = Color.Black
+                )
+
+                Row {
+                    val description = if (file.isDownloading){
+                        "Downloading..."
+                    }else{
+                        if (file.downloadedUri.isNullOrEmpty()) "Tap to download the file" else "Tap to open file"
+                    }
+                    Text(
+                        text = description,
+                        color = Color.DarkGray
+                    )
+                }
+
+            }
+
+            if (file.isDownloading){
+                CircularProgressIndicator(
+                    color = Color.Blue,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .align(Alignment.CenterVertically)
+                )
+            }
+
+        }
+
+    }
+}
+
+private fun startDownloadingFile(
+    file: FileResponse,
+    success:(String) -> Unit,
+    failed:(String) -> Unit,
+    running:() -> Unit
+) {
+    val data = Data.Builder()
+
+    data.apply {
+        putString(FileDownloadWorker.FileParams.KEY_FILE_NAME, file.created_at)
+        putString(FileDownloadWorker.FileParams.KEY_FILE_URL, file.url)
+    }
+
+    val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .setRequiresStorageNotLow(true)
+        .setRequiresBatteryNotLow(true)
+        .build()
+
+    val fileDownloadWorker = OneTimeWorkRequestBuilder<FileDownloadWorker>()
+        .setConstraints(constraints)
+        .setInputData(data.build())
+        .build()
+
+    val workManager = WorkManager.getInstance()
+    workManager.enqueueUniqueWork(
+        "oneFileDownloadWork_${System.currentTimeMillis()}",
+        ExistingWorkPolicy.KEEP,
+        fileDownloadWorker
+    )
+    val lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner as LifecycleOwner
+    workManager.getWorkInfoByIdLiveData(fileDownloadWorker.id)
+        .observe(lifeCycleOwner){ info->
+            info?.let {
+                when (it.state) {
+                    WorkInfo.State.SUCCEEDED -> {
+                        success(it.outputData.getString(FileDownloadWorker.FileParams.KEY_FILE_URI) ?: "")
+                    }
+                    WorkInfo.State.FAILED -> {
+                        failed("Downloading failed!")
+                    }
+                    WorkInfo.State.RUNNING -> {
+                        running()
+                    }
+                    else -> {
+                        failed("Something went wrong")
+                    }
+                }
+            }
+        }
+}
+/*OutlinedButton(
+modifier = Modifier
+.widthIn(300.dp)
+.background(Color(0xFFFFFFFF), CircleShape)
+.padding(vertical = 20.dp)
+.shadow(3.dp, CircleShape),
+onClick = {
+    permissionsState.permissions.forEach { perm ->
+        when (perm.permission) {
+            Manifest.permission.READ_EXTERNAL_STORAGE -> {
+                when {
+                    perm.status.isGranted -> {
+
+                    }
+                    !perm.status.isGranted -> {
+                        navController.navigate(AppScreens.PermissionScreen.route)
+                    }
+                }
+            }
+        }
+    }
+}
+){
+    Icon(
+        Icons.Filled.Upload,
+        contentDescription = "Descarga"
+    )
+    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+    Text("Descargar archivo🗂️",
+        fontSize = 15.sp,
+        fontWeight = FontWeight.ExtraBold
+    )
+}*/

@@ -2,7 +2,6 @@ package com.parce.auth.requirement.data.remote.getdetailrequirement
 
 import com.google.gson.annotations.SerializedName
 import com.parce.auth.requirement.domain.model.detailrequirement.*
-import com.parce.auth.requirement.domain.model.detailrequirement.File
 import com.parce.auth.requirement.domain.model.detailrequirement.Relations
 import com.parce.auth.requirement.domain.model.detailrequirement.User
 import java.io.Serializable
@@ -39,7 +38,7 @@ fun GetDetailResponse.toGetDetailRequirement(): DetailResponse {
                     resultUser
                 } ?: emptyList(),
                 files = data.relations?.files?.mapIndexed { _, resultFiles ->
-                    File(
+                    FileResponse(
                         id = resultFiles.id,
                         url = resultFiles.url,
                         created_at = resultFiles.created_at

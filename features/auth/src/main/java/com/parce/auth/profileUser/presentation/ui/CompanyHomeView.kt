@@ -46,8 +46,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.parce.auth.login.presentation.components.logincomposables.userRepo
+import com.parce.auth.requirement.di.HeaderRequirement
 import com.parce.auth.requirement.domain.model.getrequirement.Result
 import com.parce.auth.requirement.presentation.ui.homerequirement.*
+import com.parce.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
+import com.parce.auth.requirement.presentation.ui.homerequirement.listrequirement.HomeBottomBar
+import com.parce.auth.requirement.presentation.ui.homerequirement.listrequirement.HomeRequirements
 import com.parce.auth.requirement.presentation.ui.homerequirement.search.SearchBar
 import com.parce.auth.requirement.presentation.ui.homerequirement.search.SearchEvent
 import com.parce.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
@@ -148,15 +152,22 @@ fun HomeCompany(
                 )
             },
             floatingActionButton = {
-                LaunchedEffect(true) {
-                  val job =  userRepo?.getRolLogin()?.collect { rol ->
-                            withContext(Dispatchers.Main) {} }
+
+                val rol = HeaderRequirement.getRol()["rol"]
+                if (rol == "empresa") {
+                    FloatingButton(
+                        text = "Crear requerimiento",
+                        onClickFloatingButton = {
+                            navController.navigate(AppScreens.RequirementScreen.route)
+                        })
+                } else {
+                    FloatingButton(
+                        text = "Asignar requerimiento",
+                        onClickFloatingButton = {
+                            navController.navigate(AppScreens.RequirementScreen.route)
+                        })
                 }
-                FloatingButton(
-                    text = "Crear requerimiento",
-                    onClickFloatingButton = {
-                        navController.navigate(AppScreens.RequirementScreen.route)
-                    })
+
             },
             isFloatingActionButtonDocked = true,
             bottomBar = {

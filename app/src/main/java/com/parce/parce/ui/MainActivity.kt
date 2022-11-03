@@ -42,6 +42,7 @@ class MainActivity : ComponentActivity() {
     private val viewModelMain by viewModels<MainViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             val context = LocalContext.current
             userRepo = ProtoUserRepoImpl(context.userDataStore)
@@ -52,6 +53,7 @@ class MainActivity : ComponentActivity() {
             val size = LocalContext.current.getScreenSize()
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
             val prefsKey = prefs.getBoolean("key", false)
+
             ParceTheme() {
                 CompositionLocalProvider(
                     LocalScreenSize provides size,
