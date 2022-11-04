@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.parce.parce">
+    package="com.gerotac.parce">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
-        android:name=".BaseApplication"
+        android:name="com.gerotac.parce.BaseApplication"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
@@ -19,7 +19,7 @@
         android:theme="@style/Theme.Parce"
         tools:targetApi="31">
         <activity
-            android:name=".ui.MainActivity"
+            android:name="com.gerotac.parce.ui.MainActivity"
             android:windowSoftInputMode="adjustResize"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true"
@@ -31,7 +31,7 @@
         </activity>
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.parce.parce.fileprovider"
+            android:authorities="com.gerotac.parce.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
