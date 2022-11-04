@@ -6,6 +6,6 @@ data class FileResponse(
     val created_at: String,
     val id: Int,
     val url: String,
-    var downloadedUri:String?=null,
+    var downloadedUri:String? = null,
     var isDownloading:Boolean = false
 ): Serializable

@@ -3,52 +3,55 @@ package com.gerotac.auth.requirement.presentation.ui.homerequirement.detail
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.work.*
 import coil.compose.rememberAsyncImagePainter
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.gerotac.auth.R
 import com.gerotac.auth.requirement.di.HeaderRequirement
 import com.gerotac.auth.requirement.domain.model.detailrequirement.DataResponse
 import com.gerotac.auth.requirement.domain.model.detailrequirement.FileResponse
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.dowloadfile.FileDownloadWorker
+import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
+import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
 import com.gerotac.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
 import com.gerotac.components_ui.componets.TopPart
 import com.gerotac.components_ui.componets.button.ButtonValidation
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -132,9 +135,11 @@ private fun Header(
 private fun Body(
     data: DataResponse?,
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
+    viewModel: DetailRequirementViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current as Activity
+    val stateFile = viewModel.state.fileRequirement
     val hideKeyboard = LocalSoftwareKeyboardController.current
     val permissionsState = rememberMultiplePermissionsState(
         permissions = listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -144,7 +149,7 @@ private fun Body(
             .fillMaxSize()
             .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(15.dp),
+        verticalArrangement = Arrangement.spacedBy(1.dp),
     ) {
         FormValueComp(
             ValueState = { data?.areaintervention?.name.toString() },
@@ -155,7 +160,7 @@ private fun Body(
         OutlinedTextField(modifier = Modifier
             .width(280.dp)
             .wrapContentSize()
-            .height(150.dp),
+            .height(90.dp),
             value = data?.description.toString(),
             onValueChange = { data?.description },
             label = { Text(stringResource(id = R.string.TextField_Description_problem)) },
@@ -202,47 +207,18 @@ private fun Body(
                 model = com.gerotac.components_ui.R.drawable.cause
             )
         )
+        ListFileContent(
+            itemFileRequirement = stateFile,
+            startDownload = { it },
+            openFile = { it }
+        )
 
-//        ItemFile(
-//            file = file,
-//            startDownload = {
-//                startDownloadingFile(
-//                    file = file,
-//                    success = {
-//                        file.copy().apply {
-//                            isDownloading = false
-//                            downloadedUri = it
-//                        }
-//                    },
-//                    failed = {
-//                        file.copy().apply {
-//                            isDownloading = false
-//                            downloadedUri = null
-//                        }
-//                    },
-//                    running = {
-//                        file.copy().apply {
-//                            isDownloading = true
-//                        }
-//                    }
-//                )
-//            },
-//            openFile = {
-//                val intent = Intent(Intent.ACTION_VIEW)
-//                intent.setDataAndType(it.downloadedUri?.toUri(), "application/pdf")
-//                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-//                try {
-//                    context.startActivity(intent)
-//                } catch (e: ActivityNotFoundException) {
-//                    Toast.makeText(
-//                        context,
-//                        "Can't open Pdf",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//            }
-//        )
         when (HeaderRequirement.getRol()["rol"]) {
+            "estudiante" -> {
+                ButtonValidation(text = "Crear intervencion") {
+                    navController.navigate(AppScreens.InterventionScreen.route)
+                }
+            }
             "empresa" -> {
                 ButtonValidation(text = "Ver intervenciones") {
                     navController.navigate(AppScreens.InterventionScreen.route)
@@ -260,30 +236,88 @@ private fun Body(
     }
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-private fun Up(upPress: () -> Unit) {
-    IconButton(
-        onClick = upPress,
-        modifier = Modifier
-            .padding(horizontal = 12.dp, vertical = 10.dp)
-            .size(36.dp)
+private fun ListFileContent(
+    modifier: Modifier = Modifier,
+    startDownload: (FileResponse) -> Unit,
+    openFile: (FileResponse) -> Unit,
+    isLoading: Boolean = false,
+    itemFileRequirement: List<FileResponse> = ArrayList()
+) {
+    val context = LocalContext.current as Activity
+
+    Surface(
+        modifier = modifier.fillMaxSize(),
+        color = MaterialTheme.colors.surface
     ) {
-        Icon(
-            imageVector = mirroringBackIcon(),
-            tint = Color(0xffffffff),
-            contentDescription = null
+        LazyColumn(
+            modifier = Modifier.padding(20.dp),
+            contentPadding = PaddingValues(horizontal = 1.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            content = {
+                item {
+                    Text(
+                        text = "Archivos",
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(25.dp)
+                    )
+                }
+                itemsIndexed(
+                    items = itemFileRequirement
+                ) { _, resultRequirements ->
+                    ItemFile(
+                        file = resultRequirements,
+                        startDownload = {
+                            startDownload(it)
+                            startDownloadingFile(
+                                resultRequirements,
+                                context = context,
+                                success = {
+                                    resultRequirements.copy().apply {
+                                        isDownloading = false
+                                        downloadedUri = it
+                                    }
+                                },
+                                failed = {
+                                    resultRequirements.copy().apply {
+                                        isDownloading = false
+                                        downloadedUri = null
+                                    }
+                                },
+                                running = {
+                                    resultRequirements.copy().apply {
+                                        isDownloading = true
+                                    }
+                                }
+
+                            )
+                        },
+                        openFile = {
+                            val intent = Intent(Intent.ACTION_VIEW)
+                            intent.setDataAndType(it.downloadedUri?.toUri(), "application/pdf")
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            try {
+                                context.startActivity(intent)
+                            } catch (e: ActivityNotFoundException) {
+                                mToast(context, "$e")
+                            }
+                        })
+                }
+            }
         )
+        Column() {
+            repeat(7) {
+                if (isLoading) AnimationEffect()
+            }
+        }
     }
 }
-
-@Composable
-fun mirroringBackIcon() = mirroringIcon(
-    ltrIcon = Icons.Outlined.ArrowBack, rtlIcon = Icons.Outlined.ArrowForward
-)
-
-@Composable
-fun mirroringIcon(ltrIcon: ImageVector, rtlIcon: ImageVector): ImageVector =
-    if (LocalLayoutDirection.current == LayoutDirection.Ltr) ltrIcon else rtlIcon
 
 @Composable
 fun ItemFile(
@@ -296,17 +330,17 @@ fun ItemFile(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = Color.White)
-            .border(width = 2.dp, color = Color.Blue, shape = RoundedCornerShape(16.dp))
+            .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(25.dp))
             .clickable {
                 if (!file.isDownloading) {
-                    if (file.downloadedUri.isNullOrEmpty()) {
+                    if (file.url.isEmpty()) {
                         startDownload(file)
                     } else {
                         openFile(file)
                     }
                 }
             }
-            .padding(16.dp)
+            .padding(15.dp)
     ) {
         Row(
             modifier = Modifier
@@ -326,7 +360,7 @@ fun ItemFile(
                     val description = if (file.isDownloading) {
                         "Downloading..."
                     } else {
-                        if (file.downloadedUri.isNullOrEmpty()) "Tap to download the file" else "Tap to open file"
+                        if (file.downloadedUri.isNullOrEmpty()) "download the file" else "Tap to open file"
                     }
                     Text(
                         text = description,
@@ -352,6 +386,7 @@ fun ItemFile(
 
 private fun startDownloadingFile(
     file: FileResponse,
+    context: Context,
     success: (String) -> Unit,
     failed: (String) -> Unit,
     running: () -> Unit
@@ -374,15 +409,15 @@ private fun startDownloadingFile(
         .setInputData(data.build())
         .build()
 
-    val workManager = WorkManager.getInstance()
+    val workManager = WorkManager.getInstance(context)
     workManager.enqueueUniqueWork(
         "oneFileDownloadWork_${System.currentTimeMillis()}",
         ExistingWorkPolicy.KEEP,
         fileDownloadWorker
     )
-    val lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner as LifecycleOwner
+
     workManager.getWorkInfoByIdLiveData(fileDownloadWorker.id)
-        .observe(lifeCycleOwner) { info ->
+        .observe(context as LifecycleOwner) { info ->
             info?.let {
                 when (it.state) {
                     WorkInfo.State.SUCCEEDED -> {

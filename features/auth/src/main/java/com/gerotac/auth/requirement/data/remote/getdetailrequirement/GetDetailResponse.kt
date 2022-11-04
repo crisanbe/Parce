@@ -1,9 +1,6 @@
 package com.gerotac.auth.requirement.data.remote.getdetailrequirement
 
 import com.google.gson.annotations.SerializedName
-import com.gerotac.auth.requirement.domain.model.detailrequirement.*
-import com.gerotac.auth.requirement.domain.model.detailrequirement.Relations
-import com.gerotac.auth.requirement.domain.model.detailrequirement.User
 import java.io.Serializable
 
 data class GetDetailResponse(
@@ -12,7 +9,7 @@ data class GetDetailResponse(
     @SerializedName("status") val status: Boolean
 ) : Serializable
 
-fun GetDetailResponse.toGetDetailRequirement(): DetailResponse {
+/*fun GetDetailResponse.toGetDetailRequirement(): DetailResponse {
     return DetailResponse(
         message = message,
         status = status,
@@ -47,4 +44,4 @@ fun GetDetailResponse.toGetDetailRequirement(): DetailResponse {
             )
         )
     )
-}
+}*/

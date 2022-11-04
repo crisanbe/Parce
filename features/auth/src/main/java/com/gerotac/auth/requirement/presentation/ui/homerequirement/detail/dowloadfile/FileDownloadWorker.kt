@@ -20,6 +20,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
 
+@Suppress("UNREACHABLE_CODE")
 class FileDownloadWorker(
     private val context:Context,
     workerParameters: WorkerParameters

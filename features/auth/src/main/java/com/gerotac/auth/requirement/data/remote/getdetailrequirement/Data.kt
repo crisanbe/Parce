@@ -13,7 +13,7 @@ data class Data(
     @SerializedName("efect_problem") val efect_problem: String,
     @SerializedName("id") val id: Int,
     @SerializedName("impact_problem") val impact_problem: String,
-    @SerializedName("relations") val relations: Relations? = null,
+    @SerializedName("relations") val relations: RelationsDto? = null,
     @SerializedName("user") val user: User? = null
 )
 
@@ -21,37 +21,26 @@ fun Data.toGetDetail(): DataResponse {
     return DataResponse(
         id = id,
         description = description,
-        areaintervention = Areaintervention(name = areaintervention?.name),
+        areaintervention = Areaintervention(name = areaintervention.name),
         cause_problem = cause_problem,
         created_at = created_at,
         efect_problem = efect_problem,
         impact_problem = impact_problem,
         user = user?.let { User(name = it.name, role = user.role) },
-        relations = Relations(
-            interventions = relations?.interventions?.mapIndexed { _, resultIntervention ->
-                resultIntervention
-            },
-            users = relations?.users?.mapIndexed { _, resultUser ->
-                resultUser
-            } ?: emptyList(),
-            files = relations?.files?.mapIndexed { _, resultFiles ->
-                FileResponse(
-                    id = resultFiles.id,
-                    url = resultFiles.url,
-                    created_at = resultFiles.created_at
-                )
-            } ?: emptyList(),
-        )
+        relations = relations?.toGetFile()
     )
 }
 
-fun Relations.toGetFile(): List<FileResponse> {
-    val result = files.mapIndexed { _, file ->
-        FileResponse(
-            id = file.id,
-            url = file.url,
-            created_at = file.created_at
-        )
-    }
-    return result
+fun RelationsDto.toGetFile(): Relations {
+    return Relations(files = files.map { file -> file.toContenidoFileModel()})
+}
+
+fun File.toContenidoFileModel(): FileResponse {
+    return FileResponse(
+        created_at = created_at,
+        id = id,
+        url = url,
+        downloadedUri = "",
+        isDownloading = false
+    )
 }

@@ -1,6 +1,6 @@
 object AndroidX {
     private const val coreKtxVersion = "1.9.0"
-    private const val appCompatVersion = "1.5.0"
+    private const val appCompatVersion = "1.5.1"
     private const val runtimeKtxVersion = "2.5.1"
     private const val customViewVersion = "1.2.0-alpha01"
     private const val customViewPoolingContainerVersion = "1.0.0-rc01"
