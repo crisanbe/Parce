@@ -22,7 +22,9 @@ sealed class AppScreens(val route: String) {
     object CompanyRegistration : AppScreens(route = "CompanyRegistration")
     object CompanyProfileViewPagination : AppScreens(route = "CompanyProfileViewPagination")
     object TeacherProfile : AppScreens(route = "TeacherProfile")
+    object AdminProfile : AppScreens(route = "AdminProfile")
     object StudentProfile : AppScreens(route = "StudentProfile")
+    object UpdateAdmin : AppScreens(route = "UpdateAdmin")
     object UpdateCompanyView : AppScreens(route = "UpdateCompanyView")
     object UpdateTeacherView : AppScreens(route = "UpdateTeacherView")
     object UpdateStudentView : AppScreens(route = "UpdateStudentView")
@@ -49,9 +51,7 @@ class RequirementActions(navController: NavController) {
 
     val navigateToDetail = { id: Int ->
         navController.navigate(
-            AppScreens.DetailScreen.passId(
-                id
-            )
+            AppScreens.DetailScreen.passId(id)
         ) {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true

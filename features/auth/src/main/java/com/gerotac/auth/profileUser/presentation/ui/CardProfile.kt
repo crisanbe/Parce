@@ -187,6 +187,20 @@ fun CardProfile(
                     ButtonValid(
                         onClick = {
                             when (item.role) {
+                                "admin" -> {
+                                    navController.navigate(
+                                        AppScreens.UpdateAdmin.route
+                                                + "?teacherName=${item.name}" +
+                                                "&identificationType=${item.type_document}" +
+                                                "&idNumber=${item.document}" +
+                                                "&birthday=${item.birthday}" +
+                                                "&gene=${item.gener}" +
+                                                "&ethnicGroup=${item.group_etnic}" +
+                                                "&presentsDisability=${item.presents_disability}" +
+                                                "&address=${item.bussine?.address}" +
+                                                "&phone=${item.phone}"
+                                    )
+                                }
                                 "empresa" -> {
                                     navController.navigate(
                                         AppScreens.UpdateCompanyView.route

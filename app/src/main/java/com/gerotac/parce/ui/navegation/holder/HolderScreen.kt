@@ -39,10 +39,12 @@ import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirem
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.RequirementScreen
 import com.gerotac.auth.requirement.presentation.ui.intervention.InterventionScreen
 import com.gerotac.auth.sendemailforgotmypassword.presentation.components.resendnewcode.SendEmailForgotPasswordView
+import com.gerotac.auth.updateuser.presentation.ui.updateUser.admin.AdminProfile
 import com.gerotac.auth.updateuser.presentation.ui.updateUser.company.CompanyRegistrationPageView
 import com.gerotac.auth.updateuser.presentation.ui.updateUser.company.CompanyRegistrationView
 import com.gerotac.auth.updateuser.presentation.ui.updateUser.student.StudentProfile
 import com.gerotac.auth.updateuser.presentation.ui.updateUser.teacher.TeacherProfile
+import com.gerotac.auth.updateuser.presentation.ui.updateintohome.admin.UpdateAdminView
 import com.gerotac.auth.updateuser.presentation.ui.updateintohome.company.UpdateCompanyView
 import com.gerotac.auth.updateuser.presentation.ui.updateintohome.student.UpdateStudentView
 import com.gerotac.auth.updateuser.presentation.ui.updateintohome.teacher.UpdateTeacherView
@@ -392,6 +394,70 @@ fun ScaffoldSection(
                     }
                 }
                 composable(
+                    route = AppScreens.UpdateAdmin.route +
+                            "?teacherName={teacherName}&identificationType={identificationType}&" +
+                            "idNumber={idNumber}&birthday={birthday}&gene={gene}&" +
+                            "ethnicGroup={ethnicGroup}&presentsDisability={presentsDisability}&" +
+                            "&phone={phone}",
+                    arguments = listOf(
+                        navArgument(name = "teacherName") {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        },
+                        navArgument(name = "identificationType") {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        },
+                        navArgument(name = "idNumber") {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        },
+                        navArgument(name = "birthday") {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        },
+                        navArgument(name = "gene") {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        },
+                        navArgument(name = "ethnicGroup") {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        },
+                        navArgument(name = "presentsDisability") {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        },
+                        navArgument(name = "phone") {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        }
+                    )
+                ) { backStackEntry ->
+                    EnterAnimation {
+                        onStatusBarColorChange(MaterialTheme.colors.background)
+                        UpdateAdminView(
+                            navController = controller,
+                            adminName = backStackEntry.arguments?.getString("teacherName"),
+                            identificationType = backStackEntry.arguments?.getString("identificationType"),
+                            idNumber = backStackEntry.arguments?.getString("idNumber"),
+                            birthday = backStackEntry.arguments?.getString("birthday"),
+                            gene = backStackEntry.arguments?.getString("gene"),
+                            ethnicGroup = backStackEntry.arguments?.getString("ethnicGroup"),
+                            presentsDisability = backStackEntry.arguments?.getString("presentsDisability"),
+                            phone = backStackEntry.arguments?.getString("phone"),
+                            title = DrawerScreens.CompanyProfile,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            }
+                        )
+                    }
+                }
+                composable(
                     route = AppScreens.UpdateTeacherView.route +
                             "?teacherName={teacherName}&identificationType={identificationType}&" +
                             "idNumber={idNumber}&birthday={birthday}&gene={gene}&" +
@@ -565,7 +631,13 @@ fun ScaffoldSection(
                         onItemClicked = {}
                     )
                 }
-
+                composable(route = AppScreens.AdminProfile.route) {
+                    EnterAnimation {
+                        onStatusBarColorChange(MaterialTheme.colors.background)
+                        AdminProfile(controller)
+                        BackHandler(true) {}
+                    }
+                }
                 composable(route = AppScreens.TeacherProfile.route) {
                     EnterAnimation {
                         onStatusBarColorChange(MaterialTheme.colors.background)

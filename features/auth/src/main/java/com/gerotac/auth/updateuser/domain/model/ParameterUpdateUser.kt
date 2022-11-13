@@ -17,5 +17,6 @@ data class ParameterUpdateUser(
     val birthday: String,
     val gener: String,
     val group_etnic: String,
+    val rol: String,
     val presents_disability: String
 ) : Serializable

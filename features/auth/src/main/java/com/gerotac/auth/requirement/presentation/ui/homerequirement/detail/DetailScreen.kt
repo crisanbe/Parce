@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
+import com.gerotac.auth.requirement.domain.model.detailrequirement.Result
 import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.*
@@ -68,7 +69,7 @@ fun DetailScreen(
 private fun DetailContent(
     navController: NavController,
     modifier: Modifier = Modifier,
-    data: com.gerotac.auth.requirement.domain.model.detailrequirement.Result?,
+    data: Result?,
     upPress: () -> Unit
 ) {
     Box(modifier.fillMaxSize()) {
@@ -90,7 +91,7 @@ private fun DetailContent(
 @Composable
 private fun Header(
     modifier: Modifier = Modifier,
-    data: com.gerotac.auth.requirement.domain.model.detailrequirement.Result?,
+    data: Result?,
     upPress: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
@@ -128,7 +129,7 @@ private fun Header(
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalPermissionsApi::class)
 @Composable
 private fun Body(
-    data: com.gerotac.auth.requirement.domain.model.detailrequirement.Result?,
+    data: Result?,
     modifier: Modifier = Modifier,
     navController: NavController,
     viewModel: DetailRequirementViewModel = hiltViewModel(),
@@ -280,15 +281,15 @@ private fun ListFileContent(
                                     }*/
                                 },
                                 failed = {
-                                   /* resultRequirements.copy().apply {
-                                        isDownloading = false
-                                        downloadedUri = null
-                                    }*/
+                                    /* resultRequirements.copy().apply {
+                                         isDownloading = false
+                                         downloadedUri = null
+                                     }*/
                                 },
                                 running = {
-                                   /* resultRequirements.copy().apply {
-                                        isDownloading = true
-                                    }*/
+                                    /* resultRequirements.copy().apply {
+                                         isDownloading = true
+                                     }*/
                                 }
 
                             )
@@ -327,13 +328,13 @@ fun ItemFile(
             .background(color = Color.White)
             .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(25.dp))
             .clickable {
-               /* if (!file.isDownloading) {
-                    if (file.url.isEmpty()) {
-                        startDownload(file)
-                    } else {
-                        openFile(file)
-                    }
-                }*/
+                /* if (!file.isDownloading) {
+                     if (file.url.isEmpty()) {
+                         startDownload(file)
+                     } else {
+                         openFile(file)
+                     }
+                 }*/
             }
             .padding(15.dp)
     ) {

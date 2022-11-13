@@ -188,6 +188,13 @@ fun BodyLogin(
                                                     .VerificationCodeValidateEmail.route
                                                         + "?email=$emailUser"
                                             )
+                                    } else if (rolCompany == "admin" &&
+                                        statusUser == "pending"
+                                    ) {
+                                        navController
+                                            .navigate(
+                                                AppScreens.AdminProfile.route
+                                            )
                                     } else if (rolCompany == "empresa" &&
                                         statusUser == "pending"
                                     ) {

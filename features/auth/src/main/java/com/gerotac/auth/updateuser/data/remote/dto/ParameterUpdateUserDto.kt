@@ -19,5 +19,6 @@ data class ParameterUpdateUserDto(
     @SerializedName("birthday") val birthday: String?,
     @SerializedName("gener") val gener: String?,
     @SerializedName("group_etnic") val group_etnic: String?,
+    @SerializedName("rol") val rol: String? = null,
     @SerializedName("presents_disability") val presents_disability: String?
-): Serializable
+) : Serializable

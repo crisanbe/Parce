@@ -4,7 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.gerotac.auth.requirement.data.remote.api.RequirementApi
-import com.gerotac.auth.requirement.data.remote.requirement.toRequirementResponse
+import com.gerotac.auth.requirement.data.remote.requirementsave.toRequirementResponse
 import com.gerotac.auth.requirement.domain.model.requirement.RequirementReply
 import com.gerotac.auth.requirement.domain.repository.RequirementRepository
 import com.gerotac.auth.requirement.presentation.state.RequirementState

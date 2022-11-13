@@ -40,7 +40,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.gerotac.auth.R
-import com.gerotac.auth.requirement.data.remote.requirement.RequirementRequest
+import com.gerotac.auth.requirement.data.remote.requirementsave.RequirementRequest
 import com.gerotac.auth.requirement.presentation.viewmodel.RequirementViewModel
 import com.gerotac.components_ui.componets.TopPart
 import com.gerotac.components_ui.componets.alertdialog.DialogExit

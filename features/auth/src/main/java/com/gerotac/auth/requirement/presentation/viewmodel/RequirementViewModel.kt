@@ -3,7 +3,7 @@ package com.gerotac.auth.requirement.presentation.viewmodel
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gerotac.auth.requirement.data.remote.requirement.RequirementRequest
+import com.gerotac.auth.requirement.data.remote.requirementsave.RequirementRequest
 import com.gerotac.auth.requirement.di.HeaderRequirement
 import com.gerotac.auth.requirement.domain.usecase.GetPaginationUseCase
 import com.gerotac.auth.requirement.domain.usecase.GetRequirementUseCase

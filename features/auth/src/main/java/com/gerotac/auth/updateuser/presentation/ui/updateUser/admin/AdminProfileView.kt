@@ -1,4 +1,4 @@
-package com.gerotac.auth.updateuser.presentation.ui.updateUser.teacher
+package com.gerotac.auth.updateuser.presentation.ui.updateUser.admin
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
@@ -55,7 +55,7 @@ import kotlinx.coroutines.withContext
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun TeacherProfile(
+fun AdminProfile(
     navController: NavController,
     viewModelUpdateUser: UpdateUserViewModel = hiltViewModel(),
     viewModelAcademic: GetApisDropViewModel = hiltViewModel(),
@@ -74,21 +74,18 @@ fun TeacherProfile(
         onClickYes = {
             showDialog = !showDialog
             scope.launch {
-                userRepo?.getTokenRegister()
-                    ?.collect { tokenRegister ->
-                        withContext(Dispatchers.Main) {
-                            userRepo?.getTokenLoginState()
-                                ?.collect { tokenLogin ->
-                                    withContext(Dispatchers.Main) {
-                                        if (tokenRegister != "" || tokenLogin != "") {
-                                            tokenLogin.let { userRepo?.deleteTokenLoginState() }
-                                            tokenRegister.let { userRepo?.deleteTokenRegister() }
-                                            navController.navigate(AppScreens.StartUp.route)
-                                        }
-                                    }
+                withContext(Dispatchers.Main) {
+                    userRepo?.getTokenLoginState()
+                        ?.collect { tokenLogin ->
+                            withContext(Dispatchers.Main) {
+                                if (tokenLogin != "") {
+                                    tokenLogin.let { userRepo?.deleteTokenLoginState() }
+                                    navController.navigate(AppScreens.StartUp.route)
                                 }
+
+                            }
                         }
-                    }
+                }
             }
         }
     )
@@ -111,54 +108,47 @@ fun TeacherProfile(
                 Modifier.fillMaxSize()
             ) {
                 stateAcademic.value.academicProgramsState.let {
-                EducationalProfileView(
-                    result = it,
-                    onClickSave = {
-                        scope.launch {
-                            viewModelUpdateUser.doUpdateUser(
-                                ParameterUpdateUserDto(
-                                    name = it[0],
-                                    type_document = it[1],
-                                    document = it[2],
-                                    gener = it[3],
-                                    group_etnic = it[4],
-                                    birthday = it[5],
-                                    phone = it[6],
-                                    presents_disability = it[7],
-                                    academic_program = null,
-                                    activity_economy = null,
-                                    type_bussiness = null,
-                                    type_society = null,
-                                    person_contact = null,
-                                    departament = null,
-                                    municipality = null,
-                                    address = null
+                    EducationalProfileView(
+                        result = it,
+                        onClickSave = {
+                            scope.launch {
+                                viewModelUpdateUser.doUpdateUser(
+                                    ParameterUpdateUserDto(
+                                        name = it[0],
+                                        type_document = it[1],
+                                        document = it[2],
+                                        gener = it[3],
+                                        group_etnic = it[4],
+                                        birthday = it[5],
+                                        phone = it[6],
+                                        presents_disability = it[7],
+                                        rol = it[8]
+                                    )
                                 )
-                            )
-                            eventFlow.collect { event ->
-                                when (event) {
-                                    is UiEvent.Success -> {
-                                        navController.navigate(
-                                            DrawerScreens.CompanyHome.route
-                                                    + "?user=Bienvenido!"
-                                        )
-                                        scaffoldState.snackbarHostState.showSnackbar(
-                                            message = "Se guardo exitosamente🏅",
-                                            actionLabel = "Continue"
-                                        )
+                                eventFlow.collect { event ->
+                                    when (event) {
+                                        is UiEvent.Success -> {
+                                            navController.navigate(
+                                                DrawerScreens.CompanyHome.route
+                                                        + "?user=Bienvenido!"
+                                            )
+                                            scaffoldState.snackbarHostState.showSnackbar(
+                                                message = "Se guardo exitosamente🏅",
+                                                actionLabel = "Continue"
+                                            )
+                                        }
+                                        is UiEvent.ShowSnackBar -> {
+                                            scaffoldState.snackbarHostState.showSnackbar(
+                                                message = event.message.asString(context)
+                                            )
+                                        }
+                                        else -> Unit
                                     }
-                                    is UiEvent.ShowSnackBar -> {
-                                        scaffoldState.snackbarHostState.showSnackbar(
-                                            message = event.message.asString(context)
-                                        )
-                                    }
-                                    else -> Unit
                                 }
                             }
                         }
-                    }
-                )
-            }
+                    )
+                }
                 ProgressIndicator(
                     modifier = Modifier.offset(x = 150.dp, y = (-790).dp),
                     isDisplayed = state.value.isLoading
@@ -172,7 +162,7 @@ fun TeacherProfile(
 fun EducationalProfileView(
     onClickSave: (List<String>) -> Unit,
     result: List<Result> = emptyList(),
-    ) {
+) {
     val hideKeyboard = LocalSoftwareKeyboardController.current
     val viewModelDialog: ViewModelDialog = hiltViewModel()
     val fullName: TextFieldValueState = remember { ValueState() }
@@ -183,7 +173,7 @@ fun EducationalProfileView(
     val birthday: TextFieldValueState = remember { ValueState() }
     val phoneNumberState: TextFieldValueState = remember { PhoneNumberState() }
     val hasDisability: TextFieldValueState = remember { ValueState() }
-    var academicProgram by remember { mutableStateOf(0) }
+    val rol: TextFieldValueState = remember { (ValueState()) }
     Column(
         Modifier
             .verticalScroll(rememberScrollState()),
@@ -192,7 +182,7 @@ fun EducationalProfileView(
     ) {
         TopPart(onClickAction = { viewModelDialog.showDialog() })
         Text(
-            text = stringResource(R.string.Text_Teacher_profile),
+            text = stringResource(R.string.Text_Admin_profile),
             fontSize = 22.sp,
             color = Color.Black,
             fontWeight = FontWeight.Bold,
@@ -283,7 +273,8 @@ fun EducationalProfileView(
                             ethnicGroup.text,
                             birthday.text,
                             phoneNumberState.text,
-                            hasDisability.text
+                            hasDisability.text,
+                            rol.text,
                         )
                     )
                 },

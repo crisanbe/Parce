@@ -11,6 +11,7 @@ import com.gerotac.auth.requirement.presentation.state.DetailRequirementState
 import com.gerotac.auth.updateuser.di.UpdateUserHeaders
 import com.gerotac.shared.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,30 +25,27 @@ class DetailRequirementViewModel @Inject constructor(
         private set
 
     init {
-        detailRequirement()
+            detailRequirement()
     }
 
     private fun detailRequirement() {
         val token = UpdateUserHeaders.getHeader()["Authorization"]
         savedStateHandle.get<Int>("id")?.let { characterId ->
             viewModelScope.launch {
-                getDetailRequirementUseCase(
-                    token = token.toString(),
-                    id = characterId
-                ).also { query ->
-                    state = when (query) {
+                getDetailRequirementUseCase(token = token.toString(), id = characterId).also { query ->
+                    when (query) {
                         is Resource.Success -> {
-                            state.copy(
+                            state = state.copy(
                                 detailRequirement = query.data,
                                 fileRequirement = query.data?.relations?.files ?: emptyList(),
                                 isLoading = false,
                             )
                         }
                         is Resource.Error -> {
-                            state.copy(isLoading = false)
+                            state = state.copy(isLoading = false)
                         }
                         is Resource.Loading -> {
-                            state.copy(isLoading = true)
+                            state = state.copy(isLoading = true)
                         }
                     }
                 }

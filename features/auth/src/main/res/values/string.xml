@@ -59,6 +59,9 @@
     <string name="TextField_Address">Dirección</string>
     <string name="TextField_Years_operation">Años de funcionamiento</string>
 
+    //Perfil de Admin
+    <string name="Text_Admin_profile">Administrador</string>
+
     //Perfil de docente
     <string name="Text_Teacher_profile">Docente</string>
     <string name="TextField_full_name">Nombre Completo</string>

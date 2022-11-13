@@ -1,4 +1,4 @@
-package com.gerotac.auth.requirement.data.remote.requirement
+package com.gerotac.auth.requirement.data.remote.requirementsave
 
 import com.google.gson.annotations.SerializedName
 import com.gerotac.auth.requirement.domain.model.requirement.RequirementReply
