@@ -1,10 +1,11 @@
 package com.gerotac.auth.requirement.data.repository
 
 import com.gerotac.auth.requirement.data.remote.api.RequirementApi
+import com.gerotac.auth.requirement.domain.model.detailrequirement.Result
 import com.gerotac.auth.requirement.data.remote.getdetailrequirement.toGetDetail
-import com.gerotac.auth.requirement.domain.model.detailrequirement.DataResponse
 import com.gerotac.auth.requirement.domain.repository.DetailRequirementRepository
 import com.gerotac.shared.network.Resource
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetDetailRequirementRepositoryImpl @Inject constructor(
@@ -14,12 +15,12 @@ class GetDetailRequirementRepositoryImpl @Inject constructor(
     override suspend fun doDetailRequirement(
         token: String,
         id: Int
-    ): Resource<DataResponse> {
+    ): Resource<Result> {
         val response = try {
             api.doGetDetailRequirementApi(token = token, id = id)
         } catch (e: Exception) {
             return Resource.Error("An unknown error occurred")
         }
-        return Resource.Success(response.data.toGetDetail())
+        return Resource.Success(response.toGetDetail())
     }
 }

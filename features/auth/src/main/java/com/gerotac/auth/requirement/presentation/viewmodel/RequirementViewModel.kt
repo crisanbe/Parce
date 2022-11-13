@@ -49,7 +49,7 @@ class RequirementViewModel @Inject constructor(
 
     init {
         doGetRequirement(query.value,increase = false)
-        //doGetPagination()
+        doGetPagination()
     }
 
     suspend fun doRequirement(request: RequirementRequest) {

@@ -1,7 +1,7 @@
 package com.gerotac.auth.requirement.domain.model.detailrequirement
 
-data class User(
+data class File(
+    val created_at: String,
     val id: Int,
-    val name: String,
-    val role: String
+    val url: String
 )

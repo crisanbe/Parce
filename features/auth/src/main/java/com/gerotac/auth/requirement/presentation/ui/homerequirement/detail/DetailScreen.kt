@@ -6,7 +6,6 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -17,14 +16,11 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,9 +35,8 @@ import androidx.navigation.NavController
 import androidx.work.*
 import coil.compose.rememberAsyncImagePainter
 import com.gerotac.auth.R
+import com.gerotac.auth.requirement.data.remote.getdetailrequirement.File
 import com.gerotac.auth.requirement.di.HeaderRequirement
-import com.gerotac.auth.requirement.domain.model.detailrequirement.DataResponse
-import com.gerotac.auth.requirement.domain.model.detailrequirement.FileResponse
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.dowloadfile.FileDownloadWorker
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
@@ -73,7 +68,7 @@ fun DetailScreen(
 private fun DetailContent(
     navController: NavController,
     modifier: Modifier = Modifier,
-    data: DataResponse?,
+    data: com.gerotac.auth.requirement.domain.model.detailrequirement.Result?,
     upPress: () -> Unit
 ) {
     Box(modifier.fillMaxSize()) {
@@ -95,7 +90,7 @@ private fun DetailContent(
 @Composable
 private fun Header(
     modifier: Modifier = Modifier,
-    data: DataResponse?,
+    data: com.gerotac.auth.requirement.domain.model.detailrequirement.Result?,
     upPress: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
@@ -133,7 +128,7 @@ private fun Header(
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalPermissionsApi::class)
 @Composable
 private fun Body(
-    data: DataResponse?,
+    data: com.gerotac.auth.requirement.domain.model.detailrequirement.Result?,
     modifier: Modifier = Modifier,
     navController: NavController,
     viewModel: DetailRequirementViewModel = hiltViewModel(),
@@ -207,11 +202,11 @@ private fun Body(
                 model = com.gerotac.components_ui.R.drawable.cause
             )
         )
-        ListFileContent(
+        /*ListFileContent(
             itemFileRequirement = stateFile,
             startDownload = { it },
             openFile = { it }
-        )
+        )*/
 
         when (HeaderRequirement.getRol()["rol"]) {
             "estudiante" -> {
@@ -240,10 +235,10 @@ private fun Body(
 @Composable
 private fun ListFileContent(
     modifier: Modifier = Modifier,
-    startDownload: (FileResponse) -> Unit,
-    openFile: (FileResponse) -> Unit,
+    startDownload: (File) -> Unit,
+    openFile: (File) -> Unit,
     isLoading: Boolean = false,
-    itemFileRequirement: List<FileResponse> = ArrayList()
+    itemFileRequirement: List<File> = ArrayList()
 ) {
     val context = LocalContext.current as Activity
 
@@ -279,31 +274,31 @@ private fun ListFileContent(
                                 resultRequirements,
                                 context = context,
                                 success = {
-                                    resultRequirements.copy().apply {
+                                    /*resultRequirements.copy().apply {
                                         isDownloading = false
                                         downloadedUri = it
-                                    }
+                                    }*/
                                 },
                                 failed = {
-                                    resultRequirements.copy().apply {
+                                   /* resultRequirements.copy().apply {
                                         isDownloading = false
                                         downloadedUri = null
-                                    }
+                                    }*/
                                 },
                                 running = {
-                                    resultRequirements.copy().apply {
+                                   /* resultRequirements.copy().apply {
                                         isDownloading = true
-                                    }
+                                    }*/
                                 }
 
                             )
                         },
                         openFile = {
-                            val intent = Intent(Intent.ACTION_VIEW)
+                            /*val intent = Intent(Intent.ACTION_VIEW)
                             intent.setDataAndType(it.downloadedUri?.toUri(), "application/pdf")
-                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)*/
                             try {
-                                context.startActivity(intent)
+                                //context.startActivity(intent)
                             } catch (e: ActivityNotFoundException) {
                                 mToast(context, "$e")
                             }
@@ -321,9 +316,9 @@ private fun ListFileContent(
 
 @Composable
 fun ItemFile(
-    file: FileResponse,
-    startDownload: (FileResponse) -> Unit,
-    openFile: (FileResponse) -> Unit
+    file: File,
+    startDownload: (File) -> Unit,
+    openFile: (File) -> Unit
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -332,13 +327,13 @@ fun ItemFile(
             .background(color = Color.White)
             .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(25.dp))
             .clickable {
-                if (!file.isDownloading) {
+               /* if (!file.isDownloading) {
                     if (file.url.isEmpty()) {
                         startDownload(file)
                     } else {
                         openFile(file)
                     }
-                }
+                }*/
             }
             .padding(15.dp)
     ) {
@@ -357,27 +352,27 @@ fun ItemFile(
                 )
 
                 Row {
-                    val description = if (file.isDownloading) {
+                    /*val description = if (file.isDownloading) {
                         "Downloading..."
                     } else {
                         if (file.downloadedUri.isNullOrEmpty()) "download the file" else "Tap to open file"
-                    }
+                    }*/
                     Text(
-                        text = description,
+                        text = "description",
                         color = Color.DarkGray
                     )
                 }
 
             }
 
-            if (file.isDownloading) {
+            /*if (file.isDownloading) {
                 CircularProgressIndicator(
                     color = Color.Blue,
                     modifier = Modifier
                         .size(32.dp)
                         .align(Alignment.CenterVertically)
                 )
-            }
+            }*/
 
         }
 
@@ -385,7 +380,7 @@ fun ItemFile(
 }
 
 private fun startDownloadingFile(
-    file: FileResponse,
+    file: File,
     context: Context,
     success: (String) -> Unit,
     failed: (String) -> Unit,

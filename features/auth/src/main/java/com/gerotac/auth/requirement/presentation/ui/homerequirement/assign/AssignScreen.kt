@@ -23,8 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.gerotac.auth.R
-import com.gerotac.auth.requirement.domain.model.detailrequirement.DataResponse
-import com.gerotac.auth.requirement.domain.model.detailrequirement.FileResponse
+import com.gerotac.auth.requirement.data.remote.getdetailrequirement.File
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.FormValueComp
 import com.gerotac.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
 import com.gerotac.components_ui.componets.TopPart
@@ -54,8 +53,8 @@ fun AssignScreen(
 private fun AssignContent(
     navController: NavController,
     modifier: Modifier = Modifier,
-    data: DataResponse?,
-    file: FileResponse? = null,
+    data: com.gerotac.auth.requirement.domain.model.detailrequirement.Result?,
+    file: File? = null,
     upPress: () -> Unit
 ) {
     Box(modifier.fillMaxSize()) {
@@ -78,7 +77,7 @@ private fun AssignContent(
 @Composable
 private fun AssignHeader(
     modifier: Modifier = Modifier,
-    data: DataResponse?,
+    data: com.gerotac.auth.requirement.domain.model.detailrequirement.Result?,
     upPress: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
@@ -105,8 +104,8 @@ private fun AssignHeader(
 
 @Composable
 private fun AssignBody(
-    data: DataResponse?,
-    file: FileResponse? = null,
+    data: com.gerotac.auth.requirement.domain.model.detailrequirement.Result?,
+    file: File? = null,
     modifier: Modifier = Modifier,
     navController: NavController
 ) {

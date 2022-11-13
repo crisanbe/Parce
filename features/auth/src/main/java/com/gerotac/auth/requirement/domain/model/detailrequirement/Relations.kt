@@ -1,9 +1,7 @@
 package com.gerotac.auth.requirement.domain.model.detailrequirement
 
-import java.io.Serializable
-
 data class Relations(
-    val files: List<FileResponse>,
+    val files: List<File>,
     val interventions: List<Any>? = emptyList(),
-    val users: List<Any>? = emptyList()
-): Serializable
+    val users: List<User>? = emptyList()
+)
