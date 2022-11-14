@@ -208,7 +208,7 @@ private fun RequirementsContent(
         Column(horizontalAlignment = Alignment.Start) {
             Spacer(modifier = Modifier.size(2.dp))
             Text(
-                text = "Hola, $nameUser",
+                text = "Hola, ${HeaderRequirement.getNameUser()["name"]}",
                 fontFamily = FontFamily.Serif,
                 textAlign = TextAlign.Center,
                 style = TextStyle(

@@ -47,4 +47,21 @@ object HeaderRequirement : ViewModel() {
         }
         return head
     }
+
+    fun getNameUser(): Map<String, String> {
+        var head = mapOf<String, String>()
+        viewModelScope.launch() {
+            userRepo?.getNameUser()?.collect { name ->
+                withContext(Dispatchers.Main) {
+                    val state = MutableStateFlow(name)
+                    state.update { name }
+                    val headers: HashMap<String, String> = hashMapOf(
+                        "name" to name,
+                    )
+                    head = headers
+                }
+            }
+        }
+        return head
+    }
 }
