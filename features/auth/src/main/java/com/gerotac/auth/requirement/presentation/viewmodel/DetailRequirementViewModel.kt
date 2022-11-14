@@ -25,7 +25,7 @@ class DetailRequirementViewModel @Inject constructor(
         private set
 
     init {
-            detailRequirement()
+       detailRequirement()
     }
 
     private fun detailRequirement() {
@@ -33,19 +33,19 @@ class DetailRequirementViewModel @Inject constructor(
         savedStateHandle.get<Int>("id")?.let { characterId ->
             viewModelScope.launch {
                 getDetailRequirementUseCase(token = token.toString(), id = characterId).also { query ->
-                    when (query) {
+                    state = when (query) {
                         is Resource.Success -> {
-                            state = state.copy(
+                            state.copy(
                                 detailRequirement = query.data,
                                 fileRequirement = query.data?.relations?.files ?: emptyList(),
                                 isLoading = false,
                             )
                         }
                         is Resource.Error -> {
-                            state = state.copy(isLoading = false)
+                            state.copy(isLoading = false)
                         }
                         is Resource.Loading -> {
-                            state = state.copy(isLoading = true)
+                            state.copy(isLoading = true)
                         }
                     }
                 }

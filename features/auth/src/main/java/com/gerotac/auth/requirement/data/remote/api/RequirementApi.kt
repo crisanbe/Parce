@@ -28,10 +28,10 @@ interface RequirementApi {
         @Query("requierementId") id: String? = null
     ): GetRequirementResponse
 
-    @GET("requierements/{requierementId}")
+    @GET("requierements/{id}")
     suspend fun doGetDetailRequirementApi(
         @Header("Authorization") token: String,
-        @Path("requierementId") id: Int
+        @Path("id") id: Int
     ): ResultDto
 
     @GET("requierements-assign")

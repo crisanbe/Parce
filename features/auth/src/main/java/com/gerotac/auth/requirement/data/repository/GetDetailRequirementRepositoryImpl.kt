@@ -5,7 +5,6 @@ import com.gerotac.auth.requirement.domain.model.detailrequirement.Result
 import com.gerotac.auth.requirement.data.remote.getdetailrequirement.toGetDetail
 import com.gerotac.auth.requirement.domain.repository.DetailRequirementRepository
 import com.gerotac.shared.network.Resource
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetDetailRequirementRepositoryImpl @Inject constructor(
