@@ -23,11 +23,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.gerotac.auth.R
-import com.gerotac.auth.dropdownapi.dropacademicprograms.domain.model.locationmodel.ResultX
-import com.gerotac.auth.dropdownapi.dropacademicprograms.domain.model.locationmodel.Town
-import com.gerotac.auth.dropdownapi.dropacademicprograms.presentation.ui.DropLocationDpt
-import com.gerotac.auth.dropdownapi.dropacademicprograms.presentation.ui.DropLocationMnPo
-import com.gerotac.auth.dropdownapi.dropacademicprograms.presentation.viewmodel.GetApisDropViewModel
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.locationmodel.ResultX
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.locationmodel.Town
+import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropLocationDpt
+import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropLocationMnPo
+import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
 import com.gerotac.auth.login.presentation.components.logincomposables.userDataStore
 import com.gerotac.auth.login.presentation.components.logincomposables.userRepo
 import com.gerotac.auth.protodata.ProtoUserRepoImpl

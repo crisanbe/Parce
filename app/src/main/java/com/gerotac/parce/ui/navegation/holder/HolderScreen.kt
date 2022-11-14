@@ -611,10 +611,18 @@ fun ScaffoldSection(
                     )
                 }
                 composable(
-                    route = AppScreens.AssignScreen.route
-                ) {
+                    route = AppScreens.AssignScreen.route +
+                            "?codeTeacher={codeTeacher}",
+                    arguments = listOf(
+                        navArgument(name = "codeTeacher") {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        },
+                    )
+                ) { backStackEntry ->
                     AssignScreen(
                         navController = controller,
+                        codeTeacher = backStackEntry.arguments?.getString("codeTeacher").toString(),
                         upPress = navigateToHome
                     )
                 }
@@ -671,7 +679,8 @@ fun ScaffoldSection(
                         onClickDestination = { itString ->
                             onClickDestination(itString)
                         },
-                        onItemClicked = { navigateToDetail(it)
+                        onItemClicked = {
+                            navigateToDetail(it)
                         }
                     )
                 }

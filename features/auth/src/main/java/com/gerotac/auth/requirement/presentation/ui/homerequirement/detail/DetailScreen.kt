@@ -239,7 +239,7 @@ private fun Body(
                     Spacer(modifier = Modifier.width(16.dp))
                     TextButtonPersonalized(
                         color = Color(0xFF000000.toInt()),
-                        onclick = { navController.navigate(AppScreens.AssignScreen.route) },
+                        onclick = { navController.navigate(AppScreens.AssignScreen.route + "?codeTeacher=${data?.data?.id}") },
                         text = "Asignar",
                         fontText = FontWeight.Bold,
                         styleText = TextStyle(color = Color.White),

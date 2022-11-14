@@ -1,8 +1,6 @@
 package com.gerotac.auth.requirement.presentation.ui.homerequirement.detail
 
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -24,6 +22,7 @@ fun FormValueComp(
 ) {
     val focusManager = LocalFocusManager.current
     TextField(
+        modifier = Modifier.width(280.dp),
         value = text ?: "",
         onValueChange = {
             if (it.length <= 10) ValueState(it)

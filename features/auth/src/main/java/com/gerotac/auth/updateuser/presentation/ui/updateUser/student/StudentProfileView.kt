@@ -27,9 +27,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.gerotac.auth.R
-import com.gerotac.auth.dropdownapi.dropacademicprograms.domain.model.dropmodel.Result
-import com.gerotac.auth.dropdownapi.dropacademicprograms.presentation.ui.DropAcademic
-import com.gerotac.auth.dropdownapi.dropacademicprograms.presentation.viewmodel.GetApisDropViewModel
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.dropmodel.Result
+import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropAcademic
+import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
 import com.gerotac.auth.login.presentation.components.logincomposables.userRepo
 import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserDto
 import com.gerotac.auth.updateuser.presentation.state.DocumentNumberState
