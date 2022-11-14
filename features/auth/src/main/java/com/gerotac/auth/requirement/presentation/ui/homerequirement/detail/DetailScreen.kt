@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -50,6 +51,7 @@ import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirem
 import com.gerotac.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
 import com.gerotac.components_ui.componets.TopPart
 import com.gerotac.components_ui.componets.button.ButtonValidation
+import com.gerotac.components_ui.componets.button.TextButtonPersonalized
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -208,7 +210,6 @@ private fun Body(
                 model = com.gerotac.components_ui.R.drawable.cause
             )
         )
-        BottomSheetWithAnchor()
         when (HeaderRequirement.getRol()["rol"]) {
             "estudiante" -> {
                 ButtonValidation(text = "Crear intervencion") {
@@ -221,14 +222,33 @@ private fun Body(
                 }
             }
             else -> {
-                ButtonValidation(text = "Ver intervenciones") {
-                    navController.navigate(AppScreens.InterventionScreen.route)
-                }
-                ButtonValidation(text = "Asignar requerimiento") {
-                    navController.navigate(AppScreens.AssignScreen.route)
+                Row(
+                    modifier = Modifier
+                        .padding(all = 10.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    TextButtonPersonalized(
+                        color = Color(0xFF000000.toInt()),
+                        onclick = { navController.navigate(AppScreens.InterventionScreen.route) },
+                        text = "Intervenciones",
+                        fontText = FontWeight.Bold,
+                        styleText = TextStyle(color = Color.White),
+                        fontSize = 20.sp
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    TextButtonPersonalized(
+                        color = Color(0xFF000000.toInt()),
+                        onclick = { navController.navigate(AppScreens.AssignScreen.route) },
+                        text = "Asignar",
+                        fontText = FontWeight.Bold,
+                        styleText = TextStyle(color = Color.White),
+                        fontSize = 20.sp
+                    )
                 }
             }
         }
+        BottomSheetWithAnchor()
     }
 }
 
@@ -287,7 +307,8 @@ fun BottomSheetWithAnchor() {
 fun BottomSheetContent(viewModel: DetailRequirementViewModel = hiltViewModel()) {
     val stateFile = viewModel.state.fileRequirement
     Surface(
-        modifier = Modifier.height(200.dp),
+        modifier = Modifier.height(290.dp),
+        shape = RoundedCornerShape(50.dp),
         color = Color(0xFF000000)
     ) {
         Column(
@@ -295,14 +316,10 @@ fun BottomSheetContent(viewModel: DetailRequirementViewModel = hiltViewModel()) 
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Archivos",
+                text = "Archivos🗂️",
                 fontSize = 17.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(10.dp),
-                color = Color.White
-            )
-            Divider(
-                modifier = Modifier.padding(5.dp),
+                modifier = Modifier.padding(3.dp),
                 color = Color.White
             )
             ListFileContent(
@@ -329,8 +346,8 @@ private fun ListFileContent(
         color = MaterialTheme.colors.surface
     ) {
         LazyColumn(
-            modifier = Modifier.padding(20.dp),
-            contentPadding = PaddingValues(horizontal = 1.dp),
+            modifier = Modifier.padding(5.dp),
+            contentPadding = PaddingValues(horizontal = 5.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             content = {
                 itemsIndexed(
@@ -396,7 +413,7 @@ fun ItemFile(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = Color.White)
-            .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(25.dp))
+            .border(width = 3.dp, color = Color.Black, shape = RoundedCornerShape(20.dp))
             .clickable {
                 if (!file.isDownloading) {
                     if (file.url.isEmpty()) {
@@ -405,37 +422,31 @@ fun ItemFile(
                         openFile(file)
                     }
                 }
-
             }
             .padding(15.dp)
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
+                modifier = Modifier.fillMaxWidth(0.9f)
             ) {
                 Text(
                     text = file.url,
                     color = Color.Black
                 )
-
                 Row {
                     val description = if (file.isDownloading) {
                         "Downloading..."
                     } else {
                         if (file.downloadedUri.isNullOrEmpty()) "download the file" else "Tap to open file"
                     }
-
                     Text(
-                        text = "description",
+                        text = description,
                         color = Color.DarkGray
                     )
                 }
-
             }
             if (file.isDownloading) {
                 CircularProgressIndicator(
@@ -445,10 +456,7 @@ fun ItemFile(
                         .align(Alignment.CenterVertically)
                 )
             }
-
-
         }
-
     }
 }
 
