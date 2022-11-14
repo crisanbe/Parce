@@ -8,6 +8,6 @@ data class DataResult(
     val efect_problem: String,
     val id: Int,
     val impact_problem: String,
-    val relations: Relations,
+    val relations: RelationsDto,
     val user: User
 )

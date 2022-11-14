@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -14,19 +15,26 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
@@ -35,6 +43,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.gerotac.auth.R
 import com.gerotac.auth.requirement.di.HeaderRequirement
 import com.gerotac.auth.requirement.domain.model.detailrequirement.Data
+import com.gerotac.auth.requirement.domain.model.detailrequirement.File
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.dowloadfile.FileDownloadWorker
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
@@ -45,6 +54,7 @@ import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import kotlinx.coroutines.launch
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -128,11 +138,9 @@ private fun Header(
 private fun Body(
     data: Data?,
     modifier: Modifier = Modifier,
-    navController: NavController,
-    viewModel: DetailRequirementViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val context = LocalContext.current as Activity
-    //val stateFile = viewModel.state.fileRequirement
     val hideKeyboard = LocalSoftwareKeyboardController.current
     val permissionsState = rememberMultiplePermissionsState(
         permissions = listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -200,12 +208,7 @@ private fun Body(
                 model = com.gerotac.components_ui.R.drawable.cause
             )
         )
-        /*ListFileContent(
-            itemFileRequirement = stateFile,
-            startDownload = { it },
-            openFile = { it }
-        )*/
-
+        BottomSheetWithAnchor()
         when (HeaderRequirement.getRol()["rol"]) {
             "estudiante" -> {
                 ButtonValidation(text = "Crear intervencion") {
@@ -228,7 +231,88 @@ private fun Body(
         }
     }
 }
-/*
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun BottomSheetWithAnchor() {
+    val sheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
+    val scope = rememberCoroutineScope()
+    val sheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = sheetState
+    )
+
+    BottomSheetScaffold(
+        scaffoldState = sheetScaffoldState,
+        sheetElevation = 0.dp,
+        sheetBackgroundColor = Color.Transparent,
+        sheetPeekHeight = 49.dp,
+        sheetContent = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                IconButton(
+                    onClick = {
+                        scope.launch {
+                            if (sheetState.isCollapsed) {
+                                sheetState.expand()
+                            } else if (sheetState.isExpanded) {
+                                sheetState.collapse()
+                            }
+                        }
+                    }) {
+                    val icon = if (sheetState.isExpanded) {
+                        Icons.Filled.KeyboardArrowDown
+                    } else {
+                        Icons.Filled.KeyboardArrowUp
+                    }
+                    Icon(
+                        modifier = Modifier
+                            .size(35.dp)
+                            .shadow(elevation = 10.dp, RoundedCornerShape(20.dp))
+                            .background(Color(0xFFFDD835)),
+                        imageVector = icon,
+                        contentDescription = "Icon button",
+                        tint = Color(0xFF000000.toInt())
+                    )
+                }
+                BottomSheetContent()
+            }
+        },
+        content = {}
+    )
+}
+
+@Composable
+fun BottomSheetContent(viewModel: DetailRequirementViewModel = hiltViewModel()) {
+    val stateFile = viewModel.state.fileRequirement
+    Surface(
+        modifier = Modifier.height(200.dp),
+        color = Color(0xFF000000)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Archivos",
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(10.dp),
+                color = Color.White
+            )
+            Divider(
+                modifier = Modifier.padding(5.dp),
+                color = Color.White
+            )
+            ListFileContent(
+                itemFileRequirement = stateFile,
+                startDownload = { it },
+                openFile = { it }
+            )
+        }
+    }
+}
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -240,7 +324,6 @@ private fun ListFileContent(
     itemFileRequirement: List<File> = ArrayList()
 ) {
     val context = LocalContext.current as Activity
-
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colors.surface
@@ -250,18 +333,6 @@ private fun ListFileContent(
             contentPadding = PaddingValues(horizontal = 1.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             content = {
-                item {
-                    Text(
-                        text = "Archivos",
-                        fontSize = 18.sp,
-                        textAlign = TextAlign.Center,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(25.dp)
-                    )
-                }
                 itemsIndexed(
                     items = itemFileRequirement
                 ) { _, resultRequirements ->
@@ -273,39 +344,32 @@ private fun ListFileContent(
                                 resultRequirements,
                                 context = context,
                                 success = {
-                                    */
-/*resultRequirements.copy().apply {
+                                    resultRequirements.copy().apply {
                                         isDownloading = false
                                         downloadedUri = it
-                                    }*//*
-
+                                    }
                                 },
                                 failed = {
-                                    */
-/* resultRequirements.copy().apply {
-                                         isDownloading = false
-                                         downloadedUri = null
-                                     }*//*
-
+                                    resultRequirements.copy().apply {
+                                        isDownloading = false
+                                        downloadedUri = null
+                                    }
                                 },
                                 running = {
-                                    */
-/* resultRequirements.copy().apply {
-                                         isDownloading = true
-                                     }*//*
-
+                                    resultRequirements.copy().apply {
+                                        isDownloading = true
+                                    }
                                 }
-
                             )
                         },
                         openFile = {
-                            */
-/*val intent = Intent(Intent.ACTION_VIEW)
+                            openFile(it)
+                            val intent = Intent(Intent.ACTION_VIEW)
                             intent.setDataAndType(it.downloadedUri?.toUri(), "application/pdf")
-                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)*//*
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
                             try {
-                                //context.startActivity(intent)
+                                context.startActivity(intent)
                             } catch (e: ActivityNotFoundException) {
                                 mToast(context, "$e")
                             }
@@ -334,14 +398,13 @@ fun ItemFile(
             .background(color = Color.White)
             .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(25.dp))
             .clickable {
-                */
-/* if (!file.isDownloading) {
-                     if (file.url.isEmpty()) {
-                         startDownload(file)
-                     } else {
-                         openFile(file)
-                     }
-                 }*//*
+                if (!file.isDownloading) {
+                    if (file.url.isEmpty()) {
+                        startDownload(file)
+                    } else {
+                        openFile(file)
+                    }
+                }
 
             }
             .padding(15.dp)
@@ -361,12 +424,11 @@ fun ItemFile(
                 )
 
                 Row {
-                    */
-/*val description = if (file.isDownloading) {
+                    val description = if (file.isDownloading) {
                         "Downloading..."
                     } else {
                         if (file.downloadedUri.isNullOrEmpty()) "download the file" else "Tap to open file"
-                    }*//*
+                    }
 
                     Text(
                         text = "description",
@@ -375,16 +437,14 @@ fun ItemFile(
                 }
 
             }
-
-            */
-/*if (file.isDownloading) {
+            if (file.isDownloading) {
                 CircularProgressIndicator(
                     color = Color.Blue,
                     modifier = Modifier
                         .size(32.dp)
                         .align(Alignment.CenterVertically)
                 )
-            }*//*
+            }
 
 
         }
@@ -399,7 +459,7 @@ private fun startDownloadingFile(
     failed: (String) -> Unit,
     running: () -> Unit
 ) {
-    val data = Data.Builder()
+    val data = androidx.work.Data.Builder()
 
     data.apply {
         putString(FileDownloadWorker.FileParams.KEY_FILE_NAME, file.created_at)
@@ -447,37 +507,3 @@ private fun startDownloadingFile(
             }
         }
 }
-*/
-/*OutlinedButton(
-modifier = Modifier
-.widthIn(300.dp)
-.background(Color(0xFFFFFFFF), CircleShape)
-.padding(vertical = 20.dp)
-.shadow(3.dp, CircleShape),
-onClick = {
-    permissionsState.permissions.forEach { perm ->
-        when (perm.permission) {
-            Manifest.permission.READ_EXTERNAL_STORAGE -> {
-                when {
-                    perm.status.isGranted -> {
-
-                    }
-                    !perm.status.isGranted -> {
-                        navController.navigate(AppScreens.PermissionScreen.route)
-                    }
-                }
-            }
-        }
-    }
-}
-){
-    Icon(
-        Icons.Filled.Upload,
-        contentDescription = "Descarga"
-    )
-    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-    Text("Descargar archivo🗂️",
-        fontSize = 15.sp,
-        fontWeight = FontWeight.ExtraBold
-    )
-}*/
