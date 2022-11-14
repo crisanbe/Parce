@@ -1,8 +1,8 @@
 package com.gerotac.auth.requirement.data.repository
 
 import com.gerotac.auth.requirement.data.remote.api.RequirementApi
-import com.gerotac.auth.requirement.domain.model.detailrequirement.Result
 import com.gerotac.auth.requirement.data.remote.getdetailrequirement.toGetDetail
+import com.gerotac.auth.requirement.domain.model.detailrequirement.Data
 import com.gerotac.auth.requirement.domain.repository.DetailRequirementRepository
 import com.gerotac.shared.network.Resource
 import javax.inject.Inject
@@ -14,7 +14,7 @@ class GetDetailRequirementRepositoryImpl @Inject constructor(
     override suspend fun doDetailRequirement(
         token: String,
         id: Int
-    ): Resource<Result> {
+    ): Resource<Data> {
         val response = try {
             api.doGetDetailRequirementApi(token = token, id = id)
         } catch (e: Exception) {

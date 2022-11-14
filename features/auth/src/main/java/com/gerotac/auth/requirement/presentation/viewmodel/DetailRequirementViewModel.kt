@@ -37,7 +37,6 @@ class DetailRequirementViewModel @Inject constructor(
                         is Resource.Success -> {
                             state.copy(
                                 detailRequirement = query.data,
-                                fileRequirement = query.data?.relations?.files ?: emptyList(),
                                 isLoading = false,
                             )
                         }

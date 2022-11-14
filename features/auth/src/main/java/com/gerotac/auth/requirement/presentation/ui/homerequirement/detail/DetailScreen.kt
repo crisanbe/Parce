@@ -5,8 +5,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
-import com.gerotac.auth.requirement.domain.model.detailrequirement.Result
-import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -29,15 +27,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.work.*
 import coil.compose.rememberAsyncImagePainter
 import com.gerotac.auth.R
-import com.gerotac.auth.requirement.data.remote.getdetailrequirement.File
 import com.gerotac.auth.requirement.di.HeaderRequirement
+import com.gerotac.auth.requirement.domain.model.detailrequirement.Data
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.dowloadfile.FileDownloadWorker
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
@@ -69,7 +66,7 @@ fun DetailScreen(
 private fun DetailContent(
     navController: NavController,
     modifier: Modifier = Modifier,
-    data: Result?,
+    data: Data?,
     upPress: () -> Unit
 ) {
     Box(modifier.fillMaxSize()) {
@@ -91,7 +88,7 @@ private fun DetailContent(
 @Composable
 private fun Header(
     modifier: Modifier = Modifier,
-    data: Result?,
+    data: Data?,
     upPress: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
@@ -114,7 +111,7 @@ private fun Header(
         ) {
             TopPart(onClickAction = { upPress() })
             Text(
-                text = stringResource(R.string.TextField_Requirement_Number) + " #️⃣${data?.id}",
+                text = stringResource(R.string.TextField_Requirement_Number) + " #️⃣${data?.data?.id}",
                 fontSize = 22.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
@@ -129,13 +126,13 @@ private fun Header(
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalPermissionsApi::class)
 @Composable
 private fun Body(
-    data: Result?,
+    data: Data?,
     modifier: Modifier = Modifier,
     navController: NavController,
     viewModel: DetailRequirementViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current as Activity
-    val stateFile = viewModel.state.fileRequirement
+    //val stateFile = viewModel.state.fileRequirement
     val hideKeyboard = LocalSoftwareKeyboardController.current
     val permissionsState = rememberMultiplePermissionsState(
         permissions = listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -148,8 +145,8 @@ private fun Body(
         verticalArrangement = Arrangement.spacedBy(1.dp),
     ) {
         FormValueComp(
-            ValueState = { data?.areaintervention?.name.toString() },
-            text = data?.areaintervention?.name.toString(),
+            ValueState = { data?.data?.areaintervention?.name.toString() },
+            text = data?.data?.areaintervention?.name.toString(),
             valueText = "Area de intervencion",
             icon = rememberAsyncImagePainter(model = com.gerotac.components_ui.R.drawable.area)
         )
@@ -157,8 +154,8 @@ private fun Body(
             .width(280.dp)
             .wrapContentSize()
             .height(90.dp),
-            value = data?.description.toString(),
-            onValueChange = { data?.description },
+            value = data?.data?.description.toString(),
+            onValueChange = { data?.data?.description },
             label = { Text(stringResource(id = R.string.TextField_Description_problem)) },
             colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
             maxLines = 5,
@@ -180,24 +177,24 @@ private fun Body(
                 )
             })
         FormValueComp(
-            ValueState = { data?.impact_problem },
-            text = data?.impact_problem.toString(),
+            ValueState = { data?.data?.impact_problem },
+            text = data?.data?.impact_problem.toString(),
             valueText = "Impacto del problema",
             icon = rememberAsyncImagePainter(
                 model = com.gerotac.components_ui.R.drawable.impact
             )
         )
         FormValueComp(
-            ValueState = { data?.efect_problem },
-            text = data?.efect_problem.toString(),
+            ValueState = { data?.data?.efect_problem },
+            text = data?.data?.efect_problem.toString(),
             valueText = "Efecto del problema",
             icon = rememberAsyncImagePainter(
                 model = com.gerotac.components_ui.R.drawable.effect
             )
         )
         FormValueComp(
-            ValueState = { data?.cause_problem },
-            text = data?.cause_problem.toString(),
+            ValueState = { data?.data?.cause_problem },
+            text = data?.data?.cause_problem.toString(),
             valueText = "Causa del problema",
             icon = rememberAsyncImagePainter(
                 model = com.gerotac.components_ui.R.drawable.cause
@@ -231,6 +228,7 @@ private fun Body(
         }
     }
 }
+/*
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -275,29 +273,37 @@ private fun ListFileContent(
                                 resultRequirements,
                                 context = context,
                                 success = {
-                                    /*resultRequirements.copy().apply {
+                                    */
+/*resultRequirements.copy().apply {
                                         isDownloading = false
                                         downloadedUri = it
-                                    }*/
+                                    }*//*
+
                                 },
                                 failed = {
-                                    /* resultRequirements.copy().apply {
+                                    */
+/* resultRequirements.copy().apply {
                                          isDownloading = false
                                          downloadedUri = null
-                                     }*/
+                                     }*//*
+
                                 },
                                 running = {
-                                    /* resultRequirements.copy().apply {
+                                    */
+/* resultRequirements.copy().apply {
                                          isDownloading = true
-                                     }*/
+                                     }*//*
+
                                 }
 
                             )
                         },
                         openFile = {
-                            /*val intent = Intent(Intent.ACTION_VIEW)
+                            */
+/*val intent = Intent(Intent.ACTION_VIEW)
                             intent.setDataAndType(it.downloadedUri?.toUri(), "application/pdf")
-                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)*/
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)*//*
+
                             try {
                                 //context.startActivity(intent)
                             } catch (e: ActivityNotFoundException) {
@@ -328,13 +334,15 @@ fun ItemFile(
             .background(color = Color.White)
             .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(25.dp))
             .clickable {
-                /* if (!file.isDownloading) {
+                */
+/* if (!file.isDownloading) {
                      if (file.url.isEmpty()) {
                          startDownload(file)
                      } else {
                          openFile(file)
                      }
-                 }*/
+                 }*//*
+
             }
             .padding(15.dp)
     ) {
@@ -353,11 +361,13 @@ fun ItemFile(
                 )
 
                 Row {
-                    /*val description = if (file.isDownloading) {
+                    */
+/*val description = if (file.isDownloading) {
                         "Downloading..."
                     } else {
                         if (file.downloadedUri.isNullOrEmpty()) "download the file" else "Tap to open file"
-                    }*/
+                    }*//*
+
                     Text(
                         text = "description",
                         color = Color.DarkGray
@@ -366,14 +376,16 @@ fun ItemFile(
 
             }
 
-            /*if (file.isDownloading) {
+            */
+/*if (file.isDownloading) {
                 CircularProgressIndicator(
                     color = Color.Blue,
                     modifier = Modifier
                         .size(32.dp)
                         .align(Alignment.CenterVertically)
                 )
-            }*/
+            }*//*
+
 
         }
 
@@ -435,6 +447,7 @@ private fun startDownloadingFile(
             }
         }
 }
+*/
 /*OutlinedButton(
 modifier = Modifier
 .widthIn(300.dp)

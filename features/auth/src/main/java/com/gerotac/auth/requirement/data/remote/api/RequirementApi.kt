@@ -1,7 +1,7 @@
 package com.gerotac.auth.requirement.data.remote.api
 
 import com.gerotac.auth.requirement.data.remote.assignrequirement.request.AssignRequest
-import com.gerotac.auth.requirement.data.remote.getdetailrequirement.ResultDto
+import com.gerotac.auth.requirement.data.remote.getdetailrequirement.DataDto
 import com.gerotac.auth.requirement.data.remote.getrequirement.GetRequirementResponse
 import com.gerotac.auth.requirement.data.remote.requirementsave.RequirementResponse
 import okhttp3.MultipartBody
@@ -32,7 +32,7 @@ interface RequirementApi {
     suspend fun doGetDetailRequirementApi(
         @Header("Authorization") token: String,
         @Path("id") id: Int
-    ): ResultDto
+    ): DataDto
 
     @GET("requierements-assign")
     suspend fun doAssignRequirementApi(

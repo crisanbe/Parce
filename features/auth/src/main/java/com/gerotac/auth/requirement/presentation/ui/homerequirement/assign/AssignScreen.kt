@@ -23,7 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.gerotac.auth.R
-import com.gerotac.auth.requirement.data.remote.getdetailrequirement.File
+import com.gerotac.auth.requirement.domain.model.detailrequirement.Data
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.FormValueComp
 import com.gerotac.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
 import com.gerotac.components_ui.componets.TopPart
@@ -53,8 +53,7 @@ fun AssignScreen(
 private fun AssignContent(
     navController: NavController,
     modifier: Modifier = Modifier,
-    data: com.gerotac.auth.requirement.domain.model.detailrequirement.Result?,
-    file: File? = null,
+    data: Data?,
     upPress: () -> Unit
 ) {
     Box(modifier.fillMaxSize()) {
@@ -77,7 +76,7 @@ private fun AssignContent(
 @Composable
 private fun AssignHeader(
     modifier: Modifier = Modifier,
-    data: com.gerotac.auth.requirement.domain.model.detailrequirement.Result?,
+    data: Data?,
     upPress: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
@@ -104,8 +103,7 @@ private fun AssignHeader(
 
 @Composable
 private fun AssignBody(
-    data: com.gerotac.auth.requirement.domain.model.detailrequirement.Result?,
-    file: File? = null,
+    data: Data?,
     modifier: Modifier = Modifier,
     navController: NavController
 ) {
@@ -118,7 +116,7 @@ private fun AssignBody(
         verticalArrangement = Arrangement.Bottom,
     ) {
         Text(
-            text = stringResource(R.string.TextField_Assign_Requirement) + " #️⃣${data?.id}",
+            text = stringResource(R.string.TextField_Assign_Requirement) + " #️⃣${data?.data?.id}",
             fontSize = 22.sp,
             color = Color.Black,
             maxLines = 2,
@@ -128,8 +126,8 @@ private fun AssignBody(
         )
         Spacer(modifier = Modifier.size(20.dp))
         FormValueComp(
-            ValueState = { data?.areaintervention?.name.toString() },
-            text = data?.areaintervention?.name.toString(),
+            ValueState = { data?.data?.areaintervention?.name.toString() },
+            text = data?.data?.areaintervention?.name.toString(),
             valueText = "Seleccionar docente",
             icon = rememberAsyncImagePainter(model = com.gerotac.components_ui.R.drawable.area)
         )
