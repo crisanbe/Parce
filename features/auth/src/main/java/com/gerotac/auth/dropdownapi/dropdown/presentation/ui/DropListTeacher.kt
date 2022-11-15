@@ -17,7 +17,7 @@ import com.gerotac.auth.dropdownapi.dropdown.domain.model.listateacher.ResultTea
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DropListTeacher(
-    selectOptionChange: (Int) -> Unit,
+    selectOptionChange: (List<Int>) -> Unit,
     text: String,
     options: List<ResultTeacher>,
     mainIcon: (Painter?)
@@ -61,7 +61,7 @@ fun DropListTeacher(
                         contentPadding = PaddingValues(horizontal = 15.dp), onClick = {
                             selectOption = selectionOption.name
                             expanded = false
-                            selectOptionChange(selectionOption.id)
+                            selectOptionChange(listOf(selectionOption.id))
                         }, modifier = Modifier.sizeIn(maxHeight = 40.dp)
                     ) {
                         Column {

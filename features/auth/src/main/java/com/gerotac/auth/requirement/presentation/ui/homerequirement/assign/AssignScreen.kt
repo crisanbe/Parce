@@ -28,12 +28,18 @@ import com.gerotac.auth.dropdownapi.dropdown.domain.model.listateacher.ResultTea
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.locationmodel.ResultX
 import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropListTeacher
 import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
+import com.gerotac.auth.login.presentation.viewmodel.LoginViewModel
+import com.gerotac.auth.requirement.domain.model.assignrequirement.request.AssignRequest
 import com.gerotac.auth.requirement.domain.model.detailrequirement.Data
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.FormValueComp
+import com.gerotac.auth.requirement.presentation.viewmodel.AssignRequirementViewModel
 import com.gerotac.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
 import com.gerotac.components_ui.componets.TopPart
 import com.gerotac.components_ui.componets.button.ButtonValidation
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
+import com.gerotac.components_ui.componets.progress.ProgressIndicator
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 @Composable
 fun AssignScreen(
@@ -120,9 +126,18 @@ private fun AssignBody(
     listTeacher: List<ResultTeacher> = emptyList(),
     codeTeacher: String,
     modifier: Modifier = Modifier,
+    assignTeacherViewModel: AssignRequirementViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    var selectTeacher by remember { mutableStateOf("") }
+    val eventFlow = assignTeacherViewModel.uiEvent.receiveAsFlow()
+    val state = assignTeacherViewModel.state.collectAsState()
+    val scope = rememberCoroutineScope()
+    val teacher: List<Int> = mutableListOf()
+    var selectTeacher by remember { mutableStateOf(teacher) }
+    ProgressIndicator(
+        modifier = modifier.offset(x = 150.dp, y = 90.dp),
+        isDisplayed = state.value.isLoading
+    )
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -141,15 +156,24 @@ private fun AssignBody(
         )
         Spacer(modifier = Modifier.size(20.dp))
         DropListTeacher(
-            selectOptionChange = { selectTeacher = it.toString() },
+            selectOptionChange = { selectTeacher = it },
             text = "Docente",
             options = listTeacher,
             mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.description)
         )
         Spacer(modifier = Modifier.size(50.dp))
         ButtonValidation(
-            text = "Asignar")
+            text = "Asignar"
+        )
         {
+            scope.launch {
+                assignTeacherViewModel.assignRequirementTeacher(
+                    AssignRequest(
+                        userTeacher = selectTeacher.toList(),
+                        idRequirement = codeTeacher.toInt()
+                    )
+                )
+            }
 
         }
     }

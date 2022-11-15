@@ -1,6 +1,7 @@
 package com.gerotac.auth.requirement.data.remote.api
 
-import com.gerotac.auth.requirement.data.remote.assignrequirement.request.AssignRequest
+import com.gerotac.auth.requirement.domain.model.assignrequirement.request.AssignRequest
+import com.gerotac.auth.requirement.data.remote.assignrequirement.response.AssignDto
 import com.gerotac.auth.requirement.data.remote.getdetailrequirement.DataDto
 import com.gerotac.auth.requirement.data.remote.getrequirement.GetRequirementResponse
 import com.gerotac.auth.requirement.data.remote.requirementsave.RequirementResponse
@@ -37,8 +38,8 @@ interface RequirementApi {
     @GET("requierements-assign")
     suspend fun doAssignRequirementApi(
         @Header("Authorization") token: String,
-        @Body user: AssignRequest,
-    ): com.gerotac.auth.requirement.data.remote.getrequirement.Result
+        @Body userTeacher: AssignRequest,
+    ): AssignDto
 
     @GET("interventions")
     suspend fun doInterventionApi(
