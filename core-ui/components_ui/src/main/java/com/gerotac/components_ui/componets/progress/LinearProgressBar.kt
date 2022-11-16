@@ -3,10 +3,9 @@
 package com.gerotac.components_ui.componets.progress
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +21,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
 @Composable
-fun LinearProgressBar(isDisplayed: Boolean) {
+fun LinearProgressBar(isDisplayed: Boolean, text: String = "Cargando...") {
     if (isDisplayed) {
         Dialog(
             onDismissRequest = { isDisplayed },
@@ -43,7 +42,7 @@ fun LinearProgressBar(isDisplayed: Boolean) {
                 Text(
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    text = "Cargando..."
+                    text = text
                 )
             }
         }

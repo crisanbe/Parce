@@ -64,4 +64,21 @@ object HeaderRequirement : ViewModel() {
         }
         return head
     }
+
+    fun getEmailUser(): Map<String, String> {
+        var head = mapOf<String, String>()
+        viewModelScope.launch() {
+            userRepo?.getEmailUser()?.collect { email ->
+                withContext(Dispatchers.Main) {
+                    val state = MutableStateFlow(email)
+                    state.update { email }
+                    val headers: HashMap<String, String> = hashMapOf(
+                        "email" to email,
+                    )
+                    head = headers
+                }
+            }
+        }
+        return head
+    }
 }

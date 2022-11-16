@@ -22,6 +22,7 @@ class SendEmailForgotMyPasswordViewModel @Inject constructor(
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
     private var makePaymentJob: Job? = null
+
     fun doResendNewCode(email: SendEmailForgotMyPasswordDto) {
         if (makePaymentJob != null) return
         resendNewCodeUseCase(email = email).onEach { result ->

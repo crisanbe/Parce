@@ -27,13 +27,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.gerotac.auth.R
+import com.gerotac.auth.profileUser.presentation.ui.Drawer
 import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserDto
 import com.gerotac.auth.updateuser.presentation.viewmodel.UpdateUserViewModel
 import com.gerotac.components_ui.componets.progress.LinearProgressBar
 import com.gerotac.components_ui.componets.DividerIcon
 import com.gerotac.components_ui.componets.TopBar
 import com.gerotac.components_ui.componets.datatime.DataTimeString
-import com.gerotac.components_ui.componets.drawer.Drawer
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.dropdown.DropString
 import com.gerotac.core.util.UiEvent

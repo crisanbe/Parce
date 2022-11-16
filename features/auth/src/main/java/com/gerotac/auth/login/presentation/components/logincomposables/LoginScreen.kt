@@ -173,12 +173,13 @@ fun BodyLogin(
                                 val token = state.value.token?.authorization?.token
                                 val rolCompany = state.value.token?.user?.role
                                 val nameUser = state.value.token?.user?.name
+                                val emailUser = state.value.token?.user?.email
                                 userRepo?.saveRolLogin(rolCompany)
                                 userRepo?.saveTokenLoginState(token)
                                 userRepo?.saveNameUser(nameUser)
+                                userRepo?.saveEmailUser(emailUser)
                                 val emailVerified =
                                     state.value.token?.user?.email_verified
-                                val emailUser = state.value.token?.user?.email
                                 val statusUser = state.value.token?.user?.user_status
                                 withContext(Dispatchers.Main) {
                                     if (emailVerified == null) {

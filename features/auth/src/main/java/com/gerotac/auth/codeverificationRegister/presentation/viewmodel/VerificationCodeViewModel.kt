@@ -22,6 +22,7 @@ class VerificationCodeViewModel @Inject constructor(private val confirmationCode
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
     private var makePaymentJob: Job? = null
+
     fun doConfirmationCode(code: ParameterCodeConfirmationDto) {
         val token = CodeVerificationHeaders.getHeader()["Authorization"]
         if (makePaymentJob != null) return
@@ -45,7 +46,7 @@ class VerificationCodeViewModel @Inject constructor(private val confirmationCode
                 is Resource.Loading -> {
                     _state.value = VerificationCodeState(true)
                 }
-                else -> {}
+                else -> Unit
             }
         }.launchIn(viewModelScope)
     }

@@ -11,7 +11,6 @@ import com.gerotac.auth.requirement.presentation.state.DetailRequirementState
 import com.gerotac.auth.updateuser.di.UpdateUserHeaders
 import com.gerotac.shared.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

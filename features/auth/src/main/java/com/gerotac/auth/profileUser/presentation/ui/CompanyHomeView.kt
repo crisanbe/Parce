@@ -1,3 +1,5 @@
+@file:Suppress("UnusedEquals")
+
 package com.gerotac.auth.profileUser.presentation.ui
 
 import android.annotation.SuppressLint
@@ -18,6 +20,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Search
@@ -33,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -43,25 +47,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.gerotac.auth.login.presentation.components.logincomposables.userRepo
 import com.gerotac.auth.requirement.di.HeaderRequirement
 import com.gerotac.auth.requirement.domain.model.getrequirement.Result
-import com.gerotac.auth.requirement.presentation.ui.homerequirement.*
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.HomeBottomBar
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.HomeRequirements
 import com.gerotac.auth.requirement.presentation.viewmodel.RequirementViewModel
 import com.gerotac.components_ui.R
-import com.gerotac.components_ui.componets.*
+import com.gerotac.components_ui.componets.TopBar
 import com.gerotac.components_ui.componets.alertdialog.ViewModelDialog
 import com.gerotac.components_ui.componets.drawer.AppScreens
-import com.gerotac.components_ui.componets.drawer.Drawer
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.progress.CircularProgress
 import com.gerotac.core.util.UiEvent
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -152,7 +155,7 @@ fun HomeCompany(
                                 navController.navigate(AppScreens.RequirementScreen.route)
                             })
                     }
-                    else -> { }
+                    else -> {}
                 }
 
             },
@@ -219,42 +222,41 @@ private fun RequirementsContent(
             )
             Spacer(modifier = Modifier.size(10.dp))
             Box(modifier = modifier) {
-                BasicTextField(
-                    value = query,
-                    onValueChange = { viewModelGetRequirement.onQueryChanged(it) },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Search
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onSearch = {
-                            viewModelGetRequirement.doGetRequirement(query)
-                            keyboardController?.hide()
+                IconButton(onClick = { }) {
+                    OutlinedTextField(
+                        value = query,
+                        onValueChange = { viewModelGetRequirement.onQueryChanged(it) },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Search
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onSearch = {
+                                viewModelGetRequirement.doGetRequirement(query)
+                                keyboardController?.hide()
+                            },
+                        ),
+                        singleLine = true,
+                        label = { Text("Requerimiento") },
+                        placeholder = { Text("Código!") },
+                        maxLines = 1,
+                        shape = RoundedCornerShape(30.dp),
+                        trailingIcon = {
+                            if (query.isNotBlank()) {
+                                IconButton(onClick = { query.equals("")}) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Delete,
+                                        contentDescription = "Limpiar campo"
+                                    )
+                                }
+                            }
                         },
-                    ),
-                    maxLines = 1,
-                    singleLine = true,
-                    textStyle = TextStyle(color = Color.Black),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .shadow(5.dp, CircleShape)
-                        .background(Color.White, CircleShape)
-                        .padding(horizontal = 20.dp, vertical = 12.dp)
-                        .onFocusChanged {
-                            isHintDisplayed = (!it.isFocused) && query.isNotEmpty()
-                        }
-                )
-                IconButton(onClick = { viewModelGetRequirement.doGetRequirement(query) }) {
-                    Icon(
-                        imageVector = Icons.Outlined.Search,
-                        contentDescription = null,
                         modifier = Modifier
-                            .offset(x = 302.dp, y = (-2).dp)
-                            .size(44.dp)
-                            .clip(RoundedCornerShape(22.dp))
-                            .background(Color(0xFF21120B))
-                            .scale(scale = 0.6f),
-                        tint = Color.White
+                            .width(400.dp)
+                            .offset(y = (-13).dp)
+                            .onFocusChanged {
+                                isHintDisplayed = (!it.isFocused) && query.isNotEmpty()
+                            }
                     )
                 }
                 if (isHintDisplayed) {

@@ -33,7 +33,7 @@ import com.gerotac.auth.newpasswordforget.presentation.components.newpassword.Ne
 import com.gerotac.auth.profileUser.presentation.ui.HomeCompany
 import com.gerotac.auth.profileUser.presentation.ui.ProfileCompany
 import com.gerotac.auth.register.presentation.ui.RegisterScreen
-import com.gerotac.auth.requirement.presentation.ui.homerequirement.assign.AssignScreen
+import com.gerotac.auth.assignrequirement.presentation.ui.assign.AssignScreen
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.DetailScreen
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.ExitAlert
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.RequirementScreen
@@ -623,7 +623,8 @@ fun ScaffoldSection(
                     AssignScreen(
                         navController = controller,
                         codeTeacher = backStackEntry.arguments?.getString("codeTeacher").toString(),
-                        upPress = navigateToHome
+                        upPress = navigateToHome,
+                        scaffoldState = scaffoldState
                     )
                 }
                 composable(route = AppScreens.InterventionScreen.route) {

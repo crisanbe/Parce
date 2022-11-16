@@ -27,8 +27,6 @@ import com.gerotac.auth.requirement.domain.model.getrequirement.Result
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.HomeRequirements
 import com.gerotac.auth.requirement.presentation.viewmodel.RequirementViewModel
-import com.gerotac.components_ui.componets.TopBar
-import com.gerotac.components_ui.componets.drawer.Drawer
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable

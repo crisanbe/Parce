@@ -1,10 +1,8 @@
 package com.gerotac.auth.requirement.di
 
-import com.gerotac.auth.requirement.data.repository.AssignTeacherRepositoryImpl
 import com.gerotac.auth.requirement.data.repository.GetDetailRequirementRepositoryImpl
 import com.gerotac.auth.requirement.data.repository.GetRequirementRepositoryImpl
 import com.gerotac.auth.requirement.data.repository.RequirementRepositoryImpl
-import com.gerotac.auth.requirement.domain.repository.AssignTeacherRepository
 import com.gerotac.auth.requirement.domain.repository.DetailRequirementRepository
 import com.gerotac.auth.requirement.domain.repository.GetRequirementRepository
 import com.gerotac.auth.requirement.domain.repository.RequirementRepository
@@ -29,7 +27,4 @@ abstract class RepositoriesModule {
     abstract fun bindGetDetailRequirementRepository(impl: GetDetailRequirementRepositoryImpl):
             DetailRequirementRepository
 
-    @Binds
-    abstract fun bindAssignRequirementRepository(impl: AssignTeacherRepositoryImpl):
-            AssignTeacherRepository
 }

@@ -67,11 +67,11 @@ sealed class DrawerScreens(
     val IconDrawer: ImageVector
 ) {
     object CompanyHome :
-        DrawerScreens(route = "CompanyHome", title = "Home", IconDrawer = Icons.Outlined.Home)
+        DrawerScreens(route = "CompanyHome", title = "Inicio", IconDrawer = Icons.Outlined.Home)
 
     object CompanyProfile : DrawerScreens(
         route = "CompanyProfile",
-        title = "Profile",
+        title = "Perfil",
         IconDrawer = Icons.Outlined.Person
     )
 
