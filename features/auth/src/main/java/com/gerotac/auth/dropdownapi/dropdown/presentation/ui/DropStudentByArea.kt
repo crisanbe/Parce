@@ -15,14 +15,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.ResultArea
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.dropmodel.Result
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.studentbyarea.ResultStudent
 import com.gerotac.components_ui.R
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun DropAreas(
+fun DropStudentByArea(
     selectOptionChange: (Int) -> Unit,
     text: String,
-    options: List<ResultArea>,
+    options: List<ResultStudent>,
     mainIcon: (Painter?)
 ) {
     var selectOption by remember { mutableStateOf("") }
@@ -60,7 +61,8 @@ fun DropAreas(
             })
         Box {
             ExposedDropdownMenu(
-                expanded = expanded, onDismissRequest = {
+                expanded = expanded,
+                onDismissRequest = {
                     expanded = false
                     errorVisibility = selectOption.isEmpty()
                 }, modifier = Modifier.border(BorderStroke(2.dp, color = Color.Yellow))

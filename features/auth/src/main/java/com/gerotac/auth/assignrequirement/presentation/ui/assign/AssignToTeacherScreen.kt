@@ -36,14 +36,13 @@ import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.progress.LinearProgressBar
 import com.gerotac.core.util.UiEvent
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun AssignScreen(
+fun AssignToTeacherScreen(
     navController: NavController,
     codeTeacher: String,
     scaffoldState: ScaffoldState,
@@ -182,7 +181,7 @@ fun FooterAssign(modifier: Modifier, onClickRegister: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun AssignPreview() {
-    AssignScreen(
+    AssignToTeacherScreen(
         navController = rememberNavController(),
         "",
         rememberScaffoldState(),

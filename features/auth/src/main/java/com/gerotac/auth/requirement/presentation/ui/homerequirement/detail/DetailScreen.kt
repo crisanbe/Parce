@@ -213,12 +213,38 @@ private fun Body(
         when (HeaderRequirement.getRol()["rol"]) {
             "estudiante" -> {
                 ButtonValidation(text = "Crear intervencion") {
-                    navController.navigate(AppScreens.InterventionScreen.route)
+                    navController.navigate(AppScreens.AssignToStudentScreen.route)
                 }
             }
             "empresa" -> {
                 ButtonValidation(text = "Ver intervenciones") {
                     navController.navigate(AppScreens.InterventionScreen.route)
+                }
+            }
+            "docente" -> {
+                Row(
+                    modifier = Modifier
+                        .padding(all = 10.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    TextButtonPersonalized(
+                        color = Color(0xFF000000.toInt()),
+                        onclick = { navController.navigate(AppScreens.InterventionScreen.route) },
+                        text = "Intervenciones",
+                        fontText = FontWeight.Bold,
+                        styleText = TextStyle(color = Color.White),
+                        fontSize = 20.sp
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    TextButtonPersonalized(
+                        color = Color(0xFF000000.toInt()),
+                        onclick = { navController.navigate(AppScreens.AssignToStudentScreen.route + "?code=${data?.data?.id}") },
+                        text = "Asignar",
+                        fontText = FontWeight.Bold,
+                        styleText = TextStyle(color = Color.White),
+                        fontSize = 20.sp
+                    )
                 }
             }
             else -> {
@@ -239,7 +265,7 @@ private fun Body(
                     Spacer(modifier = Modifier.width(16.dp))
                     TextButtonPersonalized(
                         color = Color(0xFF000000.toInt()),
-                        onclick = { navController.navigate(AppScreens.AssignScreen.route + "?codeTeacher=${data?.data?.id}") },
+                        onclick = { navController.navigate(AppScreens.AssignToTeacherScreen.route + "?codeTeacher=${data?.data?.id}") },
                         text = "Asignar",
                         fontText = FontWeight.Bold,
                         styleText = TextStyle(color = Color.White),

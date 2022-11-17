@@ -1,69 +1,68 @@
 package com.gerotac.auth.dropdownapi.dropdown.presentation.ui
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
+import coil.size.Size
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.ResultArea
-import com.gerotac.auth.dropdownapi.dropdown.domain.model.dropmodel.Result
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.studentbyarea.ResultStudent
 import com.gerotac.components_ui.R
 
-@OptIn(ExperimentalMaterialApi::class)
+@SuppressLint("SuspiciousIndentation")
 @Composable
-fun DropAreas(
+fun DropPrueba(
     selectOptionChange: (Int) -> Unit,
     text: String,
-    options: List<ResultArea>,
+    options: List<ResultStudent>,
     mainIcon: (Painter?)
 ) {
-    var selectOption by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
-    var rotateIcon by remember { mutableStateOf(0f) }
-    var errorVisibility by remember { mutableStateOf(false) }
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = {
-            expanded = !expanded
-        },
-        modifier = Modifier.wrapContentSize()
-    ) {
+    var selectOption by remember { mutableStateOf("") }
+    var selectedText by remember { mutableStateOf(text) }
+
+    var textfieldSize by remember { mutableStateOf(androidx.compose.ui.geometry.Size.Zero) }
+
+    val icon = if (expanded)
+        Icons.Filled.ArrowDropUp //it requires androidx.compose.material:material-icons-extended
+    else
+        Icons.Filled.ArrowDropDown
+
         OutlinedTextField(
-            value = selectOption,
-            maxLines = 1,
-            onValueChange = {},
-            enabled = false,
-            placeholder = {
-                Text(
-                    text = text,
-                    color = Color.Black,
-                    fontWeight = FontWeight.ExtraBold,
-                )
-            },
+            value = selectedText,
+            onValueChange = { selectedText = it },
+            enabled = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { coordinates ->
+                    //This value is used to assign to the DropDown the same width
+                    textfieldSize = coordinates.size.toSize()
+                },
+            label = { Text("Label") },
             trailingIcon = {
-                rotateIcon = if (expanded) 180f else 0f
-                if (mainIcon != null) {
-                    Image(
-                        painter = mainIcon,
-                        contentDescription = null,
-                        modifier = Modifier.rotate(rotateIcon)
-                    )
-                }
-            })
+                Icon(icon, "contentDescription",
+                    Modifier.clickable { expanded = !expanded })
+            }
+        )
         Box {
-            ExposedDropdownMenu(
-                expanded = expanded, onDismissRequest = {
-                    expanded = false
-                    errorVisibility = selectOption.isEmpty()
-                }, modifier = Modifier.border(BorderStroke(2.dp, color = Color.Yellow))
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = Modifier
+                    .width(with(LocalDensity.current) { textfieldSize.width.toDp() })
             ) {
                 options.forEachIndexed { index, selectionOption ->
                     DropdownMenuItem(
@@ -92,7 +91,6 @@ fun DropAreas(
                         }
                     }
                 }
-            }
         }
     }
 }

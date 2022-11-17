@@ -10,7 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.gerotac.auth.R
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.dropmodel.Result
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.listateacher.ResultTeacher
 
@@ -38,7 +41,7 @@ fun DropListTeacher(
             maxLines = 1,
             onValueChange = {},
             enabled = false,
-            placeholder = { Text(text = text, color = Color.Black) },
+            placeholder = { Text(text = text, color = Color.Black,fontWeight = FontWeight.ExtraBold) },
             trailingIcon = {
                 rotateIcon = if (expanded) 180f else 0f
                 if (mainIcon != null) {
@@ -68,7 +71,12 @@ fun DropListTeacher(
                     ) {
                         Column {
                             Text(
-                                text = options[index].name, color = Color.Black
+                                text = options[index].name,
+                                color = Color.Black,
+                                fontWeight = FontWeight.ExtraBold,
+                                style = androidx.compose.ui.text.TextStyle(
+                                    color = colorResource(id = com.gerotac.components_ui.R.color.black)
+                                )
                             )
                             if (index != options.lastIndex) {
                                 Spacer(modifier = Modifier.size(10.dp))

@@ -1,5 +1,6 @@
 package com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel;
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gerotac.auth.dropdownapi.dropdown.domain.usecase.*
@@ -24,7 +25,8 @@ class GetApisDropViewModel @Inject constructor(
     private val locationUseCase: LocationUseCase,
     private val municipalityUseCase: MunicipalityUseCase,
     private val listTeacherUseCase: ListTeacherUseCase,
-    private val listAreaInterventionUseCase: AreaInterventionUseCase
+    private val listAreaInterventionUseCase: AreaInterventionUseCase,
+    private val studentByAreaUseCase: StudentByAreaUseCase
 ) :
     ViewModel() {
     var state = MutableStateFlow(AcademicProgramsState())
@@ -37,8 +39,20 @@ class GetApisDropViewModel @Inject constructor(
         private set
     var stateArea = MutableStateFlow(ListAreaState())
         private set
+    var stateStudentByArea = MutableStateFlow(StudentAreaState())
+        private set
     var uiEvent = Channel<UiEvent>()
         private set
+
+    var query = mutableStateOf("1".toInt())
+
+    fun onQueryChanged(query: Int) {
+        setQuery(query)
+    }
+
+    private fun setQuery(query: Int) {
+        this.query.value = query
+    }
 
     init {
         doAcademicPrograms()
@@ -197,6 +211,32 @@ class GetApisDropViewModel @Inject constructor(
                     else -> Unit
                 }
             }.launchIn(this)
+        }
+    }
+
+    fun doGetStudentByArea(query: Int?) {
+        val token = UpdateUserHeaders.getHeader()["Authorization"]
+        viewModelScope.launch {
+            query?.let {
+                studentByAreaUseCase(token = token.toString(), requierementId = it).onEach { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            stateStudentByArea.update {
+                                StudentAreaState(
+                                    studentByAreaState = result.data ?: emptyList()
+                                )
+                            }
+                        }
+                        is Resource.Error -> {
+                            stateStudentByArea.value = StudentAreaState(false)
+                        }
+                        is Resource.Loading -> {
+                            stateStudentByArea.value = StudentAreaState(true)
+                        }
+                        else -> Unit
+                    }
+                }.launchIn(this)
+            }
         }
     }
 }

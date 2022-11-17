@@ -33,7 +33,8 @@ import com.gerotac.auth.newpasswordforget.presentation.components.newpassword.Ne
 import com.gerotac.auth.profileUser.presentation.ui.HomeCompany
 import com.gerotac.auth.profileUser.presentation.ui.ProfileCompany
 import com.gerotac.auth.register.presentation.ui.RegisterScreen
-import com.gerotac.auth.assignrequirement.presentation.ui.assign.AssignScreen
+import com.gerotac.auth.assignrequirement.presentation.ui.assign.AssignToStudentScreen
+import com.gerotac.auth.assignrequirement.presentation.ui.assign.AssignToTeacherScreen
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.DetailScreen
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.ExitAlert
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.RequirementScreen
@@ -611,7 +612,7 @@ fun ScaffoldSection(
                     )
                 }
                 composable(
-                    route = AppScreens.AssignScreen.route +
+                    route = AppScreens.AssignToTeacherScreen.route +
                             "?codeTeacher={codeTeacher}",
                     arguments = listOf(
                         navArgument(name = "codeTeacher") {
@@ -620,9 +621,26 @@ fun ScaffoldSection(
                         },
                     )
                 ) { backStackEntry ->
-                    AssignScreen(
+                    AssignToTeacherScreen(
                         navController = controller,
                         codeTeacher = backStackEntry.arguments?.getString("codeTeacher").toString(),
+                        upPress = navigateToHome,
+                        scaffoldState = scaffoldState
+                    )
+                }
+                composable(
+                    route = AppScreens.AssignToStudentScreen.route +
+                            "?code={code}",
+                    arguments = listOf(
+                        navArgument(name = "code") {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        },
+                    )
+                ) { backStackEntry ->
+                    AssignToStudentScreen(
+                        navController = controller,
+                        code = backStackEntry.arguments?.getString("code").toString(),
                         upPress = navigateToHome,
                         scaffoldState = scaffoldState
                     )

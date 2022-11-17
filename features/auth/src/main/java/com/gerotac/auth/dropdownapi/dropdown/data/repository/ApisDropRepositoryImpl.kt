@@ -5,12 +5,14 @@ import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.areainterventi
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.departament.toResponseLocation
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.listateacher.toResponseListTeacher
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.responsedrop.toAcademic
+import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.studentbyarea.toResponseStudentByArea
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.GetAreasInterventions
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.ResultArea
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.dropmodel.Result
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.listateacher.ResultTeacher
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.locationmodel.ResultX
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.locationmodel.Town
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.studentbyarea.ResultStudent
 import com.gerotac.auth.dropdownapi.dropdown.domain.repository.ApisDropRepository
 import com.gerotac.shared.network.Resource
 import kotlinx.coroutines.flow.Flow
@@ -137,6 +139,28 @@ class ApisDropRepositoryImpl @Inject constructor(
         emit(Resource.Loading())
         try {
             val response = api.doAreaInterventions(token = token).toResponseListAreas()
+            emit(Resource.Success(response.data.result))
+        } catch (e: HttpException) {
+            emit(
+                Resource.Error(
+                    message = "Oops, something went wrong",
+                    data = null
+                )
+            )
+        } catch (e: IOException) {
+            emit(
+                Resource.Error(
+                    message = "Couldn't reach server, check your internet connection",
+                    data = null
+                )
+            )
+        }
+    }
+
+    override fun getStudentByArea(token: String, requierementId: Int): Flow<Resource<List<ResultStudent>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = api.doGetStudentByArea(token = token, requierementId).toResponseStudentByArea()
             emit(Resource.Success(response.data.result))
         } catch (e: HttpException) {
             emit(

@@ -94,6 +94,7 @@
     <string name="TextField_Create_Requirement">Crear requerimiento</string>
     <string name="TextField_Requirement_Number">Requerimineto</string>
     <string name="TextField_Assign_Requirement">Asignar requerimiento a docente</string>
+    <string name="TextField_Assign_Requirement_Student">Asignar requerimiento a estudiante</string>
 
     <string name="TextField_Description_problem">Descripción del problema</string>
     <string name="TextField_Area_intervention">Área de intervención</string>

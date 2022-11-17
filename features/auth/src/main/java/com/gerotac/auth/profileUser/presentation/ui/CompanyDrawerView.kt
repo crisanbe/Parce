@@ -56,6 +56,7 @@ fun Drawer(
                 style = androidx.compose.ui.text.TextStyle(
                     color = colorResource(id = com.gerotac.components_ui.R.color.secondary)
                 ),
+                maxLines = 1,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.ExtraBold
             )
