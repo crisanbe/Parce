@@ -1,9 +1,12 @@
 package com.gerotac.auth.dropdownapi.dropdown.data.repository
 
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.api.GetApiDropDown
+import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.areainterventions.toResponseListAreas
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.departament.toResponseLocation
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.listateacher.toResponseListTeacher
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.responsedrop.toAcademic
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.GetAreasInterventions
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.ResultArea
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.dropmodel.Result
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.listateacher.ResultTeacher
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.locationmodel.ResultX
@@ -113,6 +116,28 @@ class ApisDropRepositoryImpl @Inject constructor(
         try {
             val response = api.doTeacher(token = token).toResponseListTeacher().data
             emit(Resource.Success(response.result))
+        } catch (e: HttpException) {
+            emit(
+                Resource.Error(
+                    message = "Oops, something went wrong",
+                    data = null
+                )
+            )
+        } catch (e: IOException) {
+            emit(
+                Resource.Error(
+                    message = "Couldn't reach server, check your internet connection",
+                    data = null
+                )
+            )
+        }
+    }
+
+    override fun getAreasInterventionList(token: String): Flow<Resource<List<ResultArea>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = api.doAreaInterventions(token = token).toResponseListAreas()
+            emit(Resource.Success(response.data.result))
         } catch (e: HttpException) {
             emit(
                 Resource.Error(

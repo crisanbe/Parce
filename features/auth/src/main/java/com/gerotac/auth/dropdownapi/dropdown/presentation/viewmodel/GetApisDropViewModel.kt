@@ -3,10 +3,7 @@ package com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel;
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gerotac.auth.dropdownapi.dropdown.domain.usecase.*
-import com.gerotac.auth.dropdownapi.dropdown.presentation.state.AcademicProgramsState
-import com.gerotac.auth.dropdownapi.dropdown.presentation.state.ListTeacherState
-import com.gerotac.auth.dropdownapi.dropdown.presentation.state.LocationState
-import com.gerotac.auth.dropdownapi.dropdown.presentation.state.MuniState
+import com.gerotac.auth.dropdownapi.dropdown.presentation.state.*
 import com.gerotac.auth.updateuser.di.UpdateUserHeaders
 import com.gerotac.core.util.UiEvent
 import com.gerotac.core.util.UiText
@@ -26,7 +23,8 @@ class GetApisDropViewModel @Inject constructor(
     private val typeCompanyUseCase: TypeCompanyUseCase,
     private val locationUseCase: LocationUseCase,
     private val municipalityUseCase: MunicipalityUseCase,
-    private val listTeacherUseCase: ListTeacherUseCase
+    private val listTeacherUseCase: ListTeacherUseCase,
+    private val listAreaInterventionUseCase: AreaInterventionUseCase
 ) :
     ViewModel() {
     var state = MutableStateFlow(AcademicProgramsState())
@@ -37,6 +35,8 @@ class GetApisDropViewModel @Inject constructor(
         private set
     var stateTeacher = MutableStateFlow(ListTeacherState())
         private set
+    var stateArea = MutableStateFlow(ListAreaState())
+        private set
     var uiEvent = Channel<UiEvent>()
         private set
 
@@ -46,6 +46,7 @@ class GetApisDropViewModel @Inject constructor(
         doLocation()
         doMunicipality()
         doGetTeacher()
+        doGetAreas()
     }
 
     private fun doAcademicPrograms() {
@@ -168,6 +169,30 @@ class GetApisDropViewModel @Inject constructor(
                     }
                     is Resource.Loading -> {
                         stateTeacher.value = ListTeacherState(true)
+                    }
+                    else -> Unit
+                }
+            }.launchIn(this)
+        }
+    }
+
+    private fun doGetAreas() {
+        val token = UpdateUserHeaders.getHeader()["Authorization"]
+        viewModelScope.launch {
+            listAreaInterventionUseCase(token = token.toString()).onEach { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        stateArea.update {
+                            ListAreaState(
+                                areaState = result.data ?: emptyList()
+                            )
+                        }
+                    }
+                    is Resource.Error -> {
+                        stateArea.value = ListAreaState(false)
+                    }
+                    is Resource.Loading -> {
+                        stateArea.value = ListAreaState(true)
                     }
                     else -> Unit
                 }

@@ -1,5 +1,6 @@
 package com.gerotac.auth.dropdownapi.dropdown.data.remote.api
 
+import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.areainterventions.GetAreasInterventionsDto
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.departament.ResponseLocation
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.listateacher.ListTeacherDto
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.responsedrop.ResponseAcademicPrograms
@@ -26,4 +27,9 @@ interface GetApiDropDown {
     suspend fun doTeacher(
         @Header("Authorization") token: String
     ): ListTeacherDto
+
+    @GET("areainterventions")
+    suspend fun doAreaInterventions(
+        @Header("Authorization") token: String
+    ): GetAreasInterventionsDto
 }

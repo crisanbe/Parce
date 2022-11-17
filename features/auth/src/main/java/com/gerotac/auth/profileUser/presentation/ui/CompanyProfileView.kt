@@ -26,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.gerotac.auth.profileUser.domain.model.User
 import com.gerotac.auth.profileUser.presentation.viewmodel.GetProfileViewModel
+import com.gerotac.auth.requirement.di.HeaderRequirement
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
 import com.gerotac.components_ui.componets.FloatingButtonHome
 import com.gerotac.components_ui.componets.TopBar
@@ -110,13 +111,6 @@ fun ProfileCompanyView(
                         onClickDestination(screen)
                     }
                 )
-            },
-            floatingActionButton = {
-                FloatingButtonHome(
-                    text = "Crear requerimiento",
-                    onClickFloatingButton = {
-                        navController.navigate(AppScreens.RequirementScreen.route)
-                    })
             }
         ) { innerPadding ->
             Column(

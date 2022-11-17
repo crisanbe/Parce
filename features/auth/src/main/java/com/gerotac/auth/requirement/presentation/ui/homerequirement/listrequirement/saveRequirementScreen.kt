@@ -40,6 +40,9 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.gerotac.auth.R
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.ResultArea
+import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropAreas
+import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
 import com.gerotac.auth.requirement.data.remote.requirementsave.RequirementRequest
 import com.gerotac.auth.requirement.presentation.viewmodel.RequirementViewModel
 import com.gerotac.components_ui.componets.TopPart
@@ -59,20 +62,53 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import org.apache.commons.io.FileUtils
 import java.io.File
 
+@OptIn(ExperimentalComposeUiApi::class)
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@Composable
+fun RequirementScreen(
+    navController: NavController,
+    viewModelLocation: GetApisDropViewModel = hiltViewModel()
+) {
+    val scaffoldState = rememberScaffoldState()
+    val stateGetAreas = viewModelLocation.stateArea.collectAsState()
+    Scaffold(
+        modifier = Modifier,
+        scaffoldState = scaffoldState, snackbarHost = {
+            SnackbarHost(it) { data ->
+                Snackbar(
+                    actionColor = Color.White,
+                    contentColor = Color.Yellow,
+                    snackbarData = data,
+                    modifier = Modifier.padding(10.dp),
+                    shape = RoundedCornerShape(20),
+                    backgroundColor = Color.Black
+                )
+            }
+        }, content = {
+            stateGetAreas.value.areaState.let { listArea ->
+                RequirementBody(
+                    navController = navController,
+                    listArea = listArea
+                )
+            }
+        })
+
+}
+
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @ExperimentalComposeUiApi
 @ExperimentalPermissionsApi
 @Composable
-fun RequirementScreen(
+fun RequirementBody(
     navController: NavController,
-    viewModel: RequirementViewModel = hiltViewModel(),
+    listArea: List<ResultArea>,
+    viewModel: RequirementViewModel = hiltViewModel()
 ) {
     val activity = LocalContext.current as Activity
+    val state = viewModel.state.collectAsState()
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
     val eventFlow = viewModel.uiEvent.receiveAsFlow()
-    val statePages = viewModel.statePages.collectAsState()
-    val state = viewModel.state.collectAsState()
     val hideKeyboard = LocalSoftwareKeyboardController.current
     var description by remember { mutableStateOf("descrip") }
     var interventionArea by remember { mutableStateOf(1) }
@@ -87,8 +123,6 @@ fun RequirementScreen(
     val permissionsState = rememberMultiplePermissionsState(
         permissions = listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
     )
-
-
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) {
             it.forEach { item ->
@@ -115,214 +149,203 @@ fun RequirementScreen(
         showDialog = !showDialog
         navController.navigate(DrawerScreens.CompanyHome.route)
     })
-    Scaffold(modifier = Modifier, scaffoldState = scaffoldState, snackbarHost = {
-        SnackbarHost(it) { data ->
-            Snackbar(
-                actionColor = Color.White,
-                contentColor = Color.Yellow,
-                snackbarData = data,
-                modifier = Modifier.padding(10.dp),
-                shape = RoundedCornerShape(20),
-                backgroundColor = Color.Black
-            )
-        }
-    }, content = {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
+        TopPart(onClickAction = { viewModelDialog.showDialog() })
+        Text(
+            text = stringResource(R.string.TextField_Create_Requirement),
+            fontSize = 22.sp,
+            color = Color.Black,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 55.dp)
+                .offset(y = (-30).dp)
+        )
         Column(
             Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .fillMaxWidth()
+                .offset(y = (-15).dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
         ) {
-            TopPart(onClickAction = { viewModelDialog.showDialog() })
-            Text(
-                text = stringResource(R.string.TextField_Create_Requirement),
-                fontSize = 22.sp,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 55.dp)
-                    .offset(y = (-30).dp)
+            DropAreas(
+                selectOptionChange = { interventionArea = it },
+                text = "Area de intervencion",
+                options = listArea,
+                mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.identity)
             )
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .offset(y = (-15).dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
-            ) {
-                DropString(
-                    ValueState = { interventionArea = it.toInt() },
-                    text = "Area de intervencion",
-                    options = listOf("1"),
-                    mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.identity)
-                )
-                Spacer(Modifier.height(5.dp))
-                OutlinedTextField(modifier = Modifier
-                    .width(280.dp)
-                    .wrapContentSize()
-                    .height(150.dp),
-                    value = description,
-                    onValueChange = { description = it },
-                    label = { Text(stringResource(id = R.string.TextField_Description_problem)) },
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
-                    maxLines = 5,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Edit,
-                            contentDescription = "",
-                        )
-                        Divider(
-                            modifier = Modifier
-                                .width(34.3.dp)
-                                .height(30.dp)
-                                .padding(start = 33.dp)
-                        )
-                    })
-                Spacer(Modifier.height(5.dp))
-                TextField(value = causeOfTheProblem,
-                    onValueChange = { causeOfTheProblem = it },
-                    label = { Text(stringResource(id = R.string.TextField_causas_problems)) },
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
-                    maxLines = 1,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.SmsFailed,
-                            contentDescription = "",
-                        )
-                        Divider(
-                            modifier = Modifier
-                                .width(34.3.dp)
-                                .height(30.dp)
-                                .padding(start = 33.dp)
-                        )
-                    })
-                Spacer(Modifier.height(5.dp))
-                TextField(value = effectsOfTheProblem,
-                    onValueChange = { effectsOfTheProblem = it },
-                    label = { Text(stringResource(id = R.string.TextField_efect_problems)) },
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
-                    maxLines = 1,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.SyncProblem,
-                            contentDescription = "",
-                        )
-                        Divider(
-                            modifier = Modifier
-                                .width(34.3.dp)
-                                .height(30.dp)
-                                .padding(start = 33.dp)
-                        )
-                    })
-                Spacer(Modifier.height(5.dp))
-                TextField(value = impactOfTheProblem,
-                    onValueChange = { impactOfTheProblem = it },
-                    label = { Text(stringResource(id = R.string.TextField_impact_problems)) },
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
-                    maxLines = 1,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Report,
-                            contentDescription = "",
-                        )
-                        Divider(
-                            modifier = Modifier
-                                .width(34.3.dp)
-                                .height(30.dp)
-                                .padding(start = 33.dp)
-                        )
-                    })
-                OutlinedButton(
-                    modifier = Modifier
-                        .widthIn(300.dp)
-                        .background(Color(0xFFFFFFFF), CircleShape)
-                        .padding(vertical = 20.dp)
-                        .shadow(3.dp, CircleShape),
-                    onClick = {
-                        permissionsState.permissions.forEach { perm ->
-                            when (perm.permission) {
-                                Manifest.permission.READ_EXTERNAL_STORAGE -> {
-                                    when {
-                                        perm.status.isGranted -> {
-                                            launcher.launch("application/pdf")
-                                        }
-                                        !perm.status.isGranted -> {
-                                            navController.navigate(AppScreens.PermissionScreen.route)
-                                        }
+            Spacer(Modifier.height(5.dp))
+            OutlinedTextField(modifier = Modifier
+                .width(280.dp)
+                .wrapContentSize()
+                .height(150.dp),
+                value = description,
+                onValueChange = { description = it },
+                label = { Text(stringResource(id = R.string.TextField_Description_problem)) },
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
+                maxLines = 5,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.Edit,
+                        contentDescription = "",
+                    )
+                    Divider(
+                        modifier = Modifier
+                            .width(34.3.dp)
+                            .height(30.dp)
+                            .padding(start = 33.dp)
+                    )
+                })
+            Spacer(Modifier.height(5.dp))
+            TextField(value = causeOfTheProblem,
+                onValueChange = { causeOfTheProblem = it },
+                label = { Text(stringResource(id = R.string.TextField_causas_problems)) },
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
+                maxLines = 1,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.SmsFailed,
+                        contentDescription = "",
+                    )
+                    Divider(
+                        modifier = Modifier
+                            .width(34.3.dp)
+                            .height(30.dp)
+                            .padding(start = 33.dp)
+                    )
+                })
+            Spacer(Modifier.height(5.dp))
+            TextField(value = effectsOfTheProblem,
+                onValueChange = { effectsOfTheProblem = it },
+                label = { Text(stringResource(id = R.string.TextField_efect_problems)) },
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
+                maxLines = 1,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.SyncProblem,
+                        contentDescription = "",
+                    )
+                    Divider(
+                        modifier = Modifier
+                            .width(34.3.dp)
+                            .height(30.dp)
+                            .padding(start = 33.dp)
+                    )
+                })
+            Spacer(Modifier.height(5.dp))
+            TextField(value = impactOfTheProblem,
+                onValueChange = { impactOfTheProblem = it },
+                label = { Text(stringResource(id = R.string.TextField_impact_problems)) },
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
+                maxLines = 1,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.Report,
+                        contentDescription = "",
+                    )
+                    Divider(
+                        modifier = Modifier
+                            .width(34.3.dp)
+                            .height(30.dp)
+                            .padding(start = 33.dp)
+                    )
+                })
+            OutlinedButton(
+                modifier = Modifier
+                    .widthIn(300.dp)
+                    .background(Color(0xFFFFFFFF), CircleShape)
+                    .padding(vertical = 20.dp)
+                    .shadow(3.dp, CircleShape),
+                onClick = {
+                    permissionsState.permissions.forEach { perm ->
+                        when (perm.permission) {
+                            Manifest.permission.READ_EXTERNAL_STORAGE -> {
+                                when {
+                                    perm.status.isGranted -> {
+                                        launcher.launch("application/pdf")
+                                    }
+                                    !perm.status.isGranted -> {
+                                        navController.navigate(AppScreens.PermissionScreen.route)
                                     }
                                 }
                             }
                         }
                     }
-                ){
-                        Icon(
-                            Icons.Filled.Upload,
-                            contentDescription = "Archivo"
-                        )
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text("Subir archivo🗂️",
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.ExtraBold
-                        )
                 }
-                Button(
-                    onClick = {
-                        hideKeyboard?.hide()
-                        scope.launch {
-                            viewModel.doRequirement(
-                                RequirementRequest(
-                                    area_intervention = interventionArea,
-                                    description = description,
-                                    cause_problem = causeOfTheProblem,
-                                    efect_problem = causeOfTheProblem,
-                                    impact_problem = impactOfTheProblem,
-                                    file = listPdf
-                                )
+            ) {
+                Icon(
+                    Icons.Filled.Upload,
+                    contentDescription = "Archivo"
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text(
+                    "Subir archivo🗂️",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+            }
+            Button(
+                onClick = {
+                    hideKeyboard?.hide()
+                    scope.launch {
+                        viewModel.doRequirement(
+                            RequirementRequest(
+                                area_intervention = interventionArea,
+                                description = description,
+                                cause_problem = causeOfTheProblem,
+                                efect_problem = effectsOfTheProblem,
+                                impact_problem = impactOfTheProblem,
+                                file = listPdf
                             )
-                            eventFlow.collectLatest { event ->
-                                when (event) {
-                                    is UiEvent.Success -> {
-                                        viewModel.doGetPagination()
-                                        navController.navigate(
-                                            DrawerScreens.CompanyHome.route
-                                        )
-                                        scaffoldState.snackbarHostState.showSnackbar(
-                                            message = "Se guardo exitosamente🏅",
-                                            actionLabel = "Continue"
-                                        )
-                                    }
-                                    is UiEvent.ShowSnackBar -> {
-                                        scaffoldState.snackbarHostState.showSnackbar(
-                                            message = event.message.asString(activity)
-                                        )
-                                    }
-                                    else -> Unit
+                        )
+                        eventFlow.collectLatest { event ->
+                            when (event) {
+                                is UiEvent.Success -> {
+                                    viewModel.doGetPagination()
+                                    navController.navigate(
+                                        DrawerScreens.CompanyHome.route
+                                    )
+                                    scaffoldState.snackbarHostState.showSnackbar(
+                                        message = "Se guardo exitosamente🏅",
+                                        actionLabel = "Continue"
+                                    )
                                 }
+                                is UiEvent.ShowSnackBar -> {
+                                    scaffoldState.snackbarHostState.showSnackbar(
+                                        message = event.message.asString(activity)
+                                    )
+                                }
+                                else -> Unit
                             }
                         }
-                    },
-                    shape = RoundedCornerShape(percent = 45),
-                    modifier = Modifier.size(height = 55.dp, width = 300.dp),
-                    colors = ButtonDefaults.textButtonColors(backgroundColor = Color.Black)
-                ) {
-                    Text(
-                        text = stringResource(R.string.Button_Save),
-                        modifier = Modifier,
-                        color = Color.White,
-                        fontSize = 20.sp,
-                    )
-                }
-                Spacer(Modifier.height(16.dp))
+                    }
+                },
+                shape = RoundedCornerShape(percent = 45),
+                modifier = Modifier.size(height = 55.dp, width = 300.dp),
+                colors = ButtonDefaults.textButtonColors(backgroundColor = Color.Black)
+            ) {
+                Text(
+                    text = stringResource(R.string.Button_Save),
+                    modifier = Modifier,
+                    color = Color.White,
+                    fontSize = 20.sp,
+                )
             }
+            Spacer(Modifier.height(16.dp))
         }
-    })
+    }
+
     LinearProgressBar(isDisplayed = state.value.isLoading)
 }

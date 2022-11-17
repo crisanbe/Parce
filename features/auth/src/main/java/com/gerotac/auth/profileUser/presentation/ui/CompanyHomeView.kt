@@ -197,7 +197,7 @@ private fun RequirementsContent(
     modifier: Modifier = Modifier,
     onItemClicked: (Int) -> Unit,
     nameUser: String,
-    query: String,
+    query: String = remember { mutableStateOf("").toString()},
     hint: String = "",
     isLoading: Boolean = false,
     resultRequirement: List<Result> = ArrayList(),
@@ -243,7 +243,10 @@ private fun RequirementsContent(
                         shape = RoundedCornerShape(30.dp),
                         trailingIcon = {
                             if (query.isNotBlank()) {
-                                IconButton(onClick = { query.equals("")}) {
+                                IconButton(onClick = {
+                                    query.removePrefix("")
+                                }
+                                ) {
                                     Icon(
                                         imageVector = Icons.Outlined.Delete,
                                         contentDescription = "Limpiar campo"
