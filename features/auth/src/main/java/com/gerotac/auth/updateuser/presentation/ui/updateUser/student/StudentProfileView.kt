@@ -27,7 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.gerotac.auth.R
-import com.gerotac.auth.dropdownapi.dropdown.domain.model.dropmodel.Result
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.responseacademic.ResultAcademic
 import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropAcademic
 import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
 import com.gerotac.auth.login.presentation.components.logincomposables.userRepo
@@ -35,8 +35,8 @@ import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserDto
 import com.gerotac.auth.updateuser.presentation.state.DocumentNumberState
 import com.gerotac.auth.updateuser.presentation.state.PhoneNumberState
 import com.gerotac.auth.updateuser.presentation.viewmodel.UpdateUserViewModel
-import com.gerotac.components_ui.componets.alertdialog.DialogExit
 import com.gerotac.components_ui.componets.TopPart
+import com.gerotac.components_ui.componets.alertdialog.DialogExit
 import com.gerotac.components_ui.componets.alertdialog.ViewModelDialog
 import com.gerotac.components_ui.componets.datatime.DataTimeAlternative
 import com.gerotac.components_ui.componets.drawer.AppScreens
@@ -61,7 +61,7 @@ fun StudentProfile(
     val scope = rememberCoroutineScope()
     val viewModelDialog: ViewModelDialog = hiltViewModel()
     val scaffoldState = rememberScaffoldState()
-    val stateAcademic = viewModelAcademic.state.collectAsState()
+    val stateAcademic = viewModelAcademic.stateAcademic.collectAsState()
     val eventFlow = viewModelUpdateUser.uiEvent.receiveAsFlow()
     val state = viewModelUpdateUser.state.collectAsState()
     val context = LocalContext.current
@@ -100,9 +100,9 @@ fun StudentProfile(
         Column(
             Modifier.fillMaxSize()
         ) {
-            stateAcademic.value.academicProgramsState.let {
+            stateAcademic.value.academicProgramsState.let { listProgramAcademic ->
                 StudentProfileView(
-                    result = it,
+                    result = listProgramAcademic,
                     onClickSave = {
                         scope.launch {
                             viewModelUpdateUser.doUpdateUser(
@@ -160,7 +160,7 @@ fun StudentProfile(
 @Composable
 fun StudentProfileView(
     onClickSave: (List<String>) -> Unit,
-    result: List<Result> = emptyList(),
+    result: List<ResultAcademic> = emptyList(),
 ) {
     val focusManager = LocalFocusManager.current
     val hideKeyboard = LocalSoftwareKeyboardController.current

@@ -35,19 +35,7 @@ class AssignRequirementViewModel @Inject constructor(
         private set
     var stateStudentByArea = MutableStateFlow(StudentAreaState())
         private set
-    var query = mutableStateOf("".toInt())
 
-    fun onQueryChanged(query: Int) {
-        setQuery(query)
-    }
-
-    private fun setQuery(query: Int) {
-        this.query.value = query
-    }
-
-    init {
-
-    }
 
     suspend fun assignRequirementTeacher(request: AssignRequest) {
         val token = UpdateUserHeaders.getHeader()["Authorization"]

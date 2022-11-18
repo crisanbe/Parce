@@ -4,14 +4,15 @@ import com.gerotac.auth.dropdownapi.dropdown.data.remote.api.GetApiDropDown
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.areainterventions.toResponseListAreas
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.departament.toResponseLocation
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.listateacher.toResponseListTeacher
-import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.responsedrop.toAcademic
+import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.responseacademicprograms.toAcademic
+import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.responsecompany.toCompany
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.studentbyarea.toResponseStudentByArea
-import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.GetAreasInterventions
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.ResultArea
-import com.gerotac.auth.dropdownapi.dropdown.domain.model.dropmodel.Result
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.listateacher.ResultTeacher
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.locationmodel.ResultX
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.locationmodel.Town
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.responseacademic.ResultAcademic
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.responsecompany.ResultCompany
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.studentbyarea.ResultStudent
 import com.gerotac.auth.dropdownapi.dropdown.domain.repository.ApisDropRepository
 import com.gerotac.shared.network.Resource
@@ -25,10 +26,10 @@ class ApisDropRepositoryImpl @Inject constructor(
     private val api: GetApiDropDown
 ) :
     ApisDropRepository {
-    override fun getAcademicPrograms(token: String): Flow<Resource<List<Result>>> = flow {
+    override fun getAcademicPrograms(token: String): Flow<Resource<List<ResultAcademic>>> = flow {
         emit(Resource.Loading())
         try {
-            val response = api.doAcademicPrograms(token = token).toAcademic()
+            val response = api.doAcademicPrograms(token).toAcademic()
             emit(Resource.Success(response.data.result))
         } catch (e: HttpException) {
             emit(
@@ -47,10 +48,10 @@ class ApisDropRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getTypeCompany(token: String): Flow<Resource<List<Result>>> = flow {
+    override fun getTypeCompany(token: String): Flow<Resource<List<ResultCompany>>> = flow {
         emit(Resource.Loading())
         try {
-            val response = api.doTypeCompany(token = token).toAcademic()
+            val response = api.doTypeCompany(token).toCompany()
             emit(Resource.Success(response.data.result))
         } catch (e: HttpException) {
             emit(

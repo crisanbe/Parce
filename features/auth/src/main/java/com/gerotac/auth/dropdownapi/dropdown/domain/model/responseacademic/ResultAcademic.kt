@@ -1,4 +1,4 @@
-package com.gerotac.auth.dropdownapi.dropdown.domain.model.dropmodel
+package com.gerotac.auth.dropdownapi.dropdown.domain.model.responseacademic
 
 import java.io.Serializable
 
@@ -11,10 +11,10 @@ data class ResponseAcademic(
 ) : Serializable
 
 data class ResponseData(
-    val result: List<Result>
+    val result: List<ResultAcademic>
 ) : Serializable
 
-data class Result(
+data class ResultAcademic(
     val id: Int,
     val name: String
 ) : Serializable

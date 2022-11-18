@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.gerotac.auth.R
-import com.gerotac.auth.dropdownapi.dropdown.domain.model.dropmodel.Result
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.responseacademic.ResultAcademic
 import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
 import com.gerotac.auth.login.presentation.components.logincomposables.userRepo
 import com.gerotac.auth.register.presentation.ui.TextFieldError
@@ -67,7 +67,7 @@ fun AdminProfile(
     val context = LocalContext.current
     val eventFlow = viewModelUpdateUser.uiEvent.receiveAsFlow()
     val state = viewModelUpdateUser.state.collectAsState()
-    val stateAcademic = viewModelAcademic.state.collectAsState()
+    val stateAcademic = viewModelAcademic.stateAcademic.collectAsState()
     BackHandler(true) { viewModelDialog.showDialog() }
     DialogExit(
         text = "Deseas salir sin actualizar tus datos!🤦‍♂",
@@ -161,7 +161,7 @@ fun AdminProfile(
 @Composable
 fun EducationalProfileView(
     onClickSave: (List<String>) -> Unit,
-    result: List<Result> = emptyList(),
+    result: List<ResultAcademic> = emptyList(),
 ) {
     val hideKeyboard = LocalSoftwareKeyboardController.current
     val viewModelDialog: ViewModelDialog = hiltViewModel()

@@ -13,14 +13,16 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.gerotac.auth.dropdownapi.dropdown.domain.model.listateacher.ResultTeacher
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.responseacademic.ResultAcademic
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.responsecompany.ResultCompany
+import com.gerotac.components_ui.R
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun DropListTeacher(
+fun DropACompany(
     selectOptionChange: (Int) -> Unit,
     text: String,
-    options: List<ResultTeacher>,
+    options: List<ResultCompany>,
     mainIcon: (Painter?)
 ) {
     var selectOption by remember { mutableStateOf("") }
@@ -30,8 +32,8 @@ fun DropListTeacher(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = {
-        expanded = !expanded
-    },
+            expanded = !expanded
+        },
         modifier = Modifier.wrapContentSize()
     ) {
         OutlinedTextField(
@@ -39,16 +41,20 @@ fun DropListTeacher(
             maxLines = 1,
             onValueChange = {},
             enabled = false,
-            placeholder = { Text(text = text, color = Color.Black,fontWeight = FontWeight.ExtraBold) },
+            placeholder = {
+                Text(
+                    text = text,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
+                )
+            },
             trailingIcon = {
                 rotateIcon = if (expanded) 180f else 0f
                 if (mainIcon != null) {
                     Image(
                         painter = mainIcon,
                         contentDescription = null,
-                        modifier = Modifier
-                            .size(40.dp)
-                            .rotate(rotateIcon)
+                        modifier = Modifier.rotate(rotateIcon)
                     )
                 }
             })
@@ -73,8 +79,8 @@ fun DropListTeacher(
                                 color = Color.Black,
                                 fontWeight = FontWeight.ExtraBold,
                                 style = androidx.compose.ui.text.TextStyle(
-                                    color = colorResource(id = com.gerotac.components_ui.R.color.black)
-                                )
+                                    color = colorResource(id = R.color.black)
+                                ),
                             )
                             if (index != options.lastIndex) {
                                 Spacer(modifier = Modifier.size(10.dp))

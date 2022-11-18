@@ -7,7 +7,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.Feed
+import androidx.compose.material.icons.outlined.PhoneAndroid
+import androidx.compose.material.icons.outlined.Pin
+import androidx.compose.material.icons.outlined.RealEstateAgent
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,17 +26,17 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.gerotac.auth.R
-import com.gerotac.auth.dropdownapi.dropdown.domain.model.dropmodel.Result
-import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropAcademic
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.responsecompany.ResultCompany
+import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropACompany
 import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
 import com.gerotac.auth.login.presentation.components.logincomposables.userDataStore
 import com.gerotac.auth.login.presentation.components.logincomposables.userRepo
 import com.gerotac.auth.protodata.ProtoUserRepoImpl
-import com.gerotac.components_ui.componets.alertdialog.DialogExit
-import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.DividerIcon
 import com.gerotac.components_ui.componets.TopPart
+import com.gerotac.components_ui.componets.alertdialog.DialogExit
 import com.gerotac.components_ui.componets.alertdialog.ViewModelDialog
+import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.dropdown.DropString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,7 +47,7 @@ fun CompanyRegistrationView(
     navController: NavController,
     viewModelApisDrop: GetApisDropViewModel = hiltViewModel()
 ) {
-    val state = viewModelApisDrop.state.collectAsState()
+    val state = viewModelApisDrop.stateCompany.collectAsState()
     val lifecycleTokenScope = rememberCoroutineScope()
     val viemodel: ViewModelDialog = hiltViewModel()
     var showDialog by remember { mutableStateOf(false) }
@@ -66,7 +69,7 @@ fun CompanyRegistrationView(
             }
         }
     )
-    state.value.academicProgramsState.let {
+    state.value.companyState.let {
         CompanyRegistration(
             result = it,
             onClickNext = {
@@ -86,7 +89,7 @@ fun CompanyRegistrationView(
 @Composable
 fun CompanyRegistration(
     onClickNext: (List<String>) -> Unit,
-    result: List<Result> = emptyList(),
+    result: List<ResultCompany> = emptyList(),
 ) {
     userRepo = ProtoUserRepoImpl(LocalContext.current.userDataStore)
     var companyName by remember { mutableStateOf("") }
@@ -196,7 +199,7 @@ fun CompanyRegistration(
                     mainIcon = painterResource(id = R.drawable.company)
                 )
                 Spacer(Modifier.height(5.dp))
-                DropAcademic(
+                DropACompany(
                     selectOptionChange = { kindCompany = it },
                     text = "Tipo de sociedad",
                     options = result,
@@ -214,7 +217,7 @@ fun CompanyRegistration(
                                 kindCompany.toString(),
                                 economicActivity,
                                 phone
-                            ) as List<String>
+                            )
                         )
                     },
                     shape = RoundedCornerShape(percent = 45),

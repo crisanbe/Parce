@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.gerotac.auth.R
-import com.gerotac.auth.dropdownapi.dropdown.domain.model.dropmodel.Result
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.responseacademic.ResultAcademic
 import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
 import com.gerotac.auth.login.presentation.components.logincomposables.userRepo
 import com.gerotac.auth.register.presentation.ui.TextFieldError
@@ -67,7 +67,7 @@ fun TeacherProfile(
     val context = LocalContext.current
     val eventFlow = viewModelUpdateUser.uiEvent.receiveAsFlow()
     val state = viewModelUpdateUser.state.collectAsState()
-    val stateAcademic = viewModelAcademic.state.collectAsState()
+    val stateAcademic = viewModelAcademic.stateAcademic.collectAsState()
     BackHandler(true) { viewModelDialog.showDialog() }
     DialogExit(
         text = "Deseas salir sin actualizar tus datos!🤦‍♂",
@@ -110,9 +110,7 @@ fun TeacherProfile(
             Column(
                 Modifier.fillMaxSize()
             ) {
-                stateAcademic.value.academicProgramsState.let {
                 EducationalProfileView(
-                    result = it,
                     onClickSave = {
                         scope.launch {
                             viewModelUpdateUser.doUpdateUser(
@@ -159,20 +157,18 @@ fun TeacherProfile(
                     }
                 )
             }
-                ProgressIndicator(
-                    modifier = Modifier.offset(x = 150.dp, y = (-790).dp),
-                    isDisplayed = state.value.isLoading
-                )
-            }
+            ProgressIndicator(
+                modifier = Modifier.offset(x = 150.dp, y = (-790).dp),
+                isDisplayed = state.value.isLoading
+            )
         })
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun EducationalProfileView(
-    onClickSave: (List<String>) -> Unit,
-    result: List<Result> = emptyList(),
-    ) {
+    onClickSave: (List<String>) -> Unit
+) {
     val hideKeyboard = LocalSoftwareKeyboardController.current
     val viewModelDialog: ViewModelDialog = hiltViewModel()
     val fullName: TextFieldValueState = remember { ValueState() }
@@ -253,12 +249,6 @@ fun EducationalProfileView(
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.ic_disability)
             )
             Spacer(Modifier.height(5.dp))
-            /*DropAcademic(
-                selectOptionChange = { academicProgram = it },
-                text = "Programa académico",
-                options = result,
-                mainIcon = painterResource(id = R.drawable.view_module)
-            )*/
             DataTimeAlternative(birthday)
             Spacer(Modifier.height(10.dp))
             Button(

@@ -3,24 +3,23 @@ package com.gerotac.auth.dropdownapi.dropdown.data.remote.api
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.areainterventions.GetAreasInterventionsDto
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.departament.ResponseLocation
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.listateacher.ListTeacherDto
-import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.responsedrop.ResponseAcademicPrograms
-import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.studentbyarea.DataStudentByAreaDto
+import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.responseacademicprograms.ResponseAcademicProgramDto
+import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.responsecompany.ResponseCompanyDto
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.studentbyarea.GetStudentByArea
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface GetApiDropDown {
     @GET("academicprograms")
     suspend fun doAcademicPrograms(
         @Header("Authorization") token: String
-    ): ResponseAcademicPrograms
+    ): ResponseAcademicProgramDto
 
     @GET("typesocieties")
     suspend fun doTypeCompany(
         @Header("Authorization") token: String
-    ): ResponseAcademicPrograms
+    ): ResponseCompanyDto
 
     @GET("locations/departments")
     suspend fun doLocation(

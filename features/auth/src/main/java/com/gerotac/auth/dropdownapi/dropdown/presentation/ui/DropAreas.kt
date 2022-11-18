@@ -14,7 +14,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.ResultArea
-import com.gerotac.auth.dropdownapi.dropdown.domain.model.dropmodel.Result
 import com.gerotac.components_ui.R
 
 @OptIn(ExperimentalMaterialApi::class)

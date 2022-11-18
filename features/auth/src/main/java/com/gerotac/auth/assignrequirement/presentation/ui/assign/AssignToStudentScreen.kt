@@ -11,7 +11,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.AutofillNode
+import androidx.compose.ui.autofill.AutofillType
+import androidx.compose.ui.composed
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalAutofill
+import androidx.compose.ui.platform.LocalAutofillTree
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -56,11 +64,11 @@ fun AssignToStudentScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val query = assignStudentViewModel.query.value
+    //val query = assignStudentViewModel.query.value
     val hideKeyboard = LocalSoftwareKeyboardController.current
     val stateGetStudent = assignStudentViewModel.stateStudentByArea.collectAsState()
     val eventFlow = assignStudentViewModel.uiEvent.receiveAsFlow()
-    LaunchedEffect(Unit) {
+    LaunchedEffect(true) {
         scope.launch {
             assignStudentViewModel.doGetStudentByArea(
                 query = code.toInt()
@@ -157,7 +165,7 @@ fun BodyAssignToStudent(
         DropPrueba(
             selectOptionChange = { teacher = arrayListOf(it) },
             text = "Estudiante",
-            options = listStudent,
+             options = listStudent,
             mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.docente_asign)
         )
         Spacer(modifier = Modifier.size(16.dp))

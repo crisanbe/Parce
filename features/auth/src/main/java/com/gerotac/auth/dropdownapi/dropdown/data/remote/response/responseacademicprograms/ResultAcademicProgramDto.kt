@@ -1,13 +1,13 @@
-package com.gerotac.auth.dropdownapi.dropdown.data.remote.response.responsedrop
+package com.gerotac.auth.dropdownapi.dropdown.data.remote.response.responseacademicprograms
 
-import com.google.gson.annotations.SerializedName
 import com.gerotac.auth.dropdownapi.dropdown.data.remote.response.departament.Data
-import com.gerotac.auth.dropdownapi.dropdown.domain.model.dropmodel.ResponseAcademic
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.responseacademic.ResponseAcademic
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.responseacademic.ResponseData
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.responseacademic.ResultAcademic
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
-import com.gerotac.auth.dropdownapi.dropdown.domain.model.dropmodel.Result
-import com.gerotac.auth.dropdownapi.dropdown.domain.model.dropmodel.ResponseData
 
-data class ResponseAcademicPrograms(
+data class ResponseAcademicProgramDto(
     @SerializedName("code") val code: String,
     @SerializedName("data") val `data`: Data,
     @SerializedName("message") val message: String,
@@ -24,12 +24,12 @@ data class Result(
     @SerializedName("name") val name: String
 ) : Serializable
 
-fun ResponseAcademicPrograms.toAcademic(): ResponseAcademic {
+fun ResponseAcademicProgramDto.toAcademic(): ResponseAcademic {
     return ResponseAcademic(
         code = code,
         data = ResponseData(
             result = data.result.mapIndexed { _, result ->
-                Result (
+                ResultAcademic (
                     id = result.id,
                     name = result.name
                 )
@@ -39,13 +39,6 @@ fun ResponseAcademicPrograms.toAcademic(): ResponseAcademic {
         state = state,
         status = status
     )
-    /*val result = result.mapIndexed { _, result ->
-        Result(
-            id = result.id,
-            name = result.name
-        )
-    }
-    return result*/
 }
 
 

@@ -29,7 +29,9 @@ class GetApisDropViewModel @Inject constructor(
     private val studentByAreaUseCase: StudentByAreaUseCase
 ) :
     ViewModel() {
-    var state = MutableStateFlow(AcademicProgramsState())
+    var stateAcademic = MutableStateFlow(AcademicProgramsState())
+        private set
+    var stateCompany = MutableStateFlow(CompanyState())
         private set
     var stateLocation = MutableStateFlow(LocationState())
         private set
@@ -44,7 +46,7 @@ class GetApisDropViewModel @Inject constructor(
     var uiEvent = Channel<UiEvent>()
         private set
 
-    var query = mutableStateOf("1".toInt())
+    /*var query = mutableStateOf("1".toInt())
 
     fun onQueryChanged(query: Int) {
         setQuery(query)
@@ -53,7 +55,7 @@ class GetApisDropViewModel @Inject constructor(
     private fun setQuery(query: Int) {
         this.query.value = query
     }
-
+*/
     init {
         doAcademicPrograms()
         doTypeCompany()
@@ -69,7 +71,7 @@ class GetApisDropViewModel @Inject constructor(
             academicProgramsUseCase(token = token.toString()).onEach { result ->
                 when (result) {
                     is Resource.Success -> {
-                        state.update {
+                        stateAcademic.update {
                             AcademicProgramsState(
                                 academicProgramsState = result.data ?: emptyList()
                             )
@@ -77,7 +79,7 @@ class GetApisDropViewModel @Inject constructor(
                         uiEvent.send(UiEvent.Success)
                     }
                     is Resource.Error -> {
-                        state.value = AcademicProgramsState(false)
+                        stateAcademic.value = AcademicProgramsState(false)
                         uiEvent.send(
                             UiEvent.ShowSnackBar(
                                 UiText.DynamicString(result.message ?: "Error")
@@ -86,7 +88,7 @@ class GetApisDropViewModel @Inject constructor(
                         uiEvent.send(UiEvent.Error)
                     }
                     is Resource.Loading -> {
-                        state.value = AcademicProgramsState(true)
+                        stateAcademic.value = AcademicProgramsState(true)
                     }
                     else -> Unit
                 }
@@ -100,17 +102,17 @@ class GetApisDropViewModel @Inject constructor(
             typeCompanyUseCase(token = token.toString()).onEach { result ->
                 when (result) {
                     is Resource.Success -> {
-                        state.update {
-                            AcademicProgramsState(
-                                academicProgramsState = result.data ?: emptyList()
+                        stateCompany.update {
+                            CompanyState(
+                                companyState = result.data ?: emptyList()
                             )
                         }
                     }
                     is Resource.Error -> {
-                        state.value = AcademicProgramsState(false)
+                        stateCompany.value = CompanyState(false)
                     }
                     is Resource.Loading -> {
-                        state.value = AcademicProgramsState(true)
+                        stateCompany.value = CompanyState(true)
                     }
                     else -> Unit
                 }
