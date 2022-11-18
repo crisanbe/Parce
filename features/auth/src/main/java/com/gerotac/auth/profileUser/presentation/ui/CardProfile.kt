@@ -166,7 +166,7 @@ fun CardProfile(
                         CardView(
                             item = item.bussine.address,
                             elevation = 10.dp,
-                            text = "Direccion: ",
+                            text = "Dirección: ",
                             border = BorderStroke(1.dp, Color.Black)
                         )
                     }
