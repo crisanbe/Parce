@@ -349,9 +349,7 @@ fun BottomSheetContent(viewModel: DetailRequirementViewModel = hiltViewModel()) 
                 color = Color.White
             )
             ListFileContent(
-                itemFileRequirement = stateFile,
-                startDownload = { it },
-                openFile = { it }
+                itemFileRequirement = stateFile
             )
         }
     }
@@ -361,8 +359,6 @@ fun BottomSheetContent(viewModel: DetailRequirementViewModel = hiltViewModel()) 
 @Composable
 private fun ListFileContent(
     modifier: Modifier = Modifier,
-    startDownload: (File) -> Unit,
-    openFile: (File) -> Unit,
     isLoading: Boolean = false,
     itemFileRequirement: List<File> = ArrayList()
 ) {
@@ -378,37 +374,38 @@ private fun ListFileContent(
             content = {
                 itemsIndexed(
                     items = itemFileRequirement
-                ) { _, resultRequirements ->
+                ) { _, resultArchives ->
                     ItemFile(
-                        file = resultRequirements,
+                        file = resultArchives,
                         startDownload = {
-                            startDownload(it)
                             startDownloadingFile(
-                                resultRequirements,
+                                resultArchives,
                                 context = context,
                                 success = {
-                                    resultRequirements.copy().apply {
+                                    resultArchives.copy().apply {
                                         isDownloading = false
                                         downloadedUri = it
                                     }
                                 },
                                 failed = {
-                                    resultRequirements.copy().apply {
+                                    resultArchives.copy().apply {
                                         isDownloading = false
                                         downloadedUri = null
                                     }
                                 },
                                 running = {
-                                    resultRequirements.copy().apply {
+                                    resultArchives.copy().apply {
                                         isDownloading = true
                                     }
                                 }
                             )
                         },
                         openFile = {
-                            openFile(it)
                             val intent = Intent(Intent.ACTION_VIEW)
-                            intent.setDataAndType(it.downloadedUri?.toUri(), "application/pdf")
+                            intent.setDataAndType(
+                                "https://parces.gerotac.com/${it.url}".toUri(),
+                                "application/pdf"
+                            )
                             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
                             try {
