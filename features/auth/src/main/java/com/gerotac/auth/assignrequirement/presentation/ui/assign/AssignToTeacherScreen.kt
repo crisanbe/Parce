@@ -83,7 +83,7 @@ fun AssignToTeacherScreen(
                             scope.launch {
                                 assignTeacherViewModel.assignRequirementTeacher(
                                     AssignRequest(
-                                        userTeacher = it,
+                                        user = it,
                                         idRequirement = codeTeacher.toInt()
                                     )
                                 )

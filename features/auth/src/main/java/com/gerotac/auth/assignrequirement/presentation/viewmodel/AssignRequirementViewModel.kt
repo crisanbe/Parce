@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gerotac.auth.assignrequirement.data.remote.assignteacherdto.assignrequirement.request.AssignRequest
+import com.gerotac.auth.assignrequirement.domain.usecase.AssignRequirementStudentUseCase
 import com.gerotac.auth.assignrequirement.domain.usecase.AssignRequirementTeacherUseCase
 import com.gerotac.auth.assignrequirement.presentation.state.AssignTeacherState
 import com.gerotac.auth.codeverificationRegister.di.CodeVerificationHeaders
@@ -25,7 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AssignRequirementViewModel @Inject constructor(
     private val assignRequirementTeacherUseCase: AssignRequirementTeacherUseCase,
-    private val studentByAreaUseCase: StudentByAreaUseCase
+    private val assignRequirementStudentUseCase: AssignRequirementStudentUseCase
 
     ) : ViewModel() {
 
@@ -33,9 +34,6 @@ class AssignRequirementViewModel @Inject constructor(
         private set
     var uiEvent = Channel<UiEvent>()
         private set
-    var stateStudentByArea = MutableStateFlow(StudentAreaState())
-        private set
-
 
     suspend fun assignRequirementTeacher(request: AssignRequest) {
         val token = UpdateUserHeaders.getHeader()["Authorization"]
@@ -69,29 +67,35 @@ class AssignRequirementViewModel @Inject constructor(
         }
     }
 
-    fun doGetStudentByAre(query: Int? = null) {
+    suspend fun assignRequirementStudent(request: AssignRequest) {
         val token = UpdateUserHeaders.getHeader()["Authorization"]
         viewModelScope.launch {
-            query?.let {
-                studentByAreaUseCase(token = token.toString(), requierementId = it).onEach { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            stateStudentByArea.update {
-                                StudentAreaState(
-                                    studentByAreaState = result.data ?: emptyList()
-                                )
-                            }
-                        }
-                        is Resource.Error -> {
-                            stateStudentByArea.value = StudentAreaState(false)
-                        }
-                        is Resource.Loading -> {
-                            stateStudentByArea.value = StudentAreaState(true)
-                        }
-                        else -> Unit
+            assignRequirementStudentUseCase(token = token.toString(), request).onEach { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        state.update { AssignTeacherState(assignTeacher = result.data) }
+                        uiEvent.send(UiEvent.Success)
+                        uiEvent.send(
+                            UiEvent.ShowSnackBar(
+                                UiText.DynamicString(result.message ?: "Asignado correctamente👍")
+                            )
+                        )
                     }
-                }.launchIn(this)
-            }
+                    is Resource.Error -> {
+                        state.value = AssignTeacherState(false)
+                        uiEvent.send(
+                            UiEvent.ShowSnackBar(
+                                UiText.DynamicString(result.message ?: "Error")
+                            )
+                        )
+                        uiEvent.send(UiEvent.Error)
+                    }
+                    is Resource.Loading -> {
+                        state.value = AssignTeacherState(true)
+                    }
+                    else -> Unit
+                }
+            }.launchIn(viewModelScope)
         }
     }
 }

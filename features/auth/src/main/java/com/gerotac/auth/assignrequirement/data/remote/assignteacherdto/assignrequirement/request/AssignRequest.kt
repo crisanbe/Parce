@@ -3,6 +3,6 @@ package com.gerotac.auth.assignrequirement.data.remote.assignteacherdto.assignre
 import com.google.gson.annotations.SerializedName
 
 data class AssignRequest(
-    @SerializedName("user") val userTeacher: List<Int>,
+    @SerializedName("user") val user: List<Int>,
     @SerializedName("requierement") val idRequirement: Int
 )

@@ -11,15 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.autofill.AutofillNode
-import androidx.compose.ui.autofill.AutofillType
-import androidx.compose.ui.composed
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.boundsInWindow
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalAutofill
-import androidx.compose.ui.platform.LocalAutofillTree
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -35,11 +27,8 @@ import androidx.navigation.compose.rememberNavController
 import com.gerotac.auth.R
 import com.gerotac.auth.assignrequirement.data.remote.assignteacherdto.assignrequirement.request.AssignRequest
 import com.gerotac.auth.assignrequirement.presentation.viewmodel.AssignRequirementViewModel
-import com.gerotac.auth.dropdownapi.dropdown.domain.model.listateacher.ResultTeacher
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.studentbyarea.ResultStudent
-import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropListTeacher
 import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropPrueba
-import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropStudentByArea
 import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
 import com.gerotac.components_ui.componets.TextButtonNavigation
@@ -60,17 +49,18 @@ fun AssignToStudentScreen(
     code: String,
     scaffoldState: ScaffoldState,
     upPress: () -> Unit,
-    assignStudentViewModel: GetApisDropViewModel = hiltViewModel()
+    getDropStudentByAcademicViewModel: GetApisDropViewModel = hiltViewModel(),
+    assignViewModel: AssignRequirementViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     //val query = assignStudentViewModel.query.value
     val hideKeyboard = LocalSoftwareKeyboardController.current
-    val stateGetStudent = assignStudentViewModel.stateStudentByArea.collectAsState()
-    val eventFlow = assignStudentViewModel.uiEvent.receiveAsFlow()
+    val stateGetStudent = getDropStudentByAcademicViewModel.stateStudentByArea.collectAsState()
+    val eventFlow = assignViewModel.uiEvent.receiveAsFlow()
     LaunchedEffect(true) {
         scope.launch {
-            assignStudentViewModel.doGetStudentByArea(
+            getDropStudentByAcademicViewModel.doGetStudentByArea(
                 query = code.toInt()
             )
         }
@@ -101,12 +91,17 @@ fun AssignToStudentScreen(
                         onclickAssignStudent = {
                             hideKeyboard?.hide()
                             scope.launch {
-
+                                assignViewModel.assignRequirementStudent(
+                                    request = AssignRequest(
+                                        user = it,
+                                        idRequirement = code.toInt()
+                                    )
+                                )
                                 eventFlow.collect { event ->
                                     when (event) {
                                         is UiEvent.Success -> {
-                                            mToast(context,"Se asigno requerimiento👍")
-                                         navController.navigate(DrawerScreens.CompanyHome.route)
+                                            mToast(context, "Se asigno requerimiento👍")
+                                            navController.navigate(DrawerScreens.CompanyHome.route)
                                         }
                                         is UiEvent.ShowSnackBar -> {
                                             scaffoldState.snackbarHostState.showSnackbar(
@@ -125,7 +120,7 @@ fun AssignToStudentScreen(
 }
 
 @Composable
-fun HeaderAssignToStudent(navController: NavController,upPress: () -> Unit) {
+fun HeaderAssignToStudent(navController: NavController, upPress: () -> Unit) {
     TopPart(onClickAction = { upPress() })
 }
 
@@ -161,11 +156,11 @@ fun BodyAssignToStudent(
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.size(20.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         DropPrueba(
             selectOptionChange = { teacher = arrayListOf(it) },
             text = "Estudiante",
-             options = listStudent,
+            options = listStudent,
             mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.docente_asign)
         )
         Spacer(modifier = Modifier.size(16.dp))
@@ -175,7 +170,7 @@ fun BodyAssignToStudent(
         )
         Spacer(modifier = Modifier.height(70.dp))
     }
-    LinearProgressBar(state.value.isLoading,"Asignando...")
+    LinearProgressBar(state.value.isLoading, "Asignando...")
 }
 
 @Composable
