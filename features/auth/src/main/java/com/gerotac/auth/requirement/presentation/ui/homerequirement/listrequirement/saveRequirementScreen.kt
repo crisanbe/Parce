@@ -110,11 +110,11 @@ fun RequirementBody(
     val scaffoldState = rememberScaffoldState()
     val eventFlow = viewModel.uiEvent.receiveAsFlow()
     val hideKeyboard = LocalSoftwareKeyboardController.current
-    var description by remember { mutableStateOf("descrip") }
+    var description by remember { mutableStateOf("") }
     var interventionArea by remember { mutableStateOf(1) }
-    var causeOfTheProblem by remember { mutableStateOf("cause") }
-    var effectsOfTheProblem by remember { mutableStateOf("efect") }
-    var impactOfTheProblem by remember { mutableStateOf("Impact") }
+    var causeOfTheProblem by remember { mutableStateOf("") }
+    var effectsOfTheProblem by remember { mutableStateOf("") }
+    var impactOfTheProblem by remember { mutableStateOf("") }
     val viewModelDialog: ViewModelDialog = hiltViewModel()
     var showDialog by remember { mutableStateOf(false) }
     val listPdf: MutableList<MultipartBody.Part> = mutableListOf()

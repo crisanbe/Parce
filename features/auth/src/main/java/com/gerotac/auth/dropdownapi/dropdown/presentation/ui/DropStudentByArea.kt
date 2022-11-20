@@ -1,22 +1,41 @@
 package com.gerotac.auth.dropdownapi.dropdown.presentation.ui
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.autofill.AutofillNode
+import androidx.compose.ui.autofill.AutofillType
+import androidx.compose.ui.composed
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalAutofill
+import androidx.compose.ui.platform.LocalAutofillTree
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.studentbyarea.ResultStudent
-import com.gerotac.components_ui.R
 
-@OptIn(ExperimentalMaterialApi::class)
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun DropStudentByArea(
     selectOptionChange: (Int) -> Unit,
@@ -24,75 +43,184 @@ fun DropStudentByArea(
     options: List<ResultStudent>,
     mainIcon: (Painter?)
 ) {
-    var selectOption by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
-    var rotateIcon by remember { mutableStateOf(0f) }
-    var errorVisibility by remember { mutableStateOf(false) }
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = {
-            expanded = !expanded
-        },
-        modifier = Modifier.wrapContentSize()
-    ) {
-        OutlinedTextField(
-            value = selectOption,
-            maxLines = 1,
-            onValueChange = {},
-            enabled = false,
-            placeholder = {
-                Text(
-                    text = text,
-                    color = Color.Black,
-                    fontWeight = FontWeight.ExtraBold,
-                )
-            },
-            trailingIcon = {
-                rotateIcon = if (expanded) 180f else 0f
-                if (mainIcon != null) {
-                    Image(
-                        painter = mainIcon,
-                        contentDescription = null,
-                        modifier = Modifier.rotate(rotateIcon)
-                    )
-                }
-            })
-        Box {
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = {
-                    expanded = false
-                    errorVisibility = selectOption.isEmpty()
-                }, modifier = Modifier.border(BorderStroke(2.dp, color = Color.Yellow))
-            ) {
-                options.forEachIndexed { index, selectionOption ->
-                    DropdownMenuItem(
-                        contentPadding = PaddingValues(horizontal = 15.dp), onClick = {
-                            selectOption = selectionOption.name
-                            expanded = false
-                            selectOptionChange(selectionOption.id)
-                        }, modifier = Modifier.sizeIn(maxHeight = 40.dp)
-                    ) {
+    var selectOption by remember { mutableStateOf("") }
+    val heightTextFields by remember { mutableStateOf(55.dp) }
+    var textFieldSize by remember { mutableStateOf(androidx.compose.ui.geometry.Size.Zero) }
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
 
-                        Column {
-                            Text(
-                                text = options[index].name,
-                                color = Color.Black,
-                                fontWeight = FontWeight.ExtraBold,
-                                style = androidx.compose.ui.text.TextStyle(
-                                    color = colorResource(id = R.color.black)
-                                ),
+    val icon = if (expanded)
+        Icons.Filled.ArrowDropUp //it requires androidx.compose.material:material-icons-extended
+    else
+        Icons.Filled.ArrowDropDown
+
+
+    Column(
+        modifier = Modifier
+            .padding(30.dp)
+            .fillMaxWidth()
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = {
+                    expanded = false
+                }
+            )
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(heightTextFields)
+                        .border(
+                            width = 1.8.dp,
+                            color = Color.Black,
+                            shape = RoundedCornerShape(15.dp)
+                        )
+                        .onGloballyPositioned { coordinates ->
+                            //This value is used to assign to the DropDown the same width
+                            textFieldSize = coordinates.size.toSize()
+                        },
+                    maxLines = 1,
+                    value = selectOption,
+                    onValueChange = {
+                        selectOption = it
+                        expanded = true
+                    },
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = Color.Black
+                    ),
+                    textStyle = androidx.compose.ui.text.TextStyle(
+                        color = Color.Black,
+                        fontSize = 16.sp
+                    ),
+                    placeholder = {
+                        Text(
+                            text = text,
+                            color = Color.Black,
+                            fontWeight = FontWeight.ExtraBold,
+                        )
+                    },
+                    enabled = true,
+                    label = { Text("Estudiante") },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    singleLine = true,
+                    trailingIcon = {
+                        IconButton(onClick = { expanded = !expanded }) {
+                            Icon(
+                                modifier = Modifier.size(24.dp),
+                                imageVector = Icons.Rounded.KeyboardArrowDown,
+                                contentDescription = "arrow",
+                                tint = Color.Black
                             )
                         }
-                        if (index != options.lastIndex) {
-                            Spacer(modifier = Modifier.size(10.dp))
-                            Divider(
-                                thickness = 2.dp, color = Color.Black
-                            )
+                    }
+                )
+            }
+            AnimatedVisibility(visible = expanded) {
+                Card(
+                    modifier = Modifier
+                        .padding(horizontal = 5.dp)
+                        .width(textFieldSize.width.dp),
+                    elevation = 15.dp,
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    options.forEachIndexed { index, selectionOption ->
+                        LazyColumn(
+                            modifier = Modifier
+                                .clickable {
+                                    selectOption = selectionOption.name
+                                    selectOptionChange(selectionOption.id)
+                                    expanded = false
+                                }
+                                .heightIn(max = 150.dp),
+                            contentPadding = PaddingValues(horizontal = 15.dp)
+                        ) {
+                            if (selectOption.isNotEmpty()) {
+                                items(
+                                    options.filter {
+                                        it.name.lowercase()
+                                            .contains(selectOption.lowercase()) || options[index].name.lowercase()
+                                            .lowercase()
+                                            .contains("others")
+                                    }
+                                        .sortedBy { it.name }
+                                ) {
+                                    StudentItems(name = it.name, id = options[index].id)
+                                    { _, _ ->
+                                        selectOption = selectionOption.name
+                                        selectOptionChange(selectionOption.id)
+                                        expanded = false
+                                    }
+                                }
+                            } else {
+                                items(
+                                    options.sortedBy { it.name }
+                                ) {
+                                    StudentItems(name = it.name, id = options[index].id)
+                                    { _, _ ->
+                                        selectOption = selectionOption.name
+                                        selectOptionChange(selectionOption.id)
+                                        expanded = false
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+fun StudentItems(
+    name: String,
+    id: Int,
+    onSelect: (String, Int) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onSelect(name, id)
+            }
+            .padding(10.dp)
+    ) {
+        Text(text = name, fontSize = 16.sp)
+    }
+
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+fun Modifier.autofill(
+    autofillTypes: List<AutofillType>,
+    onFill: ((String) -> Unit),
+) = composed {
+    val autofill = LocalAutofill.current
+    val autofillNode = AutofillNode(onFill = onFill, autofillTypes = autofillTypes)
+    LocalAutofillTree.current += autofillNode
+
+    this
+        .onGloballyPositioned {
+            autofillNode.boundingBox = it.boundsInWindow()
+        }
+        .onFocusChanged { focusState ->
+            autofill?.run {
+                if (focusState.isFocused) {
+                    requestAutofillForNode(autofillNode)
+                } else {
+                    cancelAutofillForNode(autofillNode)
+                }
+            }
+        }
 }

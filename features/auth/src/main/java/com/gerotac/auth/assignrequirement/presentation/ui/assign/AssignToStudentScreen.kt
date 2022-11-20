@@ -28,7 +28,7 @@ import com.gerotac.auth.R
 import com.gerotac.auth.assignrequirement.data.remote.assignteacherdto.assignrequirement.request.AssignRequest
 import com.gerotac.auth.assignrequirement.presentation.viewmodel.AssignRequirementViewModel
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.studentbyarea.ResultStudent
-import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropPrueba
+import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropStudentByArea
 import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
 import com.gerotac.components_ui.componets.TextButtonNavigation
@@ -54,7 +54,6 @@ fun AssignToStudentScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    //val query = assignStudentViewModel.query.value
     val hideKeyboard = LocalSoftwareKeyboardController.current
     val stateGetStudent = getDropStudentByAcademicViewModel.stateStudentByArea.collectAsState()
     val eventFlow = assignViewModel.uiEvent.receiveAsFlow()
@@ -157,7 +156,7 @@ fun BodyAssignToStudent(
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(10.dp))
-        DropPrueba(
+        DropStudentByArea(
             selectOptionChange = { teacher = arrayListOf(it) },
             text = "Estudiante",
             options = listStudent,
