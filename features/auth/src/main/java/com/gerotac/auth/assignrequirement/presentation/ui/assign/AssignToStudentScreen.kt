@@ -142,12 +142,12 @@ fun BodyAssignToStudent(
     }
     BackHandler(true) { navController.navigate(DrawerScreens.CompanyHome.route) }
     Column(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            modifier = Modifier.padding(30.dp),
+            modifier = modifier.padding(20.dp),
             text = stringResource(R.string.TextField_Assign_Requirement_Student) + " #️⃣${code}",
             fontSize = 22.sp,
             color = Color.Black,
@@ -155,19 +155,17 @@ fun BodyAssignToStudent(
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(10.dp))
         DropStudentByArea(
             selectOptionChange = { teacher = arrayListOf(it) },
             text = "Estudiante",
             options = listStudent,
             mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.docente_asign)
         )
-        Spacer(modifier = Modifier.size(16.dp))
         ButtonValidation(
             onClick = { onclickAssignStudent.invoke(teacher) },
             text = "Asignar"
         )
-        Spacer(modifier = Modifier.height(70.dp))
+        Spacer(modifier = Modifier.height(40.dp))
     }
     LinearProgressBar(state.value.isLoading, "Asignando...")
 }

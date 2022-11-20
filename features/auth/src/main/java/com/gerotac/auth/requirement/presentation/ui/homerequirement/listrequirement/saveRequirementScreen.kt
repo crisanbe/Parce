@@ -36,9 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.gerotac.auth.R
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.ResultArea
 import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropAreas
@@ -50,17 +47,24 @@ import com.gerotac.components_ui.componets.alertdialog.DialogExit
 import com.gerotac.components_ui.componets.alertdialog.ViewModelDialog
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
-import com.gerotac.components_ui.componets.dropdown.DropString
 import com.gerotac.components_ui.componets.progress.LinearProgressBar
 import com.gerotac.core.util.UiEvent
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.MultipartBody.Part.Companion.create
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.apache.commons.io.FileUtils
 import java.io.File
+
 
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -303,10 +307,10 @@ fun RequirementBody(
                         viewModel.doRequirement(
                             RequirementRequest(
                                 area_intervention = interventionArea,
-                                description = description,
-                                cause_problem = causeOfTheProblem,
-                                efect_problem = effectsOfTheProblem,
-                                impact_problem = impactOfTheProblem,
+                                description = description.toRequestBody("text/plain".toMediaTypeOrNull()),
+                                cause_problem = causeOfTheProblem.toRequestBody("text/plain".toMediaTypeOrNull()),
+                                efect_problem = effectsOfTheProblem.toRequestBody("text/plain".toMediaTypeOrNull()),
+                                impact_problem = impactOfTheProblem.toRequestBody("text/plain".toMediaTypeOrNull()),
                                 file = listPdf
                             )
                         )

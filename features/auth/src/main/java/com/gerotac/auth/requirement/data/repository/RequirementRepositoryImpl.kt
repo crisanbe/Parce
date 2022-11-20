@@ -12,6 +12,7 @@ import com.gerotac.shared.network.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -24,10 +25,10 @@ class RequirementRepositoryImpl @Inject constructor(
     override fun doRequirement(
         token: String,
         area_intervention: Int,
-        description: String,
-        cause_problem: String,
-        efect_problem: String,
-        impact_problem: String,
+        description: RequestBody,
+        cause_problem: RequestBody,
+        efect_problem: RequestBody,
+        impact_problem: RequestBody,
         file: MutableList<MultipartBody.Part>
     ): Flow<Resource<RequirementReply>> = flow {
         emit(Resource.Loading())
@@ -39,7 +40,7 @@ class RequirementRepositoryImpl @Inject constructor(
                 cause_problem = cause_problem,
                 efect_problem = efect_problem,
                 impact_problem = impact_problem,
-                document =  file
+                document = file
             ).toRequirementResponse()
             emit(Resource.Success(response))
         } catch (e: Exception) {
