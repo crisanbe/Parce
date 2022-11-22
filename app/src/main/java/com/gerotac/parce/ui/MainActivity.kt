@@ -64,6 +64,7 @@ class MainActivity : ComponentActivity() {
                     {
                         viewModelMain.main(navController, prefsKey)
                         HolderScreen(
+                            controller = navController,
                             onStatusBarColorChange = {
                                 statusBarColor = it.toArgb()
                             }

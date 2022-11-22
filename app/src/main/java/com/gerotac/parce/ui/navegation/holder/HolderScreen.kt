@@ -66,11 +66,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun HolderScreen(onStatusBarColorChange: (color: Color) -> Unit) {
-    val controller = LocalNavHost.current
+fun HolderScreen(
+    controller: NavHostController = rememberNavController(),
+    onStatusBarColorChange: (color: Color) -> Unit
+) {
+    ParceTheme {
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-    ParceTheme {
         val navigationActions = remember(controller) {
             RequirementActions(controller)
         }
@@ -106,8 +108,7 @@ fun HolderScreen(onStatusBarColorChange: (color: Color) -> Unit) {
     ExperimentalAnimationApi::class,
     ExperimentalPermissionsApi::class,
     ExperimentalCoilApi::class,
-    ExperimentalPagerApi::class,
-    ExperimentalComposeUiApi::class
+    ExperimentalPagerApi::class
 )
 @Composable
 fun ScaffoldSection(
@@ -698,9 +699,7 @@ fun ScaffoldSection(
                         onClickDestination = { itString ->
                             onClickDestination(itString)
                         },
-                        onItemClicked = {
-                            navigateToDetail(it)
-                        }
+                        onItemClicked = { detail -> navigateToDetail(detail) }
                     )
                 }
                 composable(
