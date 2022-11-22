@@ -213,7 +213,7 @@ private fun Body(
         when (HeaderRequirement.getRol()["rol"]) {
             "estudiante" -> {
                 ButtonValidation(text = "Crear intervención") {
-                    navController.navigate(AppScreens.AssignToStudentScreen.route)
+                    navController.navigate(AppScreens.SaveInterventionScreen.route)
                 }
             }
             "empresa" -> {

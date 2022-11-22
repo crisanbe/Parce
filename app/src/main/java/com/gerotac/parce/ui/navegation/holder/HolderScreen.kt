@@ -35,6 +35,7 @@ import com.gerotac.auth.profileUser.presentation.ui.ProfileCompany
 import com.gerotac.auth.register.presentation.ui.RegisterScreen
 import com.gerotac.auth.assignrequirement.presentation.ui.assign.AssignToStudentScreen
 import com.gerotac.auth.assignrequirement.presentation.ui.assign.AssignToTeacherScreen
+import com.gerotac.auth.createintervention.presentation.ui.SaveInterventionScreen
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.DetailScreen
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.ExitAlert
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.RequirementScreen
@@ -596,6 +597,12 @@ fun ScaffoldSection(
                     EnterAnimation {
                         onStatusBarColorChange(MaterialTheme.colors.background)
                         RequirementScreen(controller)
+                    }
+                }
+                composable(route = AppScreens.SaveInterventionScreen.route) {
+                    EnterAnimation {
+                        onStatusBarColorChange(MaterialTheme.colors.background)
+                        SaveInterventionScreen(controller)
                     }
                 }
                 composable(

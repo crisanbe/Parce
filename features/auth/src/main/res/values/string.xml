@@ -104,6 +104,7 @@
 
     //Intervencion
     <string name="TextField_Type_intervention">Tipo de Intervención</string>
+    <string name="TextField_Create_Intervention">Crear intervención</string>
 
     <string name="TextField_Document_adjunt">Archivo adjunto</string>
     <string name="TextField_Description">Descripción</string>

@@ -31,6 +31,7 @@ sealed class AppScreens(val route: String) {
     object RequirementScreen : AppScreens(route = "RequirementScreen")
     object PermissionScreen : AppScreens(route = "PermissionScreen")
     object InterventionScreen : AppScreens(route = "InterventionScreen")
+    object SaveInterventionScreen : AppScreens(route = "SaveInterventionScreen")
     object AssignToStudentScreen : AppScreens(route = "AssignToStudentScreen")
     object AssignToTeacherScreen : AppScreens(route = "AssignToTeacherScreen")
     object DetailScreen : AppScreens(route = "DetailScreen?id={id}") {
