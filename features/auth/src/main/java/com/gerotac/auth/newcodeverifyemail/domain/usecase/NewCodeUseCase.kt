@@ -1,7 +1,7 @@
-package com.gerotac.auth.newcode.domain.usecase
+package com.gerotac.auth.newcodeverifyemail.domain.usecase
 
-import com.gerotac.auth.newcode.data.remote.dto.ReturnNewCodeDto
-import com.gerotac.auth.newcode.domain.repository.NewCodeRepository
+import com.gerotac.auth.newcodeverifyemail.data.remote.dto.ReturnNewCodeDto
+import com.gerotac.auth.newcodeverifyemail.domain.repository.NewCodeRepository
 import com.gerotac.shared.network.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

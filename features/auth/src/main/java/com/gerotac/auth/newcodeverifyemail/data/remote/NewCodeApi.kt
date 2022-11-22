@@ -1,6 +1,6 @@
-package com.gerotac.auth.newcode.data.remote
+package com.gerotac.auth.newcodeverifyemail.data.remote
 
-import com.gerotac.auth.newcode.data.remote.dto.ReturnNewCodeDto
+import com.gerotac.auth.newcodeverifyemail.data.remote.dto.ReturnNewCodeDto
 import retrofit2.http.GET
 import retrofit2.http.Header
 

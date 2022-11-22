@@ -88,7 +88,7 @@ private fun DetailContent(
                     .fillMaxWidth()
                     .height(240.dp),
                 data = data,
-                upPress = { upPress() }
+                upPress = upPress
             )
             Body(data = data, navController = navController)
         }
@@ -157,7 +157,7 @@ private fun Body(
         FormValueComp(
             ValueState = { data?.data?.areaintervention?.name.toString() },
             text = data?.data?.areaintervention?.name.toString(),
-            valueText = "Area de intervencion",
+            valueText = stringResource(R.string.TextField_Area_intervention),
             icon = rememberAsyncImagePainter(model = com.gerotac.components_ui.R.drawable.area)
         )
         OutlinedTextField(modifier = Modifier
@@ -212,7 +212,7 @@ private fun Body(
         )
         when (HeaderRequirement.getRol()["rol"]) {
             "estudiante" -> {
-                ButtonValidation(text = "Crear intervencion") {
+                ButtonValidation(text = "Crear intervención") {
                     navController.navigate(AppScreens.AssignToStudentScreen.route)
                 }
             }

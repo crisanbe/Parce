@@ -150,14 +150,14 @@ fun CompanyRegistrationPage(
     location: List<ResultX> = emptyList(),
     municipalityList: List<Town> = emptyList()
 ) {
-    var contactPerson by remember { mutableStateOf("Jorge") }
+    var contactPerson by remember { mutableStateOf("") }
     var department by remember { mutableStateOf(0) }
     var municipality by remember { mutableStateOf(0) }
-    var address by remember { mutableStateOf("CLL 40") }
-    var birthday by remember { mutableStateOf("15-02-2001") }
-    var genre by remember { mutableStateOf("Hombre") }
-    var ethnicGroup by remember { mutableStateOf("Sin Pertenencia a Grupo") }
-    var presentsDisability by remember { mutableStateOf("NO") }
+    var address by remember { mutableStateOf("") }
+    var birthday by remember { mutableStateOf("") }
+    var genre by remember { mutableStateOf("") }
+    var ethnicGroup by remember { mutableStateOf("") }
+    var presentsDisability by remember { mutableStateOf("") }
     val rememberToken = remember { mutableStateOf("") }
     userRepo = ProtoUserRepoImpl(LocalContext.current.userDataStore)
     LaunchedEffect(true) {

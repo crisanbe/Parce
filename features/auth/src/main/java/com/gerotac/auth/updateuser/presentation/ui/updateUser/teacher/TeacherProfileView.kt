@@ -230,7 +230,7 @@ fun EducationalProfileView(
             Spacer(Modifier.height(5.dp))
             DropDownAlternative(
                 ValueState = ethnicGroup,
-                text = "Grupo etnico",
+                text = "Grupo étnico",
                 options = listOf(
                     "Afrocolombiano",
                     "Sin Pertenencia a Grupo",

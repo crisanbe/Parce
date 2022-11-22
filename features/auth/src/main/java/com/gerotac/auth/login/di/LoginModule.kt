@@ -10,24 +10,53 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.Protocol
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object LoginModule {
+
     @Provides
-    @Singleton
-    fun provideHeadersLogin(): Map<String, String> = Header.headers
+    fun getClient(): OkHttpClient =
+        OkHttpClient.Builder()
+            .protocols(listOf(Protocol.HTTP_1_1))
+            .addInterceptor(
+                HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+            )
+            .addInterceptor(
+                HeaderInterceptor()
+            )
+            .build()
+
+    @Provides
+    fun provideRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Constant.URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(getClient())
+            .build()
+    }
+
+    @Provides
+    fun provideLoginServiceRemote(retrofit: Retrofit): LoginApi {
+        return retrofit.create(LoginApi::class.java)
+    }
 
     @Provides
     @Singleton
-    fun provideLoginRepository(): LoginRepository {
+    fun provideLoginRepositoryImp(
+        api: LoginApi,
+    ): LoginRepository {
         return LoginRepositoryImpl(
-            ServiceBuilder.createService(
-                serviceType = LoginApi::class.java,
-                Constant.URL,
-                headers = provideHeadersLogin()
-            )
+            api = api
         )
     }
+
 }

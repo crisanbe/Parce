@@ -26,7 +26,7 @@ import com.gerotac.auth.R
 import com.gerotac.auth.codeverificationRegister.data.remote.dto.ParameterCodeConfirmationDto
 import com.gerotac.auth.codeverificationRegister.presentation.viewmodel.VerificationCodeViewModel
 import com.gerotac.auth.login.presentation.components.logincomposables.userRepo
-import com.gerotac.auth.newcode.presentation.viewmodel.NewCodeViewModel
+import com.gerotac.auth.newcodeverifyemail.presentation.viewmodel.NewCodeViewModel
 import com.gerotac.components_ui.componets.*
 import com.gerotac.components_ui.componets.alertdialog.ViewModelDialog
 import com.gerotac.components_ui.componets.drawer.AppScreens

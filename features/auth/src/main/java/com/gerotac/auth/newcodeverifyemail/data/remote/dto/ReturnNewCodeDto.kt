@@ -1,7 +1,7 @@
-package com.gerotac.auth.newcode.data.remote.dto
+package com.gerotac.auth.newcodeverifyemail.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
-import com.gerotac.auth.newcode.domain.model.ReturnNewCode
+import com.gerotac.auth.newcodeverifyemail.domain.model.ReturnNewCode
 
 data class ReturnNewCodeDto(
     @SerializedName("message") val message: String,

@@ -92,7 +92,7 @@
     //Requerimiento
     <string name="TextField_Search_request">Buscar requerimiento</string>
     <string name="TextField_Create_Requirement">Crear requerimiento</string>
-    <string name="TextField_Requirement_Number">Requerimineto</string>
+    <string name="TextField_Requirement_Number">Requerimiento</string>
     <string name="TextField_Assign_Requirement">Asignar requerimiento a docente</string>
     <string name="TextField_Assign_Requirement_Student">Asignar requerimiento a estudiante</string>
 

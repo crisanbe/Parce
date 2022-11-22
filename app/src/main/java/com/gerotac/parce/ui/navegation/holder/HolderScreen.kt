@@ -85,7 +85,7 @@ fun HolderScreen(onStatusBarColorChange: (color: Color) -> Unit) {
                     controller.navigate(it) {
                         controller.graph.startDestinationRoute?.let { route ->
                             popUpTo(route) {
-                                saveState = false
+                                saveState = true
                             }
                         }
                         launchSingleTop = true

@@ -1,9 +1,9 @@
-package com.gerotac.auth.newcode.di
+package com.gerotac.auth.newcodeverifyemail.di
 
 import com.gerotac.auth.codeverificationRegister.di.ServiceBuilderGeneral
-import com.gerotac.auth.newcode.data.remote.NewCodeApi
-import com.gerotac.auth.newcode.data.repository.NewCodeRepositoryImpl
-import com.gerotac.auth.newcode.domain.repository.NewCodeRepository
+import com.gerotac.auth.newcodeverifyemail.data.remote.NewCodeApi
+import com.gerotac.auth.newcodeverifyemail.data.repository.NewCodeRepositoryImpl
+import com.gerotac.auth.newcodeverifyemail.domain.repository.NewCodeRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

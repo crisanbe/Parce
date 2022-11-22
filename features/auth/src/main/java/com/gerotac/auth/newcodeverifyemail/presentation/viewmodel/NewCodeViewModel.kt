@@ -1,9 +1,9 @@
-package com.gerotac.auth.newcode.presentation.viewmodel;
+package com.gerotac.auth.newcodeverifyemail.presentation.viewmodel;
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gerotac.auth.codeverificationRegister.di.CodeVerificationHeaders
-import com.gerotac.auth.newcode.domain.usecase.NewCodeUseCase
+import com.gerotac.auth.newcodeverifyemail.domain.usecase.NewCodeUseCase
 import com.gerotac.core.util.UiEvent
 import com.gerotac.shared.network.Resource
 import javax.inject.Inject;

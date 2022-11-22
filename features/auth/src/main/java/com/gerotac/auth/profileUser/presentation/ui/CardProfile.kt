@@ -89,13 +89,13 @@ fun CardProfile(
                 CardView(
                     item = item.phone.toString(),
                     elevation = 10.dp,
-                    text = "Telefono: ",
+                    text = "Teléfono: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
                     item = item.birthday.toString(),
                     elevation = 10.dp,
-                    text = "Fecha de naciemiento: ",
+                    text = "Fecha de nacimiento: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
@@ -107,7 +107,7 @@ fun CardProfile(
                 CardView(
                     item = item.group_etnic.toString(),
                     elevation = 10.dp,
-                    text = "Grupo etnico: ",
+                    text = "Grupo étnico: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
@@ -133,7 +133,7 @@ fun CardProfile(
                         CardView(
                             item = item.bussine.activity_economy,
                             elevation = 10.dp,
-                            text = "Actividad economica: ",
+                            text = "Actividad económica: ",
                             border = BorderStroke(1.dp, Color.Black)
                         )
                     }

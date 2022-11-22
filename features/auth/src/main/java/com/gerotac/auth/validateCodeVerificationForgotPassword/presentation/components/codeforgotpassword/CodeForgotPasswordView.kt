@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.gerotac.auth.R
-import com.gerotac.auth.newcode.presentation.viewmodel.NewCodeViewModel
+import com.gerotac.auth.newcodeverifyemail.presentation.viewmodel.NewCodeViewModel
 import com.gerotac.auth.validateCodeVerificationForgotPassword.data.remote.dto.ParameterCodeForgotPasswordDto
 import com.gerotac.auth.validateCodeVerificationForgotPassword.presentation.viewModel.CodeForgotPasswordViewModel
 import com.gerotac.components_ui.componets.*

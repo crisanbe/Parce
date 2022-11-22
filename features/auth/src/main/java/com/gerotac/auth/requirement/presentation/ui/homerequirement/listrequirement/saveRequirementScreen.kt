@@ -178,7 +178,7 @@ fun RequirementBody(
         ) {
             DropAreas(
                 selectOptionChange = { interventionArea = it },
-                text = "Area de intervencion",
+                text = stringResource(R.string.TextField_Area_intervention),
                 options = listArea,
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.identity)
             )

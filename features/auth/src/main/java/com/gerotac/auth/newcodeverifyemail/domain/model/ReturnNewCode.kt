@@ -1,4 +1,4 @@
-package com.gerotac.auth.newcode.domain.model
+package com.gerotac.auth.newcodeverifyemail.domain.model
 
 data class ReturnNewCode(
     val message: String,
