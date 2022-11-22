@@ -16,9 +16,11 @@ data class Teacher(
 )
 
 data class Student(
-    @SerializedName("id") val id: Int,
-    @SerializedName("user_id") val user_id: Int,
-    @SerializedName("academic_program") val academic_program: Int
+    @SerializedName("academicprogram") val academic_program: AcademicProgram
+)
+
+data class AcademicProgram(
+    @SerializedName("name") val name: String
 )
 
 data class User(
@@ -32,11 +34,11 @@ data class User(
     @SerializedName("group_etnic") val group_etnic: String? = null,
     @SerializedName("phone") val phone: String,
     @SerializedName("presents_disability") val presents_disability: String,
-    @SerializedName("academic_program") val academic_program: Int? = 0,
+    @SerializedName("academicprogram") val academic_program: AcademicProgram,
     @SerializedName("role") val role: String,
     @SerializedName("bussine") val bussine: Bussine? = null,
     @SerializedName("teacher") val teacher: Teacher? = null,
-    @SerializedName("teacher") val student: Student? = null,
+    @SerializedName("student") val student: Student? = null,
     @SerializedName("type_document") val type_document: String,
     @SerializedName("updated_at") val updated_at: String,
     @SerializedName("user_status") val user_status: String
@@ -59,9 +61,9 @@ fun ResponseProfileUser.toGetProfile(): List<User> {
             role = user.role,
             student = user.student?.let {
                 Student(
-                    id = it.id,
-                    user_id = user.student.user_id,
-                    academic_program = user.student.academic_program,
+                    academic_program = com.gerotac.auth.profileUser.domain.model.AcademicProgram(
+                        user.name
+                    ),
                 )
             },
             teacher = user.teacher?.let {

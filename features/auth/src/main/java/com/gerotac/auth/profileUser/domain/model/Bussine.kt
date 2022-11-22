@@ -8,6 +8,10 @@ data class Bussine(
     val municipality: Int,
     val person_contact: String,
     val type_bussiness: String,
-    val type_society: Int,
+    val type_society: TypeSociety,
     val user_id: Int
+): java.io.Serializable
+
+data class TypeSociety(
+    val name: String,
 ): java.io.Serializable

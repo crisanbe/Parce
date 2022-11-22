@@ -16,7 +16,7 @@ import com.gerotac.components_ui.componets.MySpace
 
 @Composable
 fun CardAlternative(
-    item: Int,
+    item: String,
     elevation: Dp,
     text : String,
     border: BorderStroke? = null
@@ -43,7 +43,7 @@ fun CardAlternative(
                 maxLines = 1
             )
             Text(
-                text = item.toString(),
+                text = item,
                 textAlign = TextAlign.Center,
                 maxLines = 1
             )

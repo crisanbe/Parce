@@ -13,10 +13,12 @@ data class Teacher(
 ) : Serializable
 
 data class Student(
-    val id: Int,
-    val user_id: Int,
-    val academic_program: Int
+    val academic_program: AcademicProgram
 ) : Serializable
+
+data class AcademicProgram(
+   val name: String
+)
 
 data class User(
     val id: Int,
@@ -29,7 +31,7 @@ data class User(
     val group_etnic: String? = null,
     val phone: String? = null,
     val presents_disability: String? = null,
-    val academic_program: Int? = 0,
+    val academic_program: AcademicProgram,
     val role: String? = null,
     val bussine: Bussine? = null,
     val teacher: Teacher? = null,

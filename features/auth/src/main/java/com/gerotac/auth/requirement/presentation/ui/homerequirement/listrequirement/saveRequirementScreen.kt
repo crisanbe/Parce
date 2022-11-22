@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.gerotac.auth.R
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.ResultArea
 import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropAreas
@@ -319,8 +320,7 @@ fun RequirementBody(
                                 is UiEvent.Success -> {
                                     viewModel.doGetPagination()
                                     navController.navigate(
-                                        DrawerScreens.CompanyHome.route
-                                    )
+                                        DrawerScreens.CompanyHome.route) {}
                                     scaffoldState.snackbarHostState.showSnackbar(
                                         message = "Se guardo exitosamente🏅",
                                         actionLabel = "Continue"

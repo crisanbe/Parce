@@ -120,7 +120,7 @@ fun CardProfile(
                     null -> {}
                     else -> {
                         CardAlternative(
-                            item = item.student.academic_program ?: 0,
+                            item = item.student.academic_program.name,
                             elevation = 10.dp,
                             text = "Programa académico: ",
                             border = BorderStroke(1.dp, Color.Black)
