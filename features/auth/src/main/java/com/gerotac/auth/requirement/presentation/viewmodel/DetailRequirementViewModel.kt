@@ -24,14 +24,21 @@ class DetailRequirementViewModel @Inject constructor(
         private set
 
     init {
-       detailRequirement()
+        detailRequirement()
+    }
+
+    fun getId(id: Int?) {
+
     }
 
     private fun detailRequirement() {
         val token = UpdateUserHeaders.getHeader()["Authorization"]
         savedStateHandle.get<Int>("id")?.let { characterId ->
             viewModelScope.launch {
-                getDetailRequirementUseCase(token = token.toString(), id = characterId).also { query ->
+                getDetailRequirementUseCase(
+                    token = token.toString(),
+                    id = characterId
+                ).also { query ->
                     state = when (query) {
                         is Resource.Success -> {
                             state.copy(

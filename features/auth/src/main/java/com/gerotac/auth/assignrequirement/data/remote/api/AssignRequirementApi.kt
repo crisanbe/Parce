@@ -6,7 +6,7 @@ import retrofit2.http.*
 
 interface AssignRequirementApi {
     @POST("requierements-assign")
-    suspend fun doAssignRequirementApi(
+    suspend fun doAssignRequirementTeacherApi(
         @Header("Authorization") token: String,
         @Body userTeacher: AssignRequest,
     ): AssignDto

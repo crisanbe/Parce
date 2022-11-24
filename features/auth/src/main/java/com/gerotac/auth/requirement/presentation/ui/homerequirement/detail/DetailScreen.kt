@@ -18,8 +18,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -38,12 +38,15 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.work.*
 import coil.compose.rememberAsyncImagePainter
 import com.gerotac.auth.R
 import com.gerotac.auth.requirement.di.HeaderRequirement
+import com.gerotac.auth.requirement.domain.model.detailrequirement.Areaintervention
 import com.gerotac.auth.requirement.domain.model.detailrequirement.Data
+import com.gerotac.auth.requirement.domain.model.detailrequirement.DataResponse
 import com.gerotac.auth.requirement.domain.model.detailrequirement.File
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.dowloadfile.FileDownloadWorker
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
@@ -56,6 +59,7 @@ import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @SuppressLint("SuspiciousIndentation")
@@ -65,6 +69,7 @@ fun DetailScreen(
     viewModel: DetailRequirementViewModel = hiltViewModel(),
     upPress: () -> Unit
 ) {
+
     BackHandler(true) { navController.navigate(DrawerScreens.CompanyHome.route) }
     val state = viewModel.state
     DetailContent(
@@ -135,18 +140,34 @@ private fun Header(
 }
 
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalPermissionsApi::class)
+@OptIn(
+    ExperimentalComposeUiApi::class,
+    ExperimentalPermissionsApi::class
+)
 @Composable
 private fun Body(
     data: Data?,
     modifier: Modifier = Modifier,
-    navController: NavController
-) {
+    navController: NavController,
+    viewModel: DetailRequirementViewModel = hiltViewModel(),
+
+    ) {
+    val area: MutableStateFlow<String> =
+        MutableStateFlow(data?.data?.areaintervention?.name.toString())
+    var areastate = area.collectAsState().value
+    var areaintervention by remember { mutableStateOf(data?.data?.areaintervention?.name.toString()) }
     val context = LocalContext.current as Activity
+    val scope = rememberCoroutineScope()
     val hideKeyboard = LocalSoftwareKeyboardController.current
     val permissionsState = rememberMultiplePermissionsState(
         permissions = listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
     )
+    if (data?.data?.id != 0) {
+        LaunchedEffect(Unit) {
+            areastate = "ss"
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -155,20 +176,22 @@ private fun Body(
         verticalArrangement = Arrangement.spacedBy(1.dp),
     ) {
         FormValueComp(
-            ValueState = { data?.data?.areaintervention?.name.toString() },
-            text = data?.data?.areaintervention?.name.toString(),
+            ValueState = { areastate = it },
+            text = areastate,
             valueText = stringResource(R.string.TextField_Area_intervention),
             icon = rememberAsyncImagePainter(model = com.gerotac.components_ui.R.drawable.area)
         )
-        OutlinedTextField(modifier = Modifier
-            .width(280.dp)
-            .wrapContentSize()
-            .height(90.dp),
-            value = data?.data?.description.toString(),
+        OutlinedTextField(
+            modifier = Modifier
+                .width(280.dp)
+                .wrapContentSize()
+                .height(90.dp),
+            value = data?.data?.description ?: "",
             onValueChange = { data?.data?.description },
             label = { Text(stringResource(id = R.string.TextField_Description_problem)) },
             colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
             maxLines = 5,
+            readOnly = true,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
             leadingIcon = {
@@ -188,7 +211,7 @@ private fun Body(
             })
         FormValueComp(
             ValueState = { data?.data?.impact_problem },
-            text = data?.data?.impact_problem.toString(),
+            text = data?.data?.impact_problem,
             valueText = "Impacto del problema",
             icon = rememberAsyncImagePainter(
                 model = com.gerotac.components_ui.R.drawable.impact
@@ -196,7 +219,7 @@ private fun Body(
         )
         FormValueComp(
             ValueState = { data?.data?.efect_problem },
-            text = data?.data?.efect_problem.toString(),
+            text = data?.data?.efect_problem,
             valueText = "Efecto del problema",
             icon = rememberAsyncImagePainter(
                 model = com.gerotac.components_ui.R.drawable.effect
@@ -204,7 +227,7 @@ private fun Body(
         )
         FormValueComp(
             ValueState = { data?.data?.cause_problem },
-            text = data?.data?.cause_problem.toString(),
+            text = data?.data?.cause_problem,
             valueText = "Causa del problema",
             icon = rememberAsyncImagePainter(
                 model = com.gerotac.components_ui.R.drawable.cause
@@ -217,8 +240,29 @@ private fun Body(
                 }
             }
             "empresa" -> {
-                ButtonValidation(text = "Ver intervenciones") {
-                    navController.navigate(AppScreens.InterventionScreen.route)
+                Row(
+                    modifier = Modifier
+                        .padding(all = 10.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    TextButtonPersonalized(
+                        color = Color(0xFF000000.toInt()),
+                        onclick = { navController.navigate(AppScreens.InterventionScreen.route) },
+                        text = "Intervenciones",
+                        fontText = FontWeight.Bold,
+                        styleText = TextStyle(color = Color.White),
+                        fontSize = 20.sp
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    TextButtonPersonalized(
+                        color = Color(0xFF000000.toInt()),
+                        onclick = { navController.navigate(AppScreens.UpdateRequirementDetailScreen.route + "?code=${data?.data?.id}") },
+                        text = "Actualizar",
+                        fontText = FontWeight.Bold,
+                        styleText = TextStyle(color = Color.White),
+                        fontSize = 20.sp
+                    )
                 }
             }
             "docente" -> {

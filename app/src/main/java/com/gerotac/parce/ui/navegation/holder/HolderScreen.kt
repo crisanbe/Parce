@@ -41,6 +41,7 @@ import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirem
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.RequirementScreen
 import com.gerotac.auth.requirement.presentation.ui.intervention.InterventionScreen
 import com.gerotac.auth.sendemailforgotmypassword.presentation.components.resendnewcode.SendEmailForgotPasswordView
+import com.gerotac.auth.updaterequirement.presentation.ui.UpdateRequirementDetailScreen
 import com.gerotac.auth.updateuser.presentation.ui.updateUser.admin.AdminProfile
 import com.gerotac.auth.updateuser.presentation.ui.updateUser.company.CompanyRegistrationPageView
 import com.gerotac.auth.updateuser.presentation.ui.updateUser.company.CompanyRegistrationView
@@ -597,6 +598,23 @@ fun ScaffoldSection(
                     EnterAnimation {
                         onStatusBarColorChange(MaterialTheme.colors.background)
                         RequirementScreen(controller)
+                    }
+                }
+                composable(route = AppScreens.UpdateRequirementDetailScreen.route + "?code={code}",
+                    arguments = listOf(
+                        navArgument(name = "code") {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        },
+                    )
+                ) { backStackEntry ->
+                    EnterAnimation {
+                        onStatusBarColorChange(MaterialTheme.colors.background)
+                        UpdateRequirementDetailScreen(
+                            navController = controller,
+                            code = backStackEntry.arguments?.getString("code").toString(),
+                            upPress = navigateToHome
+                        )
                     }
                 }
                 composable(route = AppScreens.SaveInterventionScreen.route) {

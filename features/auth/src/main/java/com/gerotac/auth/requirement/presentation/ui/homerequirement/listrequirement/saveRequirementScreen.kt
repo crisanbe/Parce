@@ -248,7 +248,8 @@ fun RequirementBody(
                     )
                 })
             Spacer(Modifier.height(5.dp))
-            TextField(value = impactOfTheProblem,
+            TextField(
+                value = impactOfTheProblem,
                 onValueChange = { impactOfTheProblem = it },
                 label = { Text(stringResource(id = R.string.TextField_impact_problems)) },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),

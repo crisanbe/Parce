@@ -14,13 +14,13 @@ class AssignRepositoryImpl @Inject constructor(
         token: String,
         teacher: AssignRequest
     ): AssignDto {
-        return api.doAssignRequirementApi(token,teacher)
+        return api.doAssignRequirementTeacherApi(token,teacher)
     }
 
     override suspend fun doAssignStudent(
         token: String,
         teacher: AssignRequest
     ): AssignDto {
-        return api.doAssignRequirementApi(token,teacher)
+        return api.doAssignRequirementTeacherApi(token,teacher)
     }
 }

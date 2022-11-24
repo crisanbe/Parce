@@ -1,7 +1,7 @@
 object Compose {
-    const val composeVersion = "1.3.0"
+    const val composeVersion = "1.3.1"
     const val composeCompilerVersion = "1.3.2"
-    private const val runtimeLivedataVersion = "1.2.1"
+    private const val runtimeLivedataVersion = "1.3.1"
     private const val navigationVersion = "2.5.2"
     private const val activityComposeVersion = "1.6.0"
     private const val hiltNavigationComposeVersion = "1.0.0-beta01"

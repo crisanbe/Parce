@@ -1,13 +1,13 @@
-package com.gerotac.auth.requirement.domain.model.detailrequirement
+package com.gerotac.auth.updaterequirement.domain.model
 
-data class DataResponse(
+data class Result(
     val areaintervention: Areaintervention,
     val cause_problem: String,
     val created_at: String,
     val description: String,
     val efect_problem: String,
-    val id: Int? = 0,
+    val id: Int,
     val impact_problem: String,
-    val relations: Relations,
+    val relations: List<Any>,
     val user: User
 )

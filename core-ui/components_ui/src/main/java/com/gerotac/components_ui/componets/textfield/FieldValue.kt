@@ -1,4 +1,4 @@
-package com.gerotac.auth.requirement.presentation.ui.homerequirement.detail
+package com.gerotac.components_ui.componets.textfield
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -16,21 +16,31 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 
 @Composable
-fun FormValueComp(
+fun FieldValue(
     icon: AsyncImagePainter? = null,
     ValueState: (String) -> Unit,
-    text: String?,
+    text: String,
     valueText: String? = null
 ) {
+    val focusManager = LocalFocusManager.current
     TextField(
         modifier = Modifier.width(280.dp),
-        value = text ?: "",
-        onValueChange = { ValueState(it) },
+        value = text,
+        onValueChange = {
+            if (it.length <= 10) ValueState(it)
+        },
         label = { Text(valueText.toString()) },
         colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
+        keyboardOptions = KeyboardOptions(
+            autoCorrect = true,
+            imeAction = ImeAction.Next,
+            keyboardType = KeyboardType.Text
+        ),
+        keyboardActions = KeyboardActions(onDone = {
+            focusManager.moveFocus(FocusDirection.Down)
+        }),
         singleLine = true,
         maxLines = 1,
-        readOnly = true,
         leadingIcon = {
             icon?.let {
                 Icon(
