@@ -49,6 +49,35 @@ fun LinearProgressBar(isDisplayed: Boolean, text: String = "Cargando...") {
     }
 }
 
+@Composable
+fun LinearProgress(isDisplayed: Boolean, text: String) {
+    if (isDisplayed) {
+        Dialog(
+            onDismissRequest = { isDisplayed },
+            DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(500.dp)
+                    .background(Color.Transparent, shape = RoundedCornerShape(9.dp))
+            ) {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .clip(shape = RoundedCornerShape(10.dp))
+                        .height(25.dp),
+                    color = Color.Yellow
+                )
+                Text(
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    text = text
+                )
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun ProgressPreview() {

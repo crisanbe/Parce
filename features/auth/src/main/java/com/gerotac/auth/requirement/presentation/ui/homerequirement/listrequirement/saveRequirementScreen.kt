@@ -8,6 +8,11 @@ import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -48,11 +53,14 @@ import com.gerotac.components_ui.componets.alertdialog.DialogExit
 import com.gerotac.components_ui.componets.alertdialog.ViewModelDialog
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
+import com.gerotac.components_ui.componets.progress.LinearProgress
 import com.gerotac.components_ui.componets.progress.LinearProgressBar
+import com.gerotac.components_ui.componets.progress.UploadFileView
 import com.gerotac.core.util.UiEvent
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -63,6 +71,8 @@ import okhttp3.MultipartBody.Part.Companion.create
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.internal.checkDuration
+import okhttp3.internal.concurrent.formatDuration
 import org.apache.commons.io.FileUtils
 import java.io.File
 
@@ -124,7 +134,7 @@ fun RequirementBody(
     var showDialog by remember { mutableStateOf(false) }
     val listPdf: MutableList<MultipartBody.Part> = mutableListOf()
     BackHandler(true) { viewModelDialog.showDialog() }
-
+    val animatedFloat = remember { androidx.compose.animation.core.Animatable(0f) }
     val permissionsState = rememberMultiplePermissionsState(
         permissions = listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
     )
@@ -319,9 +329,8 @@ fun RequirementBody(
                         eventFlow.collectLatest { event ->
                             when (event) {
                                 is UiEvent.Success -> {
-                                    viewModel.doGetPagination()
-                                    navController.navigate(
-                                        DrawerScreens.CompanyHome.route) {}
+                                    navController.navigate(DrawerScreens.CompanyHome.route) {restoreState}
+                                    mToast(activity,"Se guardo exitosamente👍")
                                     scaffoldState.snackbarHostState.showSnackbar(
                                         message = "Se guardo exitosamente🏅",
                                         actionLabel = "Continue"
@@ -351,6 +360,5 @@ fun RequirementBody(
             Spacer(Modifier.height(16.dp))
         }
     }
-
-    LinearProgressBar(isDisplayed = state.value.isLoading)
+    LinearProgress(isDisplayed = state.value.isLoading, text = "Subiendo Archivos...")
 }

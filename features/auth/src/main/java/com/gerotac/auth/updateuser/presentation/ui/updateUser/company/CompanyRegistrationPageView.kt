@@ -31,14 +31,14 @@ import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropV
 import com.gerotac.auth.login.presentation.components.logincomposables.userDataStore
 import com.gerotac.auth.login.presentation.components.logincomposables.userRepo
 import com.gerotac.auth.protodata.ProtoUserRepoImpl
-import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserDto
+import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserRequest
 import com.gerotac.auth.updateuser.presentation.viewmodel.UpdateUserViewModel
-import com.gerotac.components_ui.componets.progress.LinearProgressBar
 import com.gerotac.components_ui.componets.TopPart
 import com.gerotac.components_ui.componets.datatime.DataTimeString
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.dropdown.DropString
+import com.gerotac.components_ui.componets.progress.LinearProgressBar
 import com.gerotac.core.util.UiEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -94,7 +94,7 @@ fun CompanyRegistrationPageView(
                         onClickSave = {
                             lifecycleTokenScope.launch {
                                 viewModel.doUpdateUser(
-                                    ParameterUpdateUserDto(
+                                    ParameterUpdateUserRequest(
                                         name = companyName,
                                         type_document = identificationType,
                                         document = idNumber!!,

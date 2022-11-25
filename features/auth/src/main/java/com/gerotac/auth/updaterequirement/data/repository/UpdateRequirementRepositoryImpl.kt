@@ -4,10 +4,6 @@ import com.gerotac.auth.updaterequirement.data.remote.UpdateRequirementApi
 import com.gerotac.auth.updaterequirement.data.remote.dto.request.ResquestUpdateRequirement
 import com.gerotac.auth.updaterequirement.data.remote.dto.response.ResponseUpdateRequirementDto
 import com.gerotac.auth.updaterequirement.domain.repository.UpdateRequirementRepository
-import com.gerotac.auth.updateuser.data.remote.UpdateUserApi
-import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserDto
-import com.gerotac.auth.updateuser.data.remote.dto.ReturnUpdateUserDto
-import com.gerotac.auth.updateuser.domain.repository.UpdateUserRepository
 import javax.inject.Inject
 
 

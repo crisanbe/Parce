@@ -2,7 +2,7 @@ package com.gerotac.auth.updateuser.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserDto
+import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserRequest
 import com.gerotac.auth.updateuser.di.UpdateUserHeaders
 import com.gerotac.auth.updateuser.domain.usecase.UpdateUserCase
 import com.gerotac.core.util.UiEvent
@@ -24,7 +24,7 @@ class UpdateUserViewModel @Inject constructor(
     var uiEvent = Channel<UiEvent>()
         private set
 
-    fun doUpdateUser(parameterUpdateUser: ParameterUpdateUserDto) {
+    fun doUpdateUser(parameterUpdateUser: ParameterUpdateUserRequest) {
         val token = UpdateUserHeaders.getHeader()["Authorization"]
         viewModelScope.launch {
             updateUserCase(

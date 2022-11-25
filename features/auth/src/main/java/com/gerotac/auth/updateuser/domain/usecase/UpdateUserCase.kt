@@ -1,7 +1,7 @@
 package com.gerotac.auth.updateuser.domain.usecase
 
+import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserRequest
 import com.google.gson.Gson
-import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserDto
 import com.gerotac.auth.updateuser.data.remote.dto.ReturnUpdateUserDto
 import com.gerotac.auth.updateuser.domain.repository.UpdateUserRepository
 import com.gerotac.auth.updateuser.presentation.viewmodel.UpdateUserState
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 class UpdateUserCase @Inject constructor(private val repository: UpdateUserRepository) {
     operator fun invoke(
-        token: String, parameterUpdateUser: ParameterUpdateUserDto
+        token: String, parameterUpdateUser: ParameterUpdateUserRequest
     ): Flow<Resource<ReturnUpdateUserDto>> = flow {
         try {
             emit(Resource.Loading())

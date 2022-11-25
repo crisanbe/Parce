@@ -27,6 +27,8 @@ import androidx.navigation.NavController
 import com.gerotac.auth.R
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.locationmodel.ResultX
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.locationmodel.Town
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.responsecompany.ResultCompany
+import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropACompany
 import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropLocationDpt
 import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropLocationMnPo
 import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
@@ -34,14 +36,14 @@ import com.gerotac.auth.login.presentation.components.logincomposables.userDataS
 import com.gerotac.auth.login.presentation.components.logincomposables.userRepo
 import com.gerotac.auth.profileUser.presentation.ui.Drawer
 import com.gerotac.auth.protodata.ProtoUserRepoImpl
-import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserDto
+import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserRequest
 import com.gerotac.auth.updateuser.presentation.viewmodel.UpdateUserViewModel
-import com.gerotac.components_ui.componets.progress.LinearProgressBar
 import com.gerotac.components_ui.componets.DividerIcon
 import com.gerotac.components_ui.componets.TopBar
 import com.gerotac.components_ui.componets.datatime.DataTimeString
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.dropdown.DropString
+import com.gerotac.components_ui.componets.progress.LinearProgressBar
 import com.gerotac.core.util.UiEvent
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -50,7 +52,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun UpdateCompanyView(
     viewModel: UpdateUserViewModel = hiltViewModel(),
-    viewModelLocation: GetApisDropViewModel = hiltViewModel(),
+    viewModelDrop: GetApisDropViewModel = hiltViewModel(),
     navController: NavController,
     title: DrawerScreens,
     scaffoldState: ScaffoldState,
@@ -76,8 +78,9 @@ fun UpdateCompanyView(
     val context = LocalContext.current
     val eventFlow = viewModel.uiEvent.receiveAsFlow()
     val lifecycleTokenScope = rememberCoroutineScope()
-    val stateMunicipality = viewModelLocation.stateMuni.collectAsState()
-    val stateLocation = viewModelLocation.stateLocation.collectAsState()
+    val stateMunicipality = viewModelDrop.stateMuni.collectAsState()
+    val stateTypeSociety = viewModelDrop.stateCompany.collectAsState()
+    val stateLocation = viewModelDrop.stateLocation.collectAsState()
     val state = viewModel.state.collectAsState()
     var visible by remember { mutableStateOf(false) }
     AnimatedVisibility(
@@ -123,71 +126,74 @@ fun UpdateCompanyView(
                 modifier = Modifier
                     .padding(innerPadding)
             ) {
-                stateMunicipality.value.muniState.let { municipalityList ->
-                    stateLocation.value.locationState.let { departmentList ->
-                        UpdateCompany(
-                            location = departmentList,
-                            municipalityList = municipalityList,
-                            companyName = companyName,
-                            identificationType = identificationType,
-                            idNumber = idNumber,
-                            companyType = companyType,
-                            kindCompany = kindCompany,
-                            economicActivity = economicActivity,
-                            contactPerson = contactPerson,
-                            department = department,
-                            municipality = municipality,
-                            academicProgram = academicProgram,
-                            birthday = birthday,
-                            gene = gene,
-                            phone = phone,
-                            ethnicGroup = ethnicGroup,
-                            presentsDisability = presentsDisability,
-                            address = address,
-                            navController = navController,
-                            onClickSave = {
-                                lifecycleTokenScope.launch {
-                                    viewModel.doUpdateUser(
-                                        ParameterUpdateUserDto(
-                                            name = it[0],
-                                            type_document = it[1],
-                                            document = it[2],
-                                            type_bussiness = it[3],
-                                            type_society = it[4].toInt(),
-                                            activity_economy = it[5],
-                                            phone = it[6],
-                                            person_contact = it[7],
-                                            departament = it[8].toInt(),
-                                            municipality = it[9].toInt(),
-                                            address = it[10],
-                                            birthday = it[11],
-                                            gener = it[12],
-                                            group_etnic = it[13],
-                                            presents_disability = it[14]
+                stateTypeSociety.value.companyState.let { typeSociety ->
+                    stateMunicipality.value.muniState.let { municipalityList ->
+                        stateLocation.value.locationState.let { departmentList ->
+                            UpdateCompany(
+                                resultTypeSociety = typeSociety,
+                                location = departmentList,
+                                municipalityList = municipalityList,
+                                companyName = companyName,
+                                identificationType = identificationType,
+                                idNumber = idNumber,
+                                companyType = companyType,
+                                kindCompany = kindCompany,
+                                economicActivity = economicActivity,
+                                contactPerson = contactPerson,
+                                department = department,
+                                municipality = municipality,
+                                academicProgram = academicProgram,
+                                birthday = birthday,
+                                gene = gene,
+                                phone = phone,
+                                ethnicGroup = ethnicGroup,
+                                presentsDisability = presentsDisability,
+                                address = address,
+                                navController = navController,
+                                onClickSave = {
+                                    lifecycleTokenScope.launch {
+                                        viewModel.doUpdateUser(
+                                            ParameterUpdateUserRequest(
+                                                name = it[0],
+                                                type_document = it[1],
+                                                document = it[2],
+                                                type_bussiness = it[3],
+                                                type_society = it[4].toInt(),
+                                                activity_economy = it[5],
+                                                phone = it[6],
+                                                person_contact = it[7],
+                                                departament = it[8].toInt(),
+                                                municipality = it[9].toInt(),
+                                                address = it[10],
+                                                birthday = it[11],
+                                                gener = it[12],
+                                                group_etnic = it[13],
+                                                presents_disability = it[14]
+                                            )
                                         )
-                                    )
-                                    eventFlow.collect { event ->
-                                        when (event) {
-                                            is UiEvent.Success -> {
-                                                navController.navigate(
-                                                    DrawerScreens.CompanyProfile.route
-                                                )
-                                                scaffoldState.snackbarHostState.showSnackbar(
-                                                    message = "Se guardo exitosamente🏅",
-                                                    actionLabel = "Continue"
-                                                )
+                                        eventFlow.collect { event ->
+                                            when (event) {
+                                                is UiEvent.Success -> {
+                                                    navController.navigate(
+                                                        DrawerScreens.CompanyProfile.route
+                                                    )
+                                                    scaffoldState.snackbarHostState.showSnackbar(
+                                                        message = "Se guardo exitosamente🏅",
+                                                        actionLabel = "Continue"
+                                                    )
+                                                }
+                                                is UiEvent.ShowSnackBar -> {
+                                                    scaffoldState.snackbarHostState.showSnackbar(
+                                                        message = event.message.asString(context)
+                                                    )
+                                                }
+                                                else -> Unit
                                             }
-                                            is UiEvent.ShowSnackBar -> {
-                                                scaffoldState.snackbarHostState.showSnackbar(
-                                                    message = event.message.asString(context)
-                                                )
-                                            }
-                                            else -> Unit
                                         }
                                     }
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
                 }
             }
@@ -205,6 +211,7 @@ fun UpdateCompany(
     onClickSave: (List<String>) -> Unit,
     location: List<ResultX> = emptyList(),
     municipalityList: List<Town> = emptyList(),
+    resultTypeSociety: List<ResultCompany> = emptyList(),
     companyName: String?,
     identificationType: String?,
     idNumber: String?,
@@ -362,11 +369,11 @@ fun UpdateCompany(
                 mainIcon = painterResource(id = R.drawable.company)
             )
             Spacer(Modifier.height(5.dp))
-            DropString(
-                ValueState = { kindCompany = it.toInt() },
-                text = kindCompany.toString(),
-                options = listOf(),
-                mainIcon = null
+            DropACompany(
+                selectOptionChange = { kindCompany = it },
+                text = "Tipo de sociedad",
+                options = resultTypeSociety,
+                mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.society)
             )
             Spacer(Modifier.height(5.dp))
             DropLocationDpt(
@@ -380,7 +387,7 @@ fun UpdateCompany(
                 selectOptionChange = { municipality = it },
                 text = "Municipio",
                 options = municipalityList,
-                mainIcon = null
+                mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.municipality)
             )
             Spacer(Modifier.height(5.dp))
             DropString(

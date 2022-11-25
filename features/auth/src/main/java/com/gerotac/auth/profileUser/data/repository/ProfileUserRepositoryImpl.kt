@@ -1,7 +1,7 @@
 package com.gerotac.auth.profileUser.data.repository
 
 import com.gerotac.auth.profileUser.data.remote.api.GetProfileUserApi
-import com.gerotac.auth.profileUser.data.remote.response.toGetProfile
+import com.gerotac.auth.profileUser.data.remote.response.respuesta.toGetProfile
 import com.gerotac.auth.profileUser.domain.model.User
 import com.gerotac.auth.profileUser.domain.repository.ProfileUserRepository
 import com.gerotac.shared.network.Resource

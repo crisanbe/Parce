@@ -248,7 +248,10 @@ private fun Body(
                 ) {
                     TextButtonPersonalized(
                         color = Color(0xFF000000.toInt()),
-                        onclick = { navController.navigate(AppScreens.InterventionScreen.route) },
+                        onclick = {
+                            viewModel.detailRequirement()
+                            navController.navigate(AppScreens.InterventionScreen.route)
+                                  },
                         text = "Intervenciones",
                         fontText = FontWeight.Bold,
                         styleText = TextStyle(color = Color.White),

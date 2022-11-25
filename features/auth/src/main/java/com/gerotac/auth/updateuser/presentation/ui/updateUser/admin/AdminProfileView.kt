@@ -30,7 +30,7 @@ import com.gerotac.auth.dropdownapi.dropdown.domain.model.responseacademic.Resul
 import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
 import com.gerotac.auth.login.presentation.components.logincomposables.userRepo
 import com.gerotac.auth.register.presentation.ui.TextFieldError
-import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserDto
+import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserRequest
 import com.gerotac.auth.updateuser.presentation.state.DocumentNumberState
 import com.gerotac.auth.updateuser.presentation.state.PhoneNumberState
 import com.gerotac.auth.updateuser.presentation.ui.updateUser.student.DocumentStudent
@@ -113,7 +113,7 @@ fun AdminProfile(
                         onClickSave = {
                             scope.launch {
                                 viewModelUpdateUser.doUpdateUser(
-                                    ParameterUpdateUserDto(
+                                    ParameterUpdateUserRequest(
                                         name = it[0],
                                         type_document = it[1],
                                         document = it[2],

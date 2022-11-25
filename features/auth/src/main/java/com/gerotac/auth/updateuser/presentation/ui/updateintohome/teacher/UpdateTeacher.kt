@@ -31,7 +31,7 @@ import com.gerotac.auth.login.presentation.components.logincomposables.userDataS
 import com.gerotac.auth.login.presentation.components.logincomposables.userRepo
 import com.gerotac.auth.profileUser.presentation.ui.Drawer
 import com.gerotac.auth.protodata.ProtoUserRepoImpl
-import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserDto
+import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserRequest
 import com.gerotac.auth.updateuser.presentation.viewmodel.UpdateUserViewModel
 import com.gerotac.components_ui.componets.progress.LinearProgressBar
 import com.gerotac.components_ui.componets.DividerIcon
@@ -123,7 +123,7 @@ fun UpdateTeacherView(
                     onClickSave = {
                         lifecycleTokenScope.launch {
                             viewModel.doUpdateUser(
-                                ParameterUpdateUserDto(
+                                ParameterUpdateUserRequest(
                                     name = it[0],
                                     type_document = it[1],
                                     document = it[2],

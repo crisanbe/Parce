@@ -59,7 +59,7 @@ fun CardProfile(
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = item.role.toString(),
+                        text = item.role,
                         style = MaterialTheme.typography.body1,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -75,184 +75,195 @@ fun CardProfile(
                     .align(Alignment.CenterHorizontally)
             ) {
                 CardView(
-                    item = item.type_document.toString(),
+                    item = item.type_document,
                     elevation = 10.dp,
                     text = "Tipo de documento: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.document.toString(),
+                    item = item.document,
                     elevation = 10.dp,
                     text = "Documento: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.phone.toString(),
+                    item = item.phone,
                     elevation = 10.dp,
                     text = "Teléfono: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.birthday.toString(),
+                    item = item.birthday,
                     elevation = 10.dp,
                     text = "Fecha de nacimiento: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.gener.toString(),
+                    item = item.gener,
                     elevation = 10.dp,
                     text = "Genero: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.group_etnic.toString(),
+                    item = item.group_etnic,
                     elevation = 10.dp,
                     text = "Grupo étnico: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.presents_disability.toString(),
+                    item = item.presents_disability,
                     elevation = 10.dp,
                     text = "Discapacidad: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
-                when (item.student?.academic_program) {
-                    null -> {}
-                    else -> {
+                when {
+                    !item.student?.academicprogram?.name.isNullOrEmpty() -> {
                         CardAlternative(
-                            item = item.student.academic_program.name,
+                            item = item.student?.academicprogram?.name.toString(),
                             elevation = 10.dp,
                             text = "Programa académico: ",
                             border = BorderStroke(1.dp, Color.Black)
                         )
                     }
+                    else -> {}
                 }
-                when (item.bussine?.activity_economy) {
-                    null -> Unit
-                    else -> {
+                when {
+                    !item.bussine?.activity_economy.isNullOrEmpty() -> {
                         CardView(
-                            item = item.bussine.activity_economy,
+                            item = item.bussine?.activity_economy.toString(),
                             elevation = 10.dp,
                             text = "Actividad económica: ",
                             border = BorderStroke(1.dp, Color.Black)
                         )
                     }
+                    else -> {}
                 }
-                when (item.bussine?.type_bussiness) {
-                    null -> Unit
-                    else -> {
+
+                when {
+                    !item.bussine?.type_bussiness.isNullOrEmpty() -> {
                         CardView(
-                            item = item.bussine.type_bussiness,
+                            item = item.bussine?.type_bussiness ?: "",
                             elevation = 10.dp,
                             text = "Tipo de empresa: ",
                             border = BorderStroke(1.dp, Color.Black)
                         )
                     }
+                    else -> {}
                 }
-                when (item.bussine?.person_contact) {
-                    null -> Unit
-                    else -> {
+                when {
+                    !item.bussine?.person_contact.isNullOrEmpty() -> {
                         CardView(
-                            item = item.bussine.person_contact,
+                            item = item.bussine?.person_contact ?: "",
                             elevation = 10.dp,
                             text = "Contacto: ",
                             border = BorderStroke(1.dp, Color.Black)
                         )
                     }
+                    else -> {}
                 }
-                when (item.bussine?.address) {
-                    null -> Unit
-                    else -> {
+                when {
+                    !item.bussine?.address.isNullOrEmpty() -> {
                         CardView(
-                            item = item.bussine.address,
+                            item = item.bussine?.address ?: "",
                             elevation = 10.dp,
                             text = "Dirección: ",
                             border = BorderStroke(1.dp, Color.Black)
                         )
                     }
+                    else -> {}
                 }
-            }
-
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .background(color = Color.White)
-                    .padding()
-                    .padding(horizontal = 8.dp, vertical = 5.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.Center)
+                when {
+                    !item.bussine?.typesociety?.name.isNullOrEmpty() -> {
+                        CardView(
+                            item = item.bussine?.typesociety?.name ?: "",
+                            elevation = 10.dp,
+                            text = "Tipo de sociedad: ",
+                            border = BorderStroke(1.dp, Color.Black)
+                        )
+                    }
+                    else -> {}
+                }
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .background(color = Color.White)
+                        .padding()
+                        .padding(horizontal = 8.dp, vertical = 5.dp)
                 ) {
-                    ButtonValid(
-                        onClick = {
-                            when (item.role) {
-                                "admin" -> {
-                                    navController.navigate(
-                                        AppScreens.UpdateAdmin.route
-                                                + "?teacherName=${item.name}" +
-                                                "&identificationType=${item.type_document}" +
-                                                "&idNumber=${item.document}" +
-                                                "&birthday=${item.birthday}" +
-                                                "&gene=${item.gener}" +
-                                                "&ethnicGroup=${item.group_etnic}" +
-                                                "&presentsDisability=${item.presents_disability}" +
-                                                "&address=${item.bussine?.address}" +
-                                                "&phone=${item.phone}"
-                                    )
+                    Row(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                    ) {
+                        ButtonValid(
+                            onClick = {
+                                when (item.role) {
+                                    "admin" -> {
+                                        navController.navigate(
+                                            AppScreens.UpdateAdmin.route
+                                                    + "?teacherName=${item.name}" +
+                                                    "&identificationType=${item.type_document}" +
+                                                    "&idNumber=${item.document}" +
+                                                    "&birthday=${item.birthday}" +
+                                                    "&gene=${item.gener}" +
+                                                    "&ethnicGroup=${item.group_etnic}" +
+                                                    "&presentsDisability=${item.presents_disability}" +
+                                                    "&address=${item.bussine?.address}" +
+                                                    "&phone=${item.phone}"
+                                        )
+                                    }
+                                    "empresa" -> {
+                                        navController.navigate(
+                                            AppScreens.UpdateCompanyView.route
+                                                    + "?companyName=${item.name}" +
+                                                    "&identificationType=${item.type_document}" +
+                                                    "&idNumber=${item.document}" +
+                                                    "&companyType=${item.bussine?.type_bussiness}" +
+                                                    "&kindCompany=${item.bussine?.typesociety?.name}" +
+                                                    "&economicActivity=${item.bussine?.activity_economy}" +
+                                                    "&contactPerson=${item.bussine?.person_contact}" +
+                                                    "&department=${item.bussine?.departament}" +
+                                                    "&municipality=${item.bussine?.municipality}" +
+                                                    "&birthday=${item.birthday}" +
+                                                    "&gene=${item.gener}" +
+                                                    "&ethnicGroup=${item.group_etnic}" +
+                                                    "&presentsDisability=${item.presents_disability}" +
+                                                    "&address=${item.bussine?.address}" +
+                                                    "&phone=${item.phone}"
+                                        )
+                                    }
+                                    "docente" -> {
+                                        navController.navigate(
+                                            AppScreens.UpdateTeacherView.route
+                                                    + "?teacherName=${item.name}" +
+                                                    "&identificationType=${item.type_document}" +
+                                                    "&idNumber=${item.document}" +
+                                                    "&birthday=${item.birthday}" +
+                                                    "&gene=${item.gener}" +
+                                                    "&ethnicGroup=${item.group_etnic}" +
+                                                    "&presentsDisability=${item.presents_disability}" +
+                                                    "&address=${item.bussine?.address}" +
+                                                    "&phone=${item.phone}"
+                                        )
+                                    }
+                                    "estudiante" -> {
+                                        navController.navigate(
+                                            AppScreens.UpdateStudentView.route
+                                                    + "?studentName=${item.name}" +
+                                                    "&identificationType=${item.type_document}" +
+                                                    "&idNumber=${item.document}" +
+                                                    "&birthday=${item.birthday}" +
+                                                    "&gene=${item.gener}" +
+                                                    "&ethnicGroup=${item.group_etnic}" +
+                                                    "&presentsDisability=${item.presents_disability}" +
+                                                    "&academic_program=${item.student?.academicprogram?.name}" +
+                                                    "&address=${item.bussine?.address}" +
+                                                    "&phone=${item.phone}"
+                                        )
+                                    }
                                 }
-                                "empresa" -> {
-                                    navController.navigate(
-                                        AppScreens.UpdateCompanyView.route
-                                                + "?companyName=${item.name}" +
-                                                "&identificationType=${item.type_document}" +
-                                                "&idNumber=${item.document}" +
-                                                "&companyType=${item.bussine?.type_bussiness}" +
-                                                "&kindCompany=${item.bussine?.type_society}" +
-                                                "&economicActivity=${item.bussine?.activity_economy}" +
-                                                "&contactPerson=${item.bussine?.person_contact}" +
-                                                "&department=${item.bussine?.departament}" +
-                                                "&municipality=${item.bussine?.municipality}" +
-                                                "&birthday=${item.birthday}" +
-                                                "&gene=${item.gener}" +
-                                                "&ethnicGroup=${item.group_etnic}" +
-                                                "&presentsDisability=${item.presents_disability}" +
-                                                "&address=${item.bussine?.address}" +
-                                                "&phone=${item.phone}"
-                                    )
-                                }
-                                "docente" -> {
-                                    navController.navigate(
-                                        AppScreens.UpdateTeacherView.route
-                                                + "?teacherName=${item.name}" +
-                                                "&identificationType=${item.type_document}" +
-                                                "&idNumber=${item.document}" +
-                                                "&birthday=${item.birthday}" +
-                                                "&gene=${item.gener}" +
-                                                "&ethnicGroup=${item.group_etnic}" +
-                                                "&presentsDisability=${item.presents_disability}" +
-                                                "&address=${item.bussine?.address}" +
-                                                "&phone=${item.phone}"
-                                    )
-                                }
-                                "estudiante" -> {
-                                    navController.navigate(
-                                        AppScreens.UpdateStudentView.route
-                                                + "?studentName=${item.name}" +
-                                                "&identificationType=${item.type_document}" +
-                                                "&idNumber=${item.document}" +
-                                                "&birthday=${item.birthday}" +
-                                                "&gene=${item.gener}" +
-                                                "&ethnicGroup=${item.group_etnic}" +
-                                                "&presentsDisability=${item.presents_disability}" +
-                                                "&academic_program=${item.student?.academic_program}" +
-                                                "&address=${item.bussine?.address}" +
-                                                "&phone=${item.phone}"
-                                    )
-                                }
-                            }
-                        }, text = "Actualizar"
-                    )
+                            }, text = "Actualizar"
+                        )
+                    }
                 }
             }
         }

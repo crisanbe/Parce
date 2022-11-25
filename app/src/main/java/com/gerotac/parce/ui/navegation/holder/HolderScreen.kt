@@ -742,7 +742,6 @@ fun ScaffoldSection(
                                 onClickDestination(it)
                             }
                         )
-                        BackHandler(true) {}
                     }
                 }
                 composable(

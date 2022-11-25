@@ -27,8 +27,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.gerotac.auth.R
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.responseacademic.ResultAcademic
+import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropAcademic
+import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
 import com.gerotac.auth.profileUser.presentation.ui.Drawer
-import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserDto
+import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserRequest
 import com.gerotac.auth.updateuser.presentation.viewmodel.UpdateUserViewModel
 import com.gerotac.components_ui.componets.progress.LinearProgressBar
 import com.gerotac.components_ui.componets.DividerIcon
@@ -44,6 +47,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun UpdateStudentView(
     viewModelUpdateUser: UpdateUserViewModel = hiltViewModel(),
+    viewModelAcademic: GetApisDropViewModel = hiltViewModel(),
     navController: NavController,
     title: DrawerScreens,
     scaffoldState: ScaffoldState,
@@ -59,6 +63,7 @@ fun UpdateStudentView(
     presentsDisability: String?,
     academic_program: Int?
 ) {
+    val stateAcademic = viewModelAcademic.stateAcademic.collectAsState()
     val context = LocalContext.current
     val eventFlow = viewModelUpdateUser.uiEvent.receiveAsFlow()
     val lifecycleTokenScope = rememberCoroutineScope()
@@ -108,55 +113,58 @@ fun UpdateStudentView(
                 modifier = Modifier
                     .padding(innerPadding)
             ) {
-                UpdateStudent(
-                    studentName = studentName,
-                    identificationType = identificationType,
-                    idNumber = idNumber,
-                    birthday = birthday,
-                    gene = gene,
-                    phone = phone,
-                    ethnicGroup = ethnicGroup,
-                    presentsDisability = presentsDisability,
-                    academic_program = academic_program,
-                    navController = navController,
-                    onClickSave = {
-                        lifecycleTokenScope.launch {
-                            viewModelUpdateUser.doUpdateUser(
-                                ParameterUpdateUserDto(
-                                    name = it[0],
-                                    type_document = it[1],
-                                    document = it[2],
-                                    phone = it[3],
-                                    birthday = it[4],
-                                    gener = it[5],
-                                    group_etnic = it[6],
-                                    presents_disability = it[7],
-                                    academic_program = it[8].toInt()
+                stateAcademic.value.academicProgramsState.let { listProgramAcademic ->
+                    UpdateStudent(
+                        resultProgramAcademic = listProgramAcademic,
+                        studentName = studentName,
+                        identificationType = identificationType,
+                        idNumber = idNumber,
+                        birthday = birthday,
+                        gene = gene,
+                        phone = phone,
+                        ethnicGroup = ethnicGroup,
+                        presentsDisability = presentsDisability,
+                        academic_program = academic_program,
+                        navController = navController,
+                        onClickSave = {
+                            lifecycleTokenScope.launch {
+                                viewModelUpdateUser.doUpdateUser(
+                                    ParameterUpdateUserRequest(
+                                        name = it[0],
+                                        type_document = it[1],
+                                        document = it[2],
+                                        phone = it[3],
+                                        birthday = it[4],
+                                        gener = it[5],
+                                        group_etnic = it[6],
+                                        presents_disability = it[7],
+                                        academic_program = it[8].toInt()
+                                    )
                                 )
-                            )
-                            eventFlow.collect { event ->
-                                when (event) {
-                                    is UiEvent.Success -> {
-                                        navController.navigate(
-                                            DrawerScreens.CompanyHome.route
-                                                    + "?user=parce😁"
-                                        )
-                                        scaffoldState.snackbarHostState.showSnackbar(
-                                            message = "Se guardo exitosamente🏅",
-                                            actionLabel = "Continue"
-                                        )
+                                eventFlow.collect { event ->
+                                    when (event) {
+                                        is UiEvent.Success -> {
+                                            navController.navigate(
+                                                DrawerScreens.CompanyHome.route
+                                                        + "?user=parce😁"
+                                            )
+                                            scaffoldState.snackbarHostState.showSnackbar(
+                                                message = "Se guardo exitosamente🏅",
+                                                actionLabel = "Continue"
+                                            )
+                                        }
+                                        is UiEvent.ShowSnackBar -> {
+                                            scaffoldState.snackbarHostState.showSnackbar(
+                                                message = event.message.asString(context)
+                                            )
+                                        }
+                                        else -> Unit
                                     }
-                                    is UiEvent.ShowSnackBar -> {
-                                        scaffoldState.snackbarHostState.showSnackbar(
-                                            message = event.message.asString(context)
-                                        )
-                                    }
-                                    else -> Unit
                                 }
                             }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
         LinearProgressBar(state.value.isLoading)
@@ -170,6 +178,7 @@ fun UpdateStudentView(
 @Composable
 fun UpdateStudent(
     navController: NavController,
+    resultProgramAcademic: List<ResultAcademic> = emptyList(),
     onClickSave: (List<String>) -> Unit,
     studentName: String?,
     identificationType: String?,
@@ -286,10 +295,10 @@ fun UpdateStudent(
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.ic_disability)
             )
             Spacer(Modifier.height(5.dp))
-            DropString(
-                ValueState = { academic_program = it.toInt() },
-                text = "${academic_program}",
-                options = listOf(),
+            DropAcademic(
+                selectOptionChange = { academic_program = it },
+                text = "Programa académico",
+                options = resultProgramAcademic,
                 mainIcon = null
             )
             DataTimeString(dateState = { birthday = it }, value = birthday.toString())

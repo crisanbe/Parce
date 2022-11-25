@@ -31,7 +31,8 @@ import com.gerotac.auth.login.presentation.components.logincomposables.userDataS
 import com.gerotac.auth.login.presentation.components.logincomposables.userRepo
 import com.gerotac.auth.profileUser.presentation.ui.Drawer
 import com.gerotac.auth.protodata.ProtoUserRepoImpl
-import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserDto
+import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
+import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserRequest
 import com.gerotac.auth.updateuser.presentation.viewmodel.UpdateUserViewModel
 import com.gerotac.components_ui.componets.progress.LinearProgressBar
 import com.gerotac.components_ui.componets.DividerIcon
@@ -123,7 +124,7 @@ fun UpdateAdminView(
                     onClickSave = {
                         lifecycleTokenScope.launch {
                             viewModel.doUpdateUser(
-                                ParameterUpdateUserDto(
+                                ParameterUpdateUserRequest(
                                     name = it[0],
                                     type_document = it[1],
                                     document = it[2],
@@ -137,10 +138,8 @@ fun UpdateAdminView(
                             eventFlow.collect { event ->
                                 when (event) {
                                     is UiEvent.Success -> {
-                                        navController.navigate(
-                                            DrawerScreens.CompanyHome.route
-                                                    + "?user=parce😁"
-                                        )
+                                        navController.navigate(DrawerScreens.CompanyProfile.route)
+                                        mToast(context,"Se guardo exitosamente👍")
                                         scaffoldState.snackbarHostState.showSnackbar(
                                             message = "Se guardo exitosamente🏅",
                                             actionLabel = "Continue"

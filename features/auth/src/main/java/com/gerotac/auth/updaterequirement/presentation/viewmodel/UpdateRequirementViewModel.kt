@@ -6,7 +6,6 @@ import com.gerotac.auth.updaterequirement.data.remote.dto.request.ResquestUpdate
 import com.gerotac.auth.updaterequirement.data.remote.dto.response.ResponseUpdateRequirementDto
 import com.gerotac.auth.updaterequirement.domain.usecase.UpdateRequirementCase
 import com.gerotac.auth.updaterequirement.presentation.state.UpdateRequirementState
-import com.gerotac.auth.updateuser.data.remote.dto.ParameterUpdateUserDto
 import com.gerotac.auth.updateuser.di.UpdateUserHeaders
 import com.gerotac.auth.updateuser.domain.usecase.UpdateUserCase
 import com.gerotac.core.util.UiEvent
