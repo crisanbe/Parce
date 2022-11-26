@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
@@ -16,69 +17,43 @@ import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.gerotac.auth.profileUser.presentation.ui.Drawer
+import com.gerotac.auth.requirement.domain.model.getrequirement.Intervention
 import com.gerotac.auth.requirement.domain.model.getrequirement.Result
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
+import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.HomeInterventions
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.HomeRequirements
+import com.gerotac.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
 import com.gerotac.auth.requirement.presentation.viewmodel.RequirementViewModel
 import com.gerotac.components_ui.componets.TopBar
+import com.gerotac.components_ui.componets.button.TextButtonPersonalized
+import com.gerotac.components_ui.componets.drawer.AppScreens
+import kotlinx.coroutines.launch
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun InterventionScreen(
-    navController: NavController,
-    scaffoldState: ScaffoldState,
     onItemClicked: (Int) -> Unit,
-    onClickIconButton: (ScaffoldState) -> Unit,
-    onClickDestination: (screen: String) -> Unit,
-    viewModelGetRequirement: RequirementViewModel = hiltViewModel()
+    viewModel: DetailRequirementViewModel = hiltViewModel()
 ) {
     var visible by remember { mutableStateOf(false) }
-    val state = viewModelGetRequirement.stateGetRequirement.collectAsState()
-    AnimatedVisibility(
-        visible = visible,
-        enter = slideInHorizontally(tween(300)),
-        exit = slideOutHorizontally()
-    ) {
-        Scaffold(
-            scaffoldState = scaffoldState,
-            topBar = {
-                TopBar(
-                    title = "",
-                    buttonIcon = Icons.Outlined.Menu,
-                    icon = Icons.Outlined.Home,
-                    scaffoldState = scaffoldState,
-                    onClickIconButton = { scaffoldState ->
-                        onClickIconButton(scaffoldState)
-                    }
-                )
-            },
-            drawerContent = {
-                Drawer(navController = navController,
-                    onClickDestination = { screen ->
-                        onClickDestination(screen)
-                    }
-                )
-            },
-        ) { PaddingValues ->
-            Column(
-                modifier = Modifier
-                    .padding(PaddingValues)
-                    .padding(horizontal = 20.dp)
-                    .background(Color.Transparent),
-            ) {
-                RequirementsContent(
-                    onItemClicked = { onItemClicked(it) },
-                    isLoading = state.value.isLoading,
-                    resultRequirement = state.value.getRequirement
-                )
-            }
+    val state = viewModel.state
+    Card(shape = RoundedCornerShape(30.dp), elevation = 3.dp, contentColor = Color.Transparent) {
+        state.detailRequirement?.data?.relations?.interventions?.let {
+            RequirementsContent(
+                onItemClicked = { onItemClicked(it) },
+                isLoading = state.isLoading,
+                resultIntervention = it
+            )
         }
     }
     LaunchedEffect(visible) {
@@ -87,42 +62,24 @@ fun InterventionScreen(
 }
 
 @SuppressLint("StateFlowValueCalledInComposition")
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun RequirementsContent(
     modifier: Modifier = Modifier,
     onItemClicked: (Int) -> Unit,
-    hint: String = "",
     isLoading: Boolean = false,
-    resultRequirement: List<Result> = ArrayList(),
-    viewModelGetRequirement: RequirementViewModel = hiltViewModel()
+    resultIntervention: List<com.gerotac.auth.requirement.domain.model.detailrequirement.Intervention> = ArrayList(),
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
-    Surface(
-        modifier = modifier.fillMaxSize(),
-        color = MaterialTheme.colors.surface
-    ) {
+    Column(modifier = modifier.heightIn(min = 100.dp, max = 500.dp)) {
+        Spacer(modifier = Modifier.height(16.dp))
         LazyColumn(
-            contentPadding = PaddingValues(horizontal = 1.dp),
+            contentPadding = PaddingValues(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             content = {
-                item {
-                    Text(
-                        text = "Intervenciones",
-                        fontSize = 18.sp,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(25.dp)
-                            .padding(vertical = 1.dp)
-                    )
-                }
                 itemsIndexed(
-                    items = resultRequirement
-                ) { _, resultRequirements ->
-                    HomeRequirements(
-                        resultRequirement = resultRequirements,
+                    items = resultIntervention
+                ) { _, resultIntervention ->
+                    HomeInterventions(
+                        resultInterventions = resultIntervention,
                         onItemClicked = { onItemClicked(it) }
                     )
                 }

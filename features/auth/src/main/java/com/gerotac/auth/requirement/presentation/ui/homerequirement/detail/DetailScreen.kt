@@ -1,3 +1,5 @@
+@file:Suppress("UselessCallOnNotNull")
+
 package com.gerotac.auth.requirement.presentation.ui.homerequirement.detail
 
 import android.Manifest
@@ -7,6 +9,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.BackHandler
+import androidx.activity.viewModels
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,174 +17,160 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.work.*
 import coil.compose.rememberAsyncImagePainter
 import com.gerotac.auth.R
 import com.gerotac.auth.requirement.di.HeaderRequirement
-import com.gerotac.auth.requirement.domain.model.detailrequirement.Areaintervention
 import com.gerotac.auth.requirement.domain.model.detailrequirement.Data
-import com.gerotac.auth.requirement.domain.model.detailrequirement.DataResponse
 import com.gerotac.auth.requirement.domain.model.detailrequirement.File
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.dowloadfile.FileDownloadWorker
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
+import com.gerotac.auth.requirement.presentation.ui.intervention.InterventionScreen
+import com.gerotac.auth.requirement.presentation.ui.intervention.MenuInferiorViewModel
+import com.gerotac.auth.requirement.presentation.ui.intervention.component.DialogContent
 import com.gerotac.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
 import com.gerotac.components_ui.componets.TopPart
+import com.gerotac.components_ui.componets.button.BottomSheetDialog
 import com.gerotac.components_ui.componets.button.ButtonValidation
+import com.gerotac.components_ui.componets.button.ButtonWithShadow
 import com.gerotac.components_ui.componets.button.TextButtonPersonalized
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
+import com.gerotac.components_ui.componets.ui.theme.ParceTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 
-@SuppressLint("SuspiciousIndentation")
+@SuppressLint(
+    "UnusedMaterialScaffoldPaddingParameter"
+)
 @Composable
 fun DetailScreen(
     navController: NavController,
+    upPress: () -> Unit,
     viewModel: DetailRequirementViewModel = hiltViewModel(),
-    upPress: () -> Unit
+    viewModelLowerMenu: MenuInferiorViewModel = hiltViewModel(),
 ) {
-
     BackHandler(true) { navController.navigate(DrawerScreens.CompanyHome.route) }
     val state = viewModel.state
-    DetailContent(
-        data = state.detailRequirement,
-        upPress = upPress,
-        navController = navController
-    )
-}
-
-@Composable
-private fun DetailContent(
-    navController: NavController,
-    modifier: Modifier = Modifier,
-    data: Data?,
-    upPress: () -> Unit
-) {
-    Box(modifier.fillMaxSize()) {
-        Column {
-            Header(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(240.dp),
-                data = data,
-                upPress = upPress
-            )
-            Body(data = data, navController = navController)
+    val stateFile = viewModel.state.fileRequirement
+    val viewState by viewModelLowerMenu.viewState.collectAsState()
+    val activity = LocalContext.current as Activity
+    WindowCompat.setDecorFitsSystemWindows(activity.window, true)
+    Scaffold(
+        backgroundColor = Color(0xFFFFFFFF),
+        modifier = Modifier,
+        topBar = { TopPart(onClickAction = { upPress() }) },
+        bottomBar = {
+            BottomSheetDialog(
+                modifier = Modifier.background(Color(0xFF353432)),
+                visible = viewState.visible,
+                cancelable = true,
+                canceledOnTouchOutside = true,
+                onDismissRequest = viewState.onDismissRequest
+            ) {
+                DialogContent(onDismissRequest = { viewState.onDismissRequest })
+                {
+                    if (!state.detailRequirement?.data?.relations?.interventions.isNullOrEmpty()) {
+                        Text(text = "Intervenciones", fontWeight = FontWeight.Bold)
+                        InterventionScreen(
+                            onItemClicked = {},
+                        )
+                    } else {
+                        Text(text = "No hay, intervenciones!", fontWeight = FontWeight.Bold)
+                    }
+                    Text(
+                        text = "Archivos del requermiento #${state.detailRequirement?.data?.id}",
+                        fontWeight = FontWeight.Bold
+                    )
+                    if (!state.fileRequirement.isNullOrEmpty()) {
+                        ListFileContent(
+                            itemFileRequirement = stateFile
+                        )
+                    } else {
+                        Text(text = "No hay, archivos!", fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
         }
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues = innerPadding)
+        ) {
+            Body(data = state.detailRequirement, navController = navController)
 
+        }
     }
 }
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@Composable
-private fun Header(
-    modifier: Modifier = Modifier,
-    data: Data?,
-    upPress: () -> Unit
-) {
-    val scaffoldState = rememberScaffoldState()
-    Scaffold(modifier = modifier, scaffoldState = scaffoldState, snackbarHost = {
-        SnackbarHost(it) { data ->
-            Snackbar(
-                actionColor = Color.White,
-                contentColor = Color.Yellow,
-                snackbarData = data,
-                modifier = Modifier.padding(10.dp),
-                shape = RoundedCornerShape(20),
-                backgroundColor = Color.Black
-            )
-        }
-    }, content = {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            TopPart(onClickAction = { upPress() })
-            Text(
-                text = stringResource(R.string.TextField_Requirement_Number) + " #️⃣${data?.data?.id}",
-                fontSize = 22.sp,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-    })
-}
-
-
-@OptIn(
-    ExperimentalComposeUiApi::class,
-    ExperimentalPermissionsApi::class
-)
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun Body(
     data: Data?,
     modifier: Modifier = Modifier,
     navController: NavController,
-    viewModel: DetailRequirementViewModel = hiltViewModel(),
+    viewModelLowerMenu: MenuInferiorViewModel = hiltViewModel(),
 
     ) {
+    val viewState by viewModelLowerMenu.viewState.collectAsState()
     val area: MutableStateFlow<String> =
         MutableStateFlow(data?.data?.areaintervention?.name.toString())
     var areastate = area.collectAsState().value
-    var areaintervention by remember { mutableStateOf(data?.data?.areaintervention?.name.toString()) }
     val context = LocalContext.current as Activity
-    val scope = rememberCoroutineScope()
-    val hideKeyboard = LocalSoftwareKeyboardController.current
     val permissionsState = rememberMultiplePermissionsState(
         permissions = listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
     )
-    if (data?.data?.id != 0) {
-        LaunchedEffect(Unit) {
-            areastate = "ss"
-        }
-    }
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(1.dp),
+        verticalArrangement = Arrangement.spacedBy(5.dp),
     ) {
+        Text(
+            text = stringResource(R.string.TextField_Requirement_Number) + " #️⃣${data?.data?.id}",
+            fontSize = 22.sp,
+            color = Color.Black,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
         FormValueComp(
             ValueState = { areastate = it },
             text = areastate,
             valueText = stringResource(R.string.TextField_Area_intervention),
             icon = rememberAsyncImagePainter(model = com.gerotac.components_ui.R.drawable.area)
         )
-        OutlinedTextField(
+        androidx.compose.material.OutlinedTextField(
             modifier = Modifier
                 .width(280.dp)
                 .wrapContentSize()
@@ -189,11 +178,10 @@ private fun Body(
             value = data?.data?.description ?: "",
             onValueChange = { data?.data?.description },
             label = { Text(stringResource(id = R.string.TextField_Description_problem)) },
-            colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
+            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
             maxLines = 5,
             readOnly = true,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
             leadingIcon = {
                 Icon(
                     painter = rememberAsyncImagePainter(
@@ -233,6 +221,7 @@ private fun Body(
                 model = com.gerotac.components_ui.R.drawable.cause
             )
         )
+        Spacer(modifier = Modifier.height(18.dp))
         when (HeaderRequirement.getRol()["rol"]) {
             "estudiante" -> {
                 ButtonValidation(text = "Crear intervención") {
@@ -242,162 +231,101 @@ private fun Body(
             "empresa" -> {
                 Row(
                     modifier = Modifier
-                        .padding(all = 10.dp)
                         .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TextButtonPersonalized(
-                        color = Color(0xFF000000.toInt()),
-                        onclick = {
-                            viewModel.detailRequirement()
-                            navController.navigate(AppScreens.InterventionScreen.route)
-                                  },
-                        text = "Intervenciones",
-                        fontText = FontWeight.Bold,
-                        styleText = TextStyle(color = Color.White),
-                        fontSize = 20.sp
+                    ButtonWithShadow(
+                        modifier = Modifier
+                            .width(190.dp)
+                            .height(61.dp),
+                        color = Color.Black,
+                        shape = RoundedCornerShape(20.dp),
+                        onClick = { viewState.onShowRequest() },
+                        textoBoton = "Intervenciones y Archivos"
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    TextButtonPersonalized(
-                        color = Color(0xFF000000.toInt()),
-                        onclick = { navController.navigate(AppScreens.UpdateRequirementDetailScreen.route + "?code=${data?.data?.id}") },
-                        text = "Actualizar",
-                        fontText = FontWeight.Bold,
-                        styleText = TextStyle(color = Color.White),
-                        fontSize = 20.sp
+                    Spacer(modifier = Modifier.width(10.dp))
+                    ButtonWithShadow(
+                        modifier = Modifier
+                            .width(130.dp)
+                            .height(58.dp),
+                        color = Color.Black,
+                        shape = RoundedCornerShape(20.dp),
+                        onClick = {
+                            navController.navigate(
+                                AppScreens.UpdateRequirementDetailScreen.route + "?code=${data?.data?.id}"
+                            )
+                        },
+                        textoBoton = "Actualizar",
                     )
                 }
             }
             "docente" -> {
                 Row(
                     modifier = Modifier
-                        .padding(all = 10.dp)
                         .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TextButtonPersonalized(
-                        color = Color(0xFF000000.toInt()),
-                        onclick = { navController.navigate(AppScreens.InterventionScreen.route) },
-                        text = "Intervenciones",
-                        fontText = FontWeight.Bold,
-                        styleText = TextStyle(color = Color.White),
-                        fontSize = 20.sp
+                    ButtonWithShadow(
+                        modifier = Modifier
+                            .width(190.dp)
+                            .height(61.dp),
+                        color = Color.Black,
+                        shape = RoundedCornerShape(20.dp),
+                        onClick = { viewState.onShowRequest() },
+                        textoBoton = "Intervenciones"
+
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    TextButtonPersonalized(
-                        color = Color(0xFF000000.toInt()),
-                        onclick = { navController.navigate(AppScreens.AssignToStudentScreen.route + "?code=${data?.data?.id}") },
-                        text = "Asignar",
-                        fontText = FontWeight.Bold,
-                        styleText = TextStyle(color = Color.White),
-                        fontSize = 20.sp
+                    Spacer(modifier = Modifier.width(10.dp))
+                    ButtonWithShadow(
+                        modifier = Modifier
+                            .width(130.dp)
+                            .height(58.dp),
+                        color = Color.Black,
+                        shape = RoundedCornerShape(20.dp),
+                        onClick = {
+                            navController.navigate(
+                                AppScreens.AssignToStudentScreen.route + "?code=${data?.data?.id}"
+                            )
+                        },
+                        textoBoton = "Asignar",
                     )
                 }
             }
             else -> {
                 Row(
                     modifier = Modifier
-                        .padding(all = 10.dp)
                         .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TextButtonPersonalized(
-                        color = Color(0xFF000000.toInt()),
-                        onclick = { navController.navigate(AppScreens.InterventionScreen.route) },
-                        text = "Intervenciones",
-                        fontText = FontWeight.Bold,
-                        styleText = TextStyle(color = Color.White),
-                        fontSize = 20.sp
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    TextButtonPersonalized(
-                        color = Color(0xFF000000.toInt()),
-                        onclick = { navController.navigate(AppScreens.AssignToTeacherScreen.route + "?codeTeacher=${data?.data?.id}") },
-                        text = "Asignar",
-                        fontText = FontWeight.Bold,
-                        styleText = TextStyle(color = Color.White),
-                        fontSize = 20.sp
-                    )
-                }
-            }
-        }
-        BottomSheetWithAnchor()
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun BottomSheetWithAnchor() {
-    val sheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
-    val scope = rememberCoroutineScope()
-    val sheetScaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = sheetState
-    )
-
-    BottomSheetScaffold(
-        scaffoldState = sheetScaffoldState,
-        sheetElevation = 0.dp,
-        sheetBackgroundColor = Color.Transparent,
-        sheetPeekHeight = 49.dp,
-        sheetContent = {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                IconButton(
-                    onClick = {
-                        scope.launch {
-                            if (sheetState.isCollapsed) {
-                                sheetState.expand()
-                            } else if (sheetState.isExpanded) {
-                                sheetState.collapse()
-                            }
-                        }
-                    }) {
-                    val icon = if (sheetState.isExpanded) {
-                        Icons.Filled.KeyboardArrowDown
-                    } else {
-                        Icons.Filled.KeyboardArrowUp
-                    }
-                    Icon(
+                    ButtonWithShadow(
                         modifier = Modifier
-                            .size(35.dp)
-                            .shadow(elevation = 10.dp, RoundedCornerShape(20.dp))
-                            .background(Color(0xFFFDD835)),
-                        imageVector = icon,
-                        contentDescription = "Icon button",
-                        tint = Color(0xFF000000.toInt())
+                            .width(190.dp)
+                            .height(61.dp),
+                        color = Color.Black,
+                        shape = RoundedCornerShape(20.dp),
+                        onClick = { viewState.onShowRequest() },
+                        textoBoton = "Intervenciones"
+
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    ButtonWithShadow(
+                        modifier = Modifier
+                            .width(130.dp)
+                            .height(58.dp),
+                        color = Color.Black,
+                        shape = RoundedCornerShape(20.dp),
+                        onClick = {
+                            navController.navigate(
+                                AppScreens.AssignToTeacherScreen.route + "?codeTeacher=${data?.data?.id}"
+                            )
+                        },
+                        textoBoton = "Asignar",
                     )
                 }
-                BottomSheetContent()
             }
-        },
-        content = {}
-    )
-}
-
-@Composable
-fun BottomSheetContent(viewModel: DetailRequirementViewModel = hiltViewModel()) {
-    val stateFile = viewModel.state.fileRequirement
-    Surface(
-        modifier = Modifier.height(290.dp),
-        shape = RoundedCornerShape(50.dp),
-        color = Color(0xFF000000)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Archivos🗂️",
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(3.dp),
-                color = Color.White
-            )
-            ListFileContent(
-                itemFileRequirement = stateFile
-            )
         }
     }
 }
@@ -411,8 +339,10 @@ private fun ListFileContent(
 ) {
     val context = LocalContext.current as Activity
     Surface(
-        modifier = modifier.fillMaxSize(),
-        color = MaterialTheme.colors.surface
+        modifier = modifier
+            .fillMaxSize(),
+        shape = RoundedCornerShape(30.dp),
+        color = Color(0xFFE4E5E6)
     ) {
         LazyColumn(
             modifier = Modifier.padding(5.dp),
@@ -482,7 +412,7 @@ fun ItemFile(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color.White)
+            .background(color = Color(0xFFFFFAFA))
             .border(width = 3.dp, color = Color.Black, shape = RoundedCornerShape(20.dp))
             .clickable {
                 if (!file.isDownloading) {
@@ -503,18 +433,19 @@ fun ItemFile(
                 modifier = Modifier.fillMaxWidth(0.9f)
             ) {
                 Text(
-                    text = file.url,
+                    text = file.filename ?: "😉",
                     color = Color.Black
                 )
                 Row {
                     val description = if (file.isDownloading) {
-                        "Downloading..."
+                        "Descargando..."
                     } else {
-                        if (file.downloadedUri.isNullOrEmpty()) "download the file" else "Tap to open file"
+                        if (file.downloadedUri.isNullOrEmpty()) "Descargar archivo🗃️" else "Pulse para abrir el archivo"
                     }
                     Text(
                         text = description,
-                        color = Color.DarkGray
+                        color = Color.DarkGray,
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }

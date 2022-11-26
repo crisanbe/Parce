@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.gerotac.auth.requirement.domain.model.getrequirement.Intervention
 import com.gerotac.auth.requirement.domain.model.getrequirement.Result
 import com.gerotac.auth.theme.ShimmerColorShades
 
@@ -140,7 +141,7 @@ fun HomeRequirements(
                         )
                     }
                     Text(
-                        text = resultRequirement.areaintervention?.name ?: "name",
+                        text = resultRequirement.areaintervention.name ?: "name",
                         fontSize = 16.sp,
                         color = Color.Black,
                         fontWeight = FontWeight.Bold
@@ -174,14 +175,14 @@ fun HomeRequirements(
 @Composable
 fun HomeInterventions(
     modifier: Modifier = Modifier,
-    resultInterventions: Result,
+    resultInterventions: com.gerotac.auth.requirement.domain.model.detailrequirement.Intervention,
     onItemClicked: (Int) -> Unit
 ) {
     val context = LocalContext.current
     Card(
         modifier = modifier,
-        elevation = 5.dp,
-        shape = RoundedCornerShape(20.dp)
+        elevation = 10.dp,
+        shape = RoundedCornerShape(30.dp)
     ) {
         Row(
             modifier = modifier
@@ -224,7 +225,7 @@ fun HomeInterventions(
                         )
                     }
                     Text(
-                        text = resultInterventions.areaintervention?.name ?: "name",
+                        text = resultInterventions.type_intervention.toString() ?: "name",
                         fontSize = 16.sp,
                         color = Color.Black,
                         fontWeight = FontWeight.Bold

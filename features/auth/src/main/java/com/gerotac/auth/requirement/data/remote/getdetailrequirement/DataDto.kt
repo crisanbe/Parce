@@ -20,7 +20,8 @@ fun DataDto.toGetDetail(): Data {
             efect_problem = data.efect_problem,
             impact_problem = data.impact_problem,
             relations = Relations(
-                files = data.relations.files
+                files = data.relations.files,
+                interventions = data.relations.interventions
             ),
             user = data.user
         ),

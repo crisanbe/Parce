@@ -75,6 +75,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-placeholder:0.26.1-alpha")
     implementation("androidx.preference:preference-ktx:1.2.0")
     implementation("androidx.work:work-runtime-ktx:2.7.1")
+    implementation("androidx.compose.material3:material3:1.0.0-rc01")
     kapt(DaggerHilt.hiltCompiler)
     kapt(DaggerHilt.hiltCompilerAndroidx)
 

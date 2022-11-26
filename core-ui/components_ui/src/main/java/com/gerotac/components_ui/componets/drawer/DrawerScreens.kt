@@ -30,7 +30,9 @@ sealed class AppScreens(val route: String) {
     object UpdateStudentView : AppScreens(route = "UpdateStudentView")
     object RequirementScreen : AppScreens(route = "RequirementScreen")
     object PermissionScreen : AppScreens(route = "PermissionScreen")
-    object InterventionScreen : AppScreens(route = "InterventionScreen")
+    object InterventionScreen : AppScreens(route = "InterventionScreen?id={id}"){
+        fun passId(id: Int): String { return "InterventionScreen?id=$id" }
+    }
     object UpdateRequirementDetailScreen : AppScreens(route = "UpdateRequirementDetailScreen")
     object SaveInterventionScreen : AppScreens(route = "SaveInterventionScreen")
     object AssignToStudentScreen : AppScreens(route = "AssignToStudentScreen")
@@ -55,6 +57,16 @@ class RequirementActions(navController: NavController) {
     val navigateToDetail = { id: Int ->
         navController.navigate(
             AppScreens.DetailScreen.passId(id)
+        ) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+        }
+    }
+    val navigateToDetailIntervention = { id: Int ->
+        navController.navigate(
+            AppScreens.InterventionScreen.passId(id)
         ) {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true

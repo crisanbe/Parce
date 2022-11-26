@@ -673,14 +673,6 @@ fun ScaffoldSection(
                 }
                 composable(route = AppScreens.InterventionScreen.route) {
                     InterventionScreen(
-                        navController = controller,
-                        scaffoldState = scaffoldState,
-                        onClickIconButton = { itScaffold ->
-                            onClickIconButton(itScaffold)
-                        },
-                        onClickDestination = { itString ->
-                            onClickDestination(itString)
-                        },
                         onItemClicked = {}
                     )
                 }

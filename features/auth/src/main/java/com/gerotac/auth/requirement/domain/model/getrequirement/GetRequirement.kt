@@ -1,5 +1,6 @@
 package com.gerotac.auth.requirement.domain.model.getrequirement
 
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 data class GetRequirement(
@@ -34,9 +35,28 @@ data class User(
 ) : Serializable
 
 data class Relations(
-    val interventions: List<Any>,
-    val users: List<Any>
+    val files: List<File>,
+    val interventions: List<Intervention>,
+    val users: List<User>
 ) : Serializable
+
+data class Intervention(
+    val created_at: String,
+    val description: String,
+    val id: Int,
+    val relations: List<Any>,
+    val requierement: Int,
+    val type_intervention: String,
+    val user: User
+) : Serializable
+
+data class File(
+    val created_at: String,
+    val filename: String,
+    val id: Int,
+    val url: String
+) : Serializable
+
 
 data class Links(
     val first: String? = null,
@@ -56,5 +76,6 @@ data class Pagination(
 ) : Serializable
 
 data class Areaintervention(
+    val id: Int,
     val name: String
 ) : Serializable

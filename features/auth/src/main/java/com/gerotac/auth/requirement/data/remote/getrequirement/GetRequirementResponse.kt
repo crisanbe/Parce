@@ -1,6 +1,5 @@
 package com.gerotac.auth.requirement.data.remote.getrequirement
 
-import com.google.gson.annotations.SerializedName
 import com.gerotac.auth.requirement.domain.model.getrequirement.*
 import com.gerotac.auth.requirement.domain.model.getrequirement.Data
 import com.gerotac.auth.requirement.domain.model.getrequirement.Links
@@ -8,6 +7,7 @@ import com.gerotac.auth.requirement.domain.model.getrequirement.Pagination
 import com.gerotac.auth.requirement.domain.model.getrequirement.Relations
 import com.gerotac.auth.requirement.domain.model.getrequirement.Result
 import com.gerotac.auth.requirement.domain.model.getrequirement.User
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 data class GetRequirementResponse(
@@ -42,8 +42,26 @@ data class User(
 ) : Serializable
 
 data class Relations(
-    @SerializedName("interventions") val interventions: List<Any>,
-    @SerializedName("users") val users: List<Any>
+    @SerializedName("file") val files: List<File>,
+    @SerializedName("interventions") val interventions: List<Intervention>,
+    @SerializedName("users") val users: List<User>
+) : Serializable
+
+data class Intervention(
+    val created_at: String,
+    val description: String,
+    val id: Int,
+    val relations: List<Any>,
+    val requierement: Int,
+    val type_intervention: String,
+    val user: User
+) : Serializable
+
+data class File(
+    val created_at: String,
+    val filename: String,
+    val id: Int,
+    val url: String
 ) : Serializable
 
 data class Links(
@@ -64,33 +82,9 @@ data class Pagination(
 ) : Serializable
 
 data class Areaintervention(
+    @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String
 ) : Serializable
-
-/*fun GetRequirementResponse.toGetRequirements(): List<Result>? {
-    val result = data.result?.mapIndexed { _, result ->
-        Result(
-            areaintervention = result.areaintervention,
-            cause_problem = result.cause_problem,
-            created_at = result.created_at,
-            description = result.description,
-            efect_problem = result.efect_problem,
-            id = result.id,
-            impact_problem = result.impact_problem,
-            user = User(
-                name = result.user.name,
-                role = result.user.role
-            ),
-            relations = Relations(
-                interventions = result.relations.interventions.mapIndexed { _, intevention ->
-                },
-                users = result.relations.users.mapIndexed { _, user ->
-                },
-            )
-        )
-    }
-    return result
-}*/
 
 fun GetRequirementResponse.toGetPagination(): Pagination {
     return Pagination(
@@ -137,9 +131,13 @@ fun GetRequirementResponse.toGetRequirement(): GetRequirement {
                         role = result.user.role
                     ),
                     relations = Relations(
-                        interventions = result.relations.interventions.mapIndexed { _, intevention ->
-                        },
+                        files = result.relations.files,
+                        interventions = result.relations.interventions,
                         users = result.relations.users.mapIndexed { _, user ->
+                            com.gerotac.auth.requirement.domain.model.getrequirement.User(
+                                name = user.name,
+                                role = user.role
+                            )
                         },
                     )
                 )
