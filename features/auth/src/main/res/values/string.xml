@@ -104,6 +104,7 @@
     <string name="TextField_impact_problems">Impactos del problema</string>
 
     //Intervencion
+    <string name="TextField_Intervention">Intervención</string>
     <string name="TextField_Type_intervention">Tipo de Intervención</string>
     <string name="TextField_Create_Intervention">Crear intervención</string>
 

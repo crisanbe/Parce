@@ -1,4 +1,4 @@
-package com.gerotac.auth.requirement.presentation.ui.intervention.component
+package com.gerotac.auth.intervention.getinterventionofdetailrequirement.intervention.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

@@ -1,15 +1,14 @@
-package com.gerotac.auth.intervention.getintervention.domain.usecase
+package com.gerotac.auth.intervention.detailintervention.domain.usecase
 
-import com.gerotac.auth.intervention.getintervention.domain.model.getdetailrequirementinterventions.Intervention
-import com.gerotac.auth.intervention.getintervention.domain.repository.DetailRequirementInterventionRepository
+import com.gerotac.auth.intervention.detailintervention.domain.model.DetailResponseIntervention
+import com.gerotac.auth.intervention.detailintervention.domain.repository.DetailInterventionRepository
 import com.gerotac.shared.network.Resource
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetInterventionOfDetailUseCase @Inject constructor(
-    private val repository: DetailRequirementInterventionRepository
+    private val repository: DetailInterventionRepository
 ) {
-    operator fun invoke(token: String): Flow<Resource<List<Intervention>>> {
-        return repository.getDetailInterventionOfRequirement(token)
+    suspend operator fun invoke(token: String, id: Int): Resource<DetailResponseIntervention> {
+        return repository.getDetailIntervention(token = token, id = id)
     }
 }

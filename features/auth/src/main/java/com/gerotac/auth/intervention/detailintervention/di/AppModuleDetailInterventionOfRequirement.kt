@@ -1,7 +1,6 @@
-package com.gerotac.auth.intervention.getintervention.di
+package com.gerotac.auth.intervention.detailintervention.di
 
-import com.gerotac.auth.intervention.getintervention.data.remote.api.GetInterventionApi
-import com.gerotac.auth.requirement.data.remote.api.RequirementApi
+import com.gerotac.auth.intervention.detailintervention.data.remote.api.GetDetailInterventionApi
 import com.gerotac.shared.commons.Constant
 import dagger.Module
 import dagger.Provides
@@ -17,11 +16,11 @@ object AppModuleDetailInterventionOfRequirement {
 
     @Provides
     @Singleton
-    fun provideListOfInterventionRepository(): GetInterventionApi {
+    fun provideDetailInterventionRepository(): GetDetailInterventionApi {
         return Retrofit.Builder()
             .baseUrl(Constant.URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(GetInterventionApi::class.java)
+            .create(GetDetailInterventionApi::class.java)
     }
 }

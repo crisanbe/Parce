@@ -1,4 +1,4 @@
-package com.gerotac.auth.requirement.presentation.ui.intervention
+package com.gerotac.auth.intervention.getinterventionofdetailrequirement.intervention
 
 data class ViewState(
     val visible: Boolean,

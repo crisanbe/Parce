@@ -30,16 +30,23 @@ sealed class AppScreens(val route: String) {
     object UpdateStudentView : AppScreens(route = "UpdateStudentView")
     object RequirementScreen : AppScreens(route = "RequirementScreen")
     object PermissionScreen : AppScreens(route = "PermissionScreen")
-    object InterventionScreen : AppScreens(route = "InterventionScreen?id={id}"){
-        fun passId(id: Int): String { return "InterventionScreen?id=$id" }
-    }
+    object InterventionScreen : AppScreens(route = "InterventionScreen")
     object UpdateRequirementDetailScreen : AppScreens(route = "UpdateRequirementDetailScreen")
     object SaveInterventionScreen : AppScreens(route = "SaveInterventionScreen")
     object AssignToStudentScreen : AppScreens(route = "AssignToStudentScreen")
     object AssignToTeacherScreen : AppScreens(route = "AssignToTeacherScreen")
     object DetailScreen : AppScreens(route = "DetailScreen?id={id}") {
-        fun passId(id: Int): String { return "DetailScreen?id=$id" }
+        fun passId(id: Int): String {
+            return "DetailScreen?id=$id"
+        }
     }
+
+    object DetailInterventionScreen : AppScreens(route = "DetailInterventionScreen?id={id}") {
+        fun passId(id: Int): String {
+            return "DetailInterventionScreen?id=$id"
+        }
+    }
+
     object ExitAlert : AppScreens(route = "ExitAlert")
 }
 
@@ -64,9 +71,19 @@ class RequirementActions(navController: NavController) {
             launchSingleTop = true
         }
     }
+
+    val navigateToHomeIntervention: () -> Unit = {
+        navController.navigate(AppScreens.InterventionScreen.route) {
+            popUpTo(navController.graph.findStartDestination().arguments.size) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = false
+        }
+    }
     val navigateToDetailIntervention = { id: Int ->
         navController.navigate(
-            AppScreens.InterventionScreen.passId(id)
+            AppScreens.DetailInterventionScreen.passId(id)
         ) {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true

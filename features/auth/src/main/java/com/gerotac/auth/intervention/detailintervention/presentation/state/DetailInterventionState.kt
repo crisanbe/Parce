@@ -1,10 +1,10 @@
-package com.gerotac.auth.intervention.getintervention.presentation.state
+package com.gerotac.auth.intervention.detailintervention.presentation.state
 
-import com.gerotac.auth.intervention.getintervention.domain.model.getdetailrequirementinterventions.Intervention
+import com.gerotac.auth.intervention.detailintervention.domain.model.DetailResponseIntervention
+import com.gerotac.auth.intervention.detailintervention.domain.model.File
 
 data class DetailInterventionState(
-    val intervention: List<Intervention> = emptyList(),
-    val showPrevious: Boolean = false,
-    val showNext: Boolean = false,
+    val intervention: DetailResponseIntervention? = null,
+    val fileIntervention: List<File> = emptyList(),
     val isLoading: Boolean = false
 )

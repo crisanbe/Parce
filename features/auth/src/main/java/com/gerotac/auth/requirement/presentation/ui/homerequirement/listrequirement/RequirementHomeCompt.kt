@@ -225,7 +225,7 @@ fun HomeInterventions(
                         )
                     }
                     Text(
-                        text = resultInterventions.type_intervention.toString() ?: "name",
+                        text = resultInterventions.type_intervention,
                         fontSize = 16.sp,
                         color = Color.Black,
                         fontWeight = FontWeight.Bold

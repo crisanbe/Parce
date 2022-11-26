@@ -1,4 +1,4 @@
-package com.gerotac.auth.requirement.presentation.ui.intervention
+package com.gerotac.auth.intervention.getinterventionofdetailrequirement.intervention
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
@@ -49,8 +49,8 @@ fun InterventionScreen(
     val state = viewModel.state
     Card(shape = RoundedCornerShape(30.dp), elevation = 3.dp, contentColor = Color.Transparent) {
         state.detailRequirement?.data?.relations?.interventions?.let {
-            RequirementsContent(
-                onItemClicked = { onItemClicked(it) },
+            InterventionContent(
+                onItemClicked = { interventionId -> onItemClicked(interventionId) },
                 isLoading = state.isLoading,
                 resultIntervention = it
             )
@@ -63,7 +63,7 @@ fun InterventionScreen(
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-private fun RequirementsContent(
+private fun InterventionContent(
     modifier: Modifier = Modifier,
     onItemClicked: (Int) -> Unit,
     isLoading: Boolean = false,

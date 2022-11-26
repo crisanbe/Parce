@@ -36,10 +36,11 @@ import com.gerotac.auth.register.presentation.ui.RegisterScreen
 import com.gerotac.auth.assignrequirement.presentation.ui.assign.AssignToStudentScreen
 import com.gerotac.auth.assignrequirement.presentation.ui.assign.AssignToTeacherScreen
 import com.gerotac.auth.createintervention.presentation.ui.SaveInterventionScreen
+import com.gerotac.auth.intervention.detailintervention.presentation.ui.DetailInterventionScreen
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.DetailScreen
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.ExitAlert
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.RequirementScreen
-import com.gerotac.auth.requirement.presentation.ui.intervention.InterventionScreen
+import com.gerotac.auth.intervention.getinterventionofdetailrequirement.intervention.InterventionScreen
 import com.gerotac.auth.sendemailforgotmypassword.presentation.components.resendnewcode.SendEmailForgotPasswordView
 import com.gerotac.auth.updaterequirement.presentation.ui.UpdateRequirementDetailScreen
 import com.gerotac.auth.updateuser.presentation.ui.updateUser.admin.AdminProfile
@@ -73,8 +74,8 @@ fun HolderScreen(
     onStatusBarColorChange: (color: Color) -> Unit
 ) {
     ParceTheme {
-    val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
+        val scaffoldState = rememberScaffoldState()
+        val scope = rememberCoroutineScope()
         val navigationActions = remember(controller) {
             RequirementActions(controller)
         }
@@ -100,7 +101,9 @@ fun HolderScreen(
                     }
                 },
                 navigateToHome = navigationActions.navigateToHome,
-                navigateToDetail = navigationActions.navigateToDetail
+                navigateToDetail = navigationActions.navigateToDetail,
+                navigateToIntervention = navigationActions.navigateToHomeIntervention,
+                navigateToDetailIntervention = navigationActions.navigateToDetailIntervention
             )
         }
     }
@@ -118,7 +121,9 @@ fun ScaffoldSection(
     scaffoldState: ScaffoldState,
     onStatusBarColorChange: (color: Color) -> Unit,
     navigateToHome: () -> Unit,
+    navigateToIntervention: () -> Unit,
     navigateToDetail: (Int) -> Unit,
+    navigateToDetailIntervention: (Int) -> Unit,
     onClickIconButton: (ScaffoldState) -> Unit,
     onClickDestination: (screen: String) -> Unit
 ) {
@@ -600,7 +605,8 @@ fun ScaffoldSection(
                         RequirementScreen(controller)
                     }
                 }
-                composable(route = AppScreens.UpdateRequirementDetailScreen.route + "?code={code}",
+                composable(
+                    route = AppScreens.UpdateRequirementDetailScreen.route + "?code={code}",
                     arguments = listOf(
                         navArgument(name = "code") {
                             type = NavType.StringType
@@ -633,6 +639,25 @@ fun ScaffoldSection(
                     )
                 ) {
                     DetailScreen(
+                        navController = controller,
+                        upPress = navigateToHome,
+                        onItemClicked = { navigateIntervention ->
+                            navigateToDetailIntervention(
+                                navigateIntervention
+                            )
+                        }
+                    )
+                }
+                composable(
+                    route = AppScreens.DetailInterventionScreen.route,
+                    arguments = listOf(
+                        navArgument("id") {
+                            type = NavType.IntType
+                            defaultValue = 0
+                        }
+                    )
+                ) {
+                    DetailInterventionScreen(
                         navController = controller,
                         upPress = navigateToHome
                     )
@@ -669,11 +694,6 @@ fun ScaffoldSection(
                         code = backStackEntry.arguments?.getString("code").toString(),
                         upPress = navigateToHome,
                         scaffoldState = scaffoldState
-                    )
-                }
-                composable(route = AppScreens.InterventionScreen.route) {
-                    InterventionScreen(
-                        onItemClicked = {}
                     )
                 }
                 composable(route = AppScreens.AdminProfile.route) {

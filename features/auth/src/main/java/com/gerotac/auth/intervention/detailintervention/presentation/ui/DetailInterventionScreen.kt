@@ -1,6 +1,6 @@
 @file:Suppress("UselessCallOnNotNull")
 
-package com.gerotac.auth.requirement.presentation.ui.homerequirement.detail
+package com.gerotac.auth.intervention.detailintervention.presentation.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -9,29 +9,24 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.BackHandler
-import androidx.activity.viewModels
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
@@ -42,51 +37,40 @@ import androidx.navigation.NavController
 import androidx.work.*
 import coil.compose.rememberAsyncImagePainter
 import com.gerotac.auth.R
+import com.gerotac.auth.intervention.detailintervention.domain.model.File
+import com.gerotac.auth.intervention.detailintervention.domain.model.DetailResponseIntervention
 import com.gerotac.auth.intervention.detailintervention.presentation.viewmodel.DetailInterventionViewModel
+import com.gerotac.auth.intervention.getinterventionofdetailrequirement.intervention.MenuInferiorViewModel
+import com.gerotac.auth.intervention.getinterventionofdetailrequirement.intervention.component.DialogContent
 import com.gerotac.auth.requirement.di.HeaderRequirement
-import com.gerotac.auth.requirement.domain.model.detailrequirement.Data
-import com.gerotac.auth.requirement.domain.model.detailrequirement.File
+import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.FormValueComp
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.dowloadfile.FileDownloadWorker
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
-import com.gerotac.auth.intervention.getinterventionofdetailrequirement.intervention.InterventionScreen
-import com.gerotac.auth.intervention.getinterventionofdetailrequirement.intervention.MenuInferiorViewModel
-import com.gerotac.auth.intervention.getinterventionofdetailrequirement.intervention.component.DialogContent
-import com.gerotac.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
 import com.gerotac.components_ui.componets.TopPart
 import com.gerotac.components_ui.componets.button.BottomSheetDialog
 import com.gerotac.components_ui.componets.button.ButtonValidation
 import com.gerotac.components_ui.componets.button.ButtonWithShadow
-import com.gerotac.components_ui.componets.button.TextButtonPersonalized
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
-import com.gerotac.components_ui.componets.ui.theme.ParceTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.flow.MutableStateFlow
 
-@SuppressLint(
-    "UnusedMaterialScaffoldPaddingParameter"
-)
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun DetailScreen(
+fun DetailInterventionScreen(
     navController: NavController,
     upPress: () -> Unit,
-    onItemClicked: (Int) -> Unit,
-    viewModelIntervention: DetailInterventionViewModel = hiltViewModel(),
-    viewModel: DetailRequirementViewModel = hiltViewModel(),
+    viewModel: DetailInterventionViewModel = hiltViewModel(),
     viewModelLowerMenu: MenuInferiorViewModel = hiltViewModel(),
 ) {
     BackHandler(true) { navController.navigate(DrawerScreens.CompanyHome.route) }
     val state = viewModel.state
-    val stateIntervention = viewModelIntervention.state
-    val stateFile = viewModel.state.fileRequirement
+    val stateFile = viewModel.state.fileIntervention
     val viewState by viewModelLowerMenu.viewState.collectAsState()
     val activity = LocalContext.current as Activity
     WindowCompat.setDecorFitsSystemWindows(activity.window, true)
-    LaunchedEffect(true){
-        viewModelIntervention.detailIntervention()
-    }
     Scaffold(
         backgroundColor = Color(0xFFFFFFFF),
         modifier = Modifier,
@@ -101,21 +85,10 @@ fun DetailScreen(
             ) {
                 DialogContent(onDismissRequest = { viewState.onDismissRequest })
                 {
-                    if (!state.detailRequirement?.data?.relations?.interventions.isNullOrEmpty()) {
-                        Text(text = "Intervenciones", fontWeight = FontWeight.Bold)
-                        InterventionScreen(
-                            onItemClicked = { onItemClicked(it)},
-                        )
-                    } else {
-                        Text(text = "No hay, intervenciones!", fontWeight = FontWeight.Bold)
-                    }
-                    Text(
-                        text = "Archivos del requermiento #${state.detailRequirement?.data?.id}",
-                        fontWeight = FontWeight.Bold
-                    )
-                    if (!state.fileRequirement.isNullOrEmpty()) {
+                    if (!state.fileIntervention.isNullOrEmpty()) {
+                        Text(text = "Archivos", fontWeight = FontWeight.Bold)
                         ListFileContent(
-                            itemFileRequirement = stateFile
+                            itemFileIntervention = stateFile
                         )
                     } else {
                         Text(text = "No hay, archivos!", fontWeight = FontWeight.Bold)
@@ -129,7 +102,7 @@ fun DetailScreen(
                 .fillMaxSize()
                 .padding(paddingValues = innerPadding)
         ) {
-            Body(data = state.detailRequirement, navController = navController)
+            Body(data = state.intervention, navController = navController)
 
         }
     }
@@ -138,16 +111,16 @@ fun DetailScreen(
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun Body(
-    data: Data?,
+    data: DetailResponseIntervention?,
     modifier: Modifier = Modifier,
     navController: NavController,
     viewModelLowerMenu: MenuInferiorViewModel = hiltViewModel(),
 
     ) {
     val viewState by viewModelLowerMenu.viewState.collectAsState()
-    val area: MutableStateFlow<String> =
-        MutableStateFlow(data?.data?.areaintervention?.name.toString())
-    var areastate = area.collectAsState().value
+    val protoTypeIntervention: MutableStateFlow<String> =
+        MutableStateFlow(data?.data?.type_intervention.toString())
+    var typeIntervention = protoTypeIntervention.collectAsState().value
     val context = LocalContext.current as Activity
     val permissionsState = rememberMultiplePermissionsState(
         permissions = listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -161,7 +134,8 @@ private fun Body(
         verticalArrangement = Arrangement.spacedBy(5.dp),
     ) {
         Text(
-            text = stringResource(R.string.TextField_Requirement_Number) + " #️⃣${data?.data?.id}",
+            text = stringResource(R.string.TextField_Intervention) +
+                    " #️⃣${data?.data?.id} del requerimiento #️⃣${data?.data?.requierement}",
             fontSize = 22.sp,
             color = Color.Black,
             fontWeight = FontWeight.Bold,
@@ -169,9 +143,9 @@ private fun Body(
             modifier = Modifier.fillMaxWidth()
         )
         FormValueComp(
-            ValueState = { areastate = it },
-            text = areastate,
-            valueText = stringResource(R.string.TextField_Area_intervention),
+            ValueState = { typeIntervention = it },
+            text = typeIntervention,
+            valueText = stringResource(R.string.TextField_Type_intervention),
             icon = rememberAsyncImagePainter(model = com.gerotac.components_ui.R.drawable.area)
         )
         androidx.compose.material.OutlinedTextField(
@@ -202,27 +176,19 @@ private fun Body(
                 )
             })
         FormValueComp(
-            ValueState = { data?.data?.impact_problem },
-            text = data?.data?.impact_problem,
-            valueText = "Impacto del problema",
+            ValueState = { data?.data?.user?.name },
+            text = data?.data?.user?.name,
+            valueText = "Usuario",
             icon = rememberAsyncImagePainter(
                 model = com.gerotac.components_ui.R.drawable.impact
             )
         )
         FormValueComp(
-            ValueState = { data?.data?.efect_problem },
-            text = data?.data?.efect_problem,
-            valueText = "Efecto del problema",
+            ValueState = { data?.data?.user?.role },
+            text = data?.data?.user?.role,
+            valueText = "Rol",
             icon = rememberAsyncImagePainter(
                 model = com.gerotac.components_ui.R.drawable.effect
-            )
-        )
-        FormValueComp(
-            ValueState = { data?.data?.cause_problem },
-            text = data?.data?.cause_problem,
-            valueText = "Causa del problema",
-            icon = rememberAsyncImagePainter(
-                model = com.gerotac.components_ui.R.drawable.cause
             )
         )
         Spacer(modifier = Modifier.height(18.dp))
@@ -338,7 +304,7 @@ private fun Body(
 private fun ListFileContent(
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
-    itemFileRequirement: List<File> = ArrayList()
+    itemFileIntervention: List<File> = ArrayList()
 ) {
     val context = LocalContext.current as Activity
     Surface(
@@ -353,7 +319,7 @@ private fun ListFileContent(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             content = {
                 itemsIndexed(
-                    items = itemFileRequirement
+                    items = itemFileIntervention
                 ) { _, resultArchives ->
                     ItemFile(
                         file = resultArchives,

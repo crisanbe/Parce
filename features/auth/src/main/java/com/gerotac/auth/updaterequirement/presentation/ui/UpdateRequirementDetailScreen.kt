@@ -41,6 +41,7 @@ import com.gerotac.auth.requirement.presentation.viewmodel.DetailRequirementView
 import com.gerotac.auth.updaterequirement.data.remote.dto.request.ResquestUpdateRequirement
 import com.gerotac.auth.updaterequirement.presentation.viewmodel.UpdateRequirementViewModel
 import com.gerotac.components_ui.componets.TopPart
+import com.gerotac.components_ui.componets.button.ButtonWithShadow
 import com.gerotac.components_ui.componets.button.TextButtonPersonalized
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.dropdown.DropString
@@ -226,10 +227,13 @@ private fun BodyUpdateRequirement(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(18.dp))
-            TextButtonPersonalized(
-                modifier = Modifier.width(280.dp),
-                color = Color(0xFF000000.toInt()),
-                onclick = {
+            ButtonWithShadow(
+                modifier = Modifier
+                    .width(300.dp)
+                    .height(61.dp),
+                color = Color.Black,
+                shape = RoundedCornerShape(20.dp),
+                onClick = {
                     scope.launch {
                         viewModel.doUpdateRequirement(
                             id = code.toInt(),
@@ -244,7 +248,7 @@ private fun BodyUpdateRequirement(
                         eventFlow.collectLatest { event ->
                             when (event) {
                                 is UiEvent.Success -> {
-                                    mToast(context = activity,"Se actualizo correctamente🗃️")
+                                    mToast(context = activity, "Se actualizo correctamente🗃️")
                                     navController.navigate(DrawerScreens.CompanyHome.route)
                                     scaffoldState.snackbarHostState.showSnackbar(
                                         message = "Se actualizo correctamente🏅",
@@ -261,10 +265,7 @@ private fun BodyUpdateRequirement(
                         }
                     }
                 },
-                text = "Guardar",
-                fontText = FontWeight.Bold,
-                styleText = TextStyle(color = Color.White),
-                fontSize = 20.sp
+                textoBoton = "Guardar",
             )
         }
     }
