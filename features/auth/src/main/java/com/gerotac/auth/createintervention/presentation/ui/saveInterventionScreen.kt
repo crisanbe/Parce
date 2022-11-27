@@ -41,6 +41,8 @@ import com.gerotac.auth.R
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.ResultArea
 import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropAreas
 import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
+import com.gerotac.auth.intervention.createintervention.data.remote.request.SaveInterventionRequest
+import com.gerotac.auth.intervention.createintervention.presentation.viewmodel.InterventionViewModel
 import com.gerotac.auth.requirement.data.remote.requirementsave.RequirementRequest
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
 import com.gerotac.auth.requirement.presentation.viewmodel.RequirementViewModel
@@ -73,6 +75,7 @@ import java.io.File
 @Composable
 fun SaveInterventionScreen(
     navController: NavController,
+    code: String,
     viewModelLocation: GetApisDropViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
@@ -91,14 +94,11 @@ fun SaveInterventionScreen(
                 )
             }
         }, content = {
-            stateGetAreas.value.areaState.let { listArea ->
                 SaveInterventionBody(
                     navController = navController,
-                    listArea = listArea
+                    code = code
                 )
-            }
         })
-
 }
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -107,8 +107,8 @@ fun SaveInterventionScreen(
 @Composable
 fun SaveInterventionBody(
     navController: NavController,
-    listArea: List<ResultArea>,
-    viewModel: RequirementViewModel = hiltViewModel()
+    code: String,
+    viewModel: InterventionViewModel = hiltViewModel()
 ) {
     val activity = LocalContext.current as Activity
     val state = viewModel.state.collectAsState()
@@ -117,10 +117,8 @@ fun SaveInterventionBody(
     val eventFlow = viewModel.uiEvent.receiveAsFlow()
     val hideKeyboard = LocalSoftwareKeyboardController.current
     var description by remember { mutableStateOf("") }
-    var interventionArea by remember { mutableStateOf(1) }
-    var causeOfTheProblem by remember { mutableStateOf("") }
-    var effectsOfTheProblem by remember { mutableStateOf("") }
-    var impactOfTheProblem by remember { mutableStateOf("") }
+    var requierement_id by remember { mutableStateOf(1) }
+    var type_intervention by remember { mutableStateOf("") }
     val viewModelDialog: ViewModelDialog = hiltViewModel()
     var showDialog by remember { mutableStateOf(false) }
     val listPdf: MutableList<MultipartBody.Part> = mutableListOf()
@@ -151,7 +149,7 @@ fun SaveInterventionBody(
             }
         }
 
-    DialogExit(text = "Deseas salir sin crear el requerimiento!😁", onClickYes = {
+    DialogExit(text = "Deseas finalizar?😁", onClickYes = {
         showDialog = !showDialog
         navController.navigate(DrawerScreens.CompanyHome.route)
     })
@@ -178,40 +176,9 @@ fun SaveInterventionBody(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            DropAreas(
-                selectOptionChange = { interventionArea = it },
-                text = stringResource(R.string.TextField_Area_intervention),
-                options = listArea,
-                mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.identity)
-            )
-            Spacer(Modifier.height(5.dp))
-            OutlinedTextField(modifier = Modifier
-                .width(280.dp)
-                .wrapContentSize()
-                .height(150.dp),
-                value = description,
-                onValueChange = { description = it },
-                label = { Text(stringResource(id = R.string.TextField_Description_problem)) },
-                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
-                maxLines = 5,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Edit,
-                        contentDescription = "",
-                    )
-                    Divider(
-                        modifier = Modifier
-                            .width(34.3.dp)
-                            .height(30.dp)
-                            .padding(start = 33.dp)
-                    )
-                })
-            Spacer(Modifier.height(5.dp))
-            TextField(value = causeOfTheProblem,
-                onValueChange = { causeOfTheProblem = it },
-                label = { Text(stringResource(id = R.string.TextField_causas_problems)) },
+            TextField(value = type_intervention,
+                onValueChange = { type_intervention = it },
+                label = { Text(stringResource(id = R.string.TextField_Type_intervention)) },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
                 maxLines = 1,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -229,16 +196,20 @@ fun SaveInterventionBody(
                     )
                 })
             Spacer(Modifier.height(5.dp))
-            TextField(value = effectsOfTheProblem,
-                onValueChange = { effectsOfTheProblem = it },
-                label = { Text(stringResource(id = R.string.TextField_efect_problems)) },
+            OutlinedTextField(modifier = Modifier
+                .width(280.dp)
+                .wrapContentSize()
+                .height(150.dp),
+                value = description,
+                onValueChange = { description = it },
+                label = { Text(stringResource(id = R.string.TextField_Description)) },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
-                maxLines = 1,
+                maxLines = 5,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
                 leadingIcon = {
                     Icon(
-                        imageVector = Icons.Outlined.SyncProblem,
+                        imageVector = Icons.Outlined.Edit,
                         contentDescription = "",
                     )
                     Divider(
@@ -249,25 +220,6 @@ fun SaveInterventionBody(
                     )
                 })
             Spacer(Modifier.height(5.dp))
-            TextField(value = impactOfTheProblem,
-                onValueChange = { impactOfTheProblem = it },
-                label = { Text(stringResource(id = R.string.TextField_impact_problems)) },
-                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
-                maxLines = 1,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Report,
-                        contentDescription = "",
-                    )
-                    Divider(
-                        modifier = Modifier
-                            .width(34.3.dp)
-                            .height(30.dp)
-                            .padding(start = 33.dp)
-                    )
-                })
             OutlinedButton(
                 modifier = Modifier
                     .widthIn(300.dp)
@@ -306,20 +258,17 @@ fun SaveInterventionBody(
                 onClick = {
                     hideKeyboard?.hide()
                     scope.launch {
-                        viewModel.doRequirement(
-                            RequirementRequest(
-                                area_intervention = interventionArea,
+                        viewModel.doSaveIntervention(
+                            SaveInterventionRequest(
+                                requierement_id = code.toInt(),
                                 description = description.toRequestBody("text/plain".toMediaTypeOrNull()),
-                                cause_problem = causeOfTheProblem.toRequestBody("text/plain".toMediaTypeOrNull()),
-                                efect_problem = effectsOfTheProblem.toRequestBody("text/plain".toMediaTypeOrNull()),
-                                impact_problem = impactOfTheProblem.toRequestBody("text/plain".toMediaTypeOrNull()),
+                                type_intervention = type_intervention.toRequestBody("text/plain".toMediaTypeOrNull()),
                                 file = listPdf
                             )
                         )
                         eventFlow.collectLatest { event ->
                             when (event) {
                                 is UiEvent.Success -> {
-                                    viewModel.doGetPagination()
                                     navController.navigate(
                                         DrawerScreens.CompanyHome.route) {}
                                     scaffoldState.snackbarHostState.showSnackbar(

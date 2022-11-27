@@ -14,15 +14,19 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Archive
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -245,8 +249,8 @@ private fun Body(
                             .height(61.dp),
                         color = Color.Black,
                         shape = RoundedCornerShape(20.dp),
-                        onClick = { viewState.onShowRequest() },
-                        textoBoton = "Intervenciones y Archivos"
+                        onClick = { navController.navigate(AppScreens.SaveInterventionScreen.route+ "?code=${data?.data?.id}") },
+                        textoBoton = "Crear intervención"
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     ButtonWithShadow(
@@ -263,6 +267,34 @@ private fun Body(
                         textoBoton = "Actualizar",
                     )
                 }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        OutlinedButton(
+                            modifier = Modifier
+                                .widthIn(300.dp)
+                                .background(Color(0xFFFFFFFF), CircleShape)
+                                .padding(vertical = 20.dp)
+                                .shadow(3.dp, CircleShape),
+                            onClick = {
+                                viewState.onShowRequest()
+                            }
+                        ) {
+                            Icon(
+                                Icons.Filled.Archive,
+                                contentDescription = "Archivo"
+                            )
+                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                            Text(
+                                "Intervenciones y archivos🗂️",
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.ExtraBold
+                            )
+                        }
+                    }
             }
             "docente" -> {
                 Row(

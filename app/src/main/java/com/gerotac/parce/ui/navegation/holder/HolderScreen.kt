@@ -623,10 +623,20 @@ fun ScaffoldSection(
                         )
                     }
                 }
-                composable(route = AppScreens.SaveInterventionScreen.route) {
+                composable(route = AppScreens.SaveInterventionScreen.route+ "?code={code}",
+                    arguments = listOf(
+                        navArgument(name = "code") {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        },
+                    )
+                ) { backStackEntry ->
                     EnterAnimation {
                         onStatusBarColorChange(MaterialTheme.colors.background)
-                        SaveInterventionScreen(controller)
+                        SaveInterventionScreen(
+                            controller,
+                            code = backStackEntry.arguments?.getString("code").toString(),
+                        )
                     }
                 }
                 composable(

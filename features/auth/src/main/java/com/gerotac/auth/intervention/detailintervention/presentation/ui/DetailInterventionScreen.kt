@@ -13,10 +13,12 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.runtime.Composable
@@ -24,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -57,6 +60,7 @@ import com.gerotac.components_ui.componets.button.ButtonWithShadow
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -196,124 +200,37 @@ private fun Body(
         )
         Spacer(modifier = Modifier.height(18.dp))
 
-        if (HeaderRequirement.getRol()["rol"] == "estudiante") {
-            ButtonValidation(text = "Crear intervención") {
-                navController.navigate(AppScreens.SaveInterventionScreen.route)
-            }
-        } else if (HeaderRequirement.getRol()["rol"] == "empresa") {
+         if (HeaderRequirement.getRol()["rol"] == "empresa") {
             //TODO this is the intervention id
-            if (!data?.data?.id.toString().isNullOrEmpty()){
+            if (!data?.data?.id.toString().isNullOrEmpty()) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    ButtonWithShadow(
+                    OutlinedButton(
                         modifier = Modifier
-                            .width(120.dp)
-                            .height(61.dp),
-                        color = Color.Black,
-                        shape = RoundedCornerShape(20.dp),
-                        onClick = { viewState.onShowRequest() },
-                        textoBoton = "Archivos🗃️"
-                    )
-                }
-            }else{
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    ButtonWithShadow(
-                        modifier = Modifier
-                            .width(190.dp)
-                            .height(61.dp),
-                        color = Color.Black,
-                        shape = RoundedCornerShape(20.dp),
-                        onClick = { viewState.onShowRequest() },
-                        textoBoton = "Intervenciones y Archivos"
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    ButtonWithShadow(
-                        modifier = Modifier
-                            .width(130.dp)
-                            .height(58.dp),
-                        color = Color.Black,
-                        shape = RoundedCornerShape(20.dp),
+                            .widthIn(300.dp)
+                            .background(Color(0xFFFFFFFF), CircleShape)
+                            .padding(vertical = 20.dp)
+                            .shadow(3.dp, CircleShape),
                         onClick = {
-                            navController.navigate(
-                                AppScreens.UpdateRequirementDetailScreen.route + "?code=${data?.data?.id}"
-                            )
-                        },
-                        textoBoton = "Actualizar intervencion",
-                    )
+                            viewState.onShowRequest()
+                        }
+                    ) {
+                        Icon(
+                            Icons.Filled.Archive,
+                            contentDescription = "Archivo"
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(
+                            "Ver archivo🗂️",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.ExtraBold
+                        )
+                    }
                 }
-            }
-
-        } else if (HeaderRequirement.getRol()["rol"] == "docente") {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                ButtonWithShadow(
-                    modifier = Modifier
-                        .width(190.dp)
-                        .height(61.dp),
-                    color = Color.Black,
-                    shape = RoundedCornerShape(20.dp),
-                    onClick = { viewState.onShowRequest() },
-                    textoBoton = "Intervenciones"
-
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                ButtonWithShadow(
-                    modifier = Modifier
-                        .width(130.dp)
-                        .height(58.dp),
-                    color = Color.Black,
-                    shape = RoundedCornerShape(20.dp),
-                    onClick = {
-                        navController.navigate(
-                            AppScreens.AssignToStudentScreen.route + "?code=${data?.data?.id}"
-                        )
-                    },
-                    textoBoton = "Asignar",
-                )
-            }
-        } else {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                ButtonWithShadow(
-                    modifier = Modifier
-                        .width(190.dp)
-                        .height(61.dp),
-                    color = Color.Black,
-                    shape = RoundedCornerShape(20.dp),
-                    onClick = { viewState.onShowRequest() },
-                    textoBoton = "Intervenciones"
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                ButtonWithShadow(
-                    modifier = Modifier
-                        .width(130.dp)
-                        .height(58.dp),
-                    color = Color.Black,
-                    shape = RoundedCornerShape(20.dp),
-                    onClick = {
-                        navController.navigate(
-                            AppScreens.AssignToTeacherScreen.route + "?codeTeacher=${data?.data?.id}"
-                        )
-                    },
-                    textoBoton = "Asignar",
-                )
             }
         }
     }
