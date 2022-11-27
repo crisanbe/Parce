@@ -8,11 +8,6 @@ import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.Animatable
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -24,7 +19,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Archive
-import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -42,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.gerotac.auth.R
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.ResultArea
 import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropAreas
@@ -55,27 +48,20 @@ import com.gerotac.components_ui.componets.alertdialog.ViewModelDialog
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.progress.LinearProgress
-import com.gerotac.components_ui.componets.progress.LinearProgressBar
-import com.gerotac.components_ui.componets.progress.UploadFileView
 import com.gerotac.core.util.UiEvent
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.MultipartBody.Part.Companion.create
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.internal.checkDuration
-import okhttp3.internal.concurrent.formatDuration
 import org.apache.commons.io.FileUtils
 import java.io.File
+import java.util.*
 
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -124,7 +110,7 @@ fun RequirementBody(
     listArea: List<ResultArea>,
     viewModel: RequirementViewModel = hiltViewModel()
 ) {
-    val activity = LocalContext.current
+    val activity = LocalContext.current as Activity
     val state = viewModel.state.collectAsState()
     val scope = rememberCoroutineScope()
     val eventFlow = viewModel.uiEvent.receiveAsFlow()
@@ -163,7 +149,7 @@ fun RequirementBody(
             }
         }
 
-    DialogExit(text = "Deseas salir sin crear el requerimiento!😁", onClickYes = {
+    DialogExit(text = "Deseas finalizar la sesión?😁", onClickYes = {
         showDialog = !showDialog
         navController.navigate(DrawerScreens.CompanyHome.route)
     })
@@ -317,7 +303,6 @@ fun RequirementBody(
             }
             Button(
                 onClick = {
-                    hideKeyboard?.hide()
                     scope.launch {
                         viewModel.doRequirement(
                             RequirementRequest(
@@ -329,11 +314,11 @@ fun RequirementBody(
                                 file = listPdf
                             )
                         )
-                        eventFlow.collectLatest { event ->
+                        eventFlow.collect { event ->
                             when (event) {
                                 is UiEvent.Success -> {
-                                    //navController.navigate(DrawerScreens.CompanyHome.route) { restoreState }
-                                    mToast(activity, "Se guardo exitosamente👍")
+                                    delay(5000)
+                                    navController.navigate(DrawerScreens.CompanyHome.route) { restoreState }
                                 }
                                 is UiEvent.ShowSnackBar -> {
                                     scaffoldState.snackbarHostState.showSnackbar(

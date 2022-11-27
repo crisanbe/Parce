@@ -41,37 +41,3 @@ data class User(
     @SerializedName("updated_at") val updated_at: String,
     @SerializedName("user_status") val user_status: String
 ) : Serializable
-
-fun RequirementResponse.toRequirementResponse(): RequirementReply {
-    return RequirementReply(
-        message = message,
-        requierement = RequirementAnswer(
-            area_intervention = requierement.area_intervention,
-            cause_problem = requierement.cause_problem,
-            created_at = requierement.created_at,
-            description = requierement.description,
-            efect_problem = requierement.efect_problem,
-            id = requierement.id,
-            impact_problem = requierement.impact_problem,
-            updated_at = requierement.updated_at,
-            user_id = requierement.user_id,
-            user = UserAnswer(
-                birthday = requierement.user.birthday,
-                created_at = requierement.user.created_at,
-                document = requierement.user.document,
-                email = requierement.user.email,
-                gener = requierement.user.gener,
-                group_etnic = requierement.user.group_etnic,
-                id = requierement.user.id,
-                name = requierement.user.name,
-                phone = requierement.user.phone,
-                presents_disability = requierement.user.presents_disability,
-                role = requierement.user.role,
-                type_document = requierement.user.type_document,
-                updated_at = requierement.user.updated_at,
-                user_status = requierement.user.user_status,
-            )
-        ),
-        status = status
-    )
-}

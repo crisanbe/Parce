@@ -27,7 +27,7 @@ class RequirementViewModel @Inject constructor(
     private val getRequirementUseCase: GetRequirementUseCase,
     private val getPaginationUseCase: GetPaginationUseCase
 ) : ViewModel() {
-    private var currentPage = 1
+     private var currentPage = 1
     var state = MutableStateFlow(RequirementState())
         private set
     private var statePages = MutableStateFlow(GetPageState())
@@ -47,7 +47,7 @@ class RequirementViewModel @Inject constructor(
     }
 
     init {
-        doGetRequirement(query.value, increase = false)
+        doGetRequirement(query.value,increase = false)
         doGetPagination()
     }
 
@@ -88,7 +88,7 @@ class RequirementViewModel @Inject constructor(
         }
     }
 
-    fun doGetRequirement(query: String? = null, increase: Boolean? = null) {
+    fun doGetRequirement(query: String? = null,increase: Boolean? = null) {
         val token = HeaderRequirement.getHeader()["Authorization"]
         viewModelScope.launch {
             if (increase == true) currentPage++ else if (currentPage > 1) currentPage--
