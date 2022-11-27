@@ -88,7 +88,7 @@ fun DetailScreen(
     val viewState by viewModelLowerMenu.viewState.collectAsState()
     val activity = LocalContext.current as Activity
     WindowCompat.setDecorFitsSystemWindows(activity.window, true)
-    LaunchedEffect(true){
+    LaunchedEffect(true) {
         viewModelIntervention.detailIntervention()
     }
     Scaffold(
@@ -108,7 +108,7 @@ fun DetailScreen(
                     if (!state.detailRequirement?.data?.relations?.interventions.isNullOrEmpty()) {
                         Text(text = "Intervenciones", fontWeight = FontWeight.Bold)
                         InterventionScreen(
-                            onItemClicked = { onItemClicked(it)},
+                            onItemClicked = { onItemClicked(it) },
                         )
                     } else {
                         Text(text = "No hay, intervenciones!", fontWeight = FontWeight.Bold)
@@ -232,8 +232,21 @@ private fun Body(
         Spacer(modifier = Modifier.height(18.dp))
         when (HeaderRequirement.getRol()["rol"]) {
             "estudiante" -> {
-                ButtonValidation(text = "Crear intervención") {
-                    navController.navigate(AppScreens.SaveInterventionScreen.route)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    ButtonWithShadow(
+                        modifier = Modifier
+                            .width(300.dp)
+                            .height(61.dp),
+                        color = Color.Black,
+                        shape = RoundedCornerShape(20.dp),
+                        onClick = { navController.navigate(AppScreens.SaveInterventionScreen.route + "?code=${data?.data?.id}") },
+                        textoBoton = "Crear intervención"
+                    )
                 }
             }
             "empresa" -> {
@@ -249,7 +262,7 @@ private fun Body(
                             .height(61.dp),
                         color = Color.Black,
                         shape = RoundedCornerShape(20.dp),
-                        onClick = { navController.navigate(AppScreens.SaveInterventionScreen.route+ "?code=${data?.data?.id}") },
+                        onClick = { navController.navigate(AppScreens.SaveInterventionScreen.route + "?code=${data?.data?.id}") },
                         textoBoton = "Crear intervención"
                     )
                     Spacer(modifier = Modifier.width(10.dp))
@@ -267,34 +280,34 @@ private fun Body(
                         textoBoton = "Actualizar",
                     )
                 }
-                    Column(
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    OutlinedButton(
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        OutlinedButton(
-                            modifier = Modifier
-                                .widthIn(300.dp)
-                                .background(Color(0xFFFFFFFF), CircleShape)
-                                .padding(vertical = 20.dp)
-                                .shadow(3.dp, CircleShape),
-                            onClick = {
-                                viewState.onShowRequest()
-                            }
-                        ) {
-                            Icon(
-                                Icons.Filled.Archive,
-                                contentDescription = "Archivo"
-                            )
-                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                            Text(
-                                "Intervenciones y archivos🗂️",
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.ExtraBold
-                            )
+                            .widthIn(300.dp)
+                            .background(Color(0xFFFFFFFF), CircleShape)
+                            .padding(vertical = 20.dp)
+                            .shadow(3.dp, CircleShape),
+                        onClick = {
+                            viewState.onShowRequest()
                         }
+                    ) {
+                        Icon(
+                            Icons.Filled.Archive,
+                            contentDescription = "Archivo"
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(
+                            "Intervenciones y archivos🗂️",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.ExtraBold
+                        )
                     }
+                }
             }
             "docente" -> {
                 Row(

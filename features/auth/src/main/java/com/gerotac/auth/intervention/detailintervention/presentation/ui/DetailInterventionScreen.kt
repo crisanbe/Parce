@@ -200,7 +200,8 @@ private fun Body(
         )
         Spacer(modifier = Modifier.height(18.dp))
 
-         if (HeaderRequirement.getRol()["rol"] == "empresa") {
+         if (HeaderRequirement.getRol()["rol"] == "empresa" ||
+             HeaderRequirement.getRol()["rol"] == "docente") {
             //TODO this is the intervention id
             if (!data?.data?.id.toString().isNullOrEmpty()) {
                 Row(

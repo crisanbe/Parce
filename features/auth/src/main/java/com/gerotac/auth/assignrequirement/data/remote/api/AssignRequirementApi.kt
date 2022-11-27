@@ -16,4 +16,10 @@ interface AssignRequirementApi {
         @Header("Authorization") token: String,
         @Body userStudent: AssignRequest,
     ): AssignDto
+
+    @POST("requierements-docent-remove")
+    suspend fun doDeassignRequirementTeacherApi(
+        @Header("Authorization") token: String,
+        @Body userDocent: AssignRequest,
+    ): AssignDto
 }

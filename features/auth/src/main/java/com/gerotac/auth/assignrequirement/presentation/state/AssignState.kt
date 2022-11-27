@@ -2,9 +2,9 @@ package com.gerotac.auth.assignrequirement.presentation.state
 
 import com.gerotac.auth.assignrequirement.data.remote.assignteacherdto.assignrequirement.response.AssignDto
 
-data class AssignTeacherState(
+data class AssignState(
     val isLoading: Boolean = false,
-    val assignTeacher: AssignDto? = null,
+    val assign: AssignDto? = null,
     val error: String = "",
     val message: String = ""
 )

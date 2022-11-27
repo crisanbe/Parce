@@ -13,4 +13,9 @@ interface AssignRepository {
         token: String,
         teacher: AssignRequest
     ): AssignDto
+
+    suspend fun doDeassignRequirementTeacher(
+        token: String,
+        docent: AssignRequest
+    ): AssignDto
 }

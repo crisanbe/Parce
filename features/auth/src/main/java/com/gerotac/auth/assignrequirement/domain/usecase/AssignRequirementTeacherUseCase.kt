@@ -3,7 +3,7 @@ package com.gerotac.auth.assignrequirement.domain.usecase
 import com.gerotac.auth.assignrequirement.data.remote.assignteacherdto.assignrequirement.request.AssignRequest
 import com.gerotac.auth.assignrequirement.data.remote.assignteacherdto.assignrequirement.response.AssignDto
 import com.gerotac.auth.assignrequirement.domain.repository.AssignRepository
-import com.gerotac.auth.assignrequirement.presentation.state.AssignTeacherState
+import com.gerotac.auth.assignrequirement.presentation.state.AssignState
 import com.gerotac.shared.network.Resource
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +28,7 @@ class AssignRequirementTeacherUseCase @Inject constructor(
                 is HttpException -> {
                     Gson().fromJson(
                         e.response()?.errorBody()?.string(),
-                        AssignTeacherState::class.java
+                        AssignState::class.java
                     ).message
                 }
                 else -> e.message ?: "error"

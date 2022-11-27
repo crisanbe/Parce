@@ -26,7 +26,7 @@ import com.gerotac.auth.R
 import com.gerotac.auth.assignrequirement.data.remote.assignteacherdto.assignrequirement.request.AssignRequest
 import com.gerotac.auth.assignrequirement.presentation.viewmodel.AssignRequirementViewModel
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.listateacher.ResultTeacher
-import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropListTeacher
+import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropDeassignRequirement
 import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
 import com.gerotac.components_ui.componets.TextButtonNavigation
@@ -48,13 +48,13 @@ fun AssignToTeacherScreen(
     scaffoldState: ScaffoldState,
     upPress: () -> Unit,
     viewModelLocation: GetApisDropViewModel = hiltViewModel(),
-    assignTeacherViewModel: AssignRequirementViewModel = hiltViewModel()
+    viewModel: AssignRequirementViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val hideKeyboard = LocalSoftwareKeyboardController.current
     val stateGetTeacher = viewModelLocation.stateTeacher.collectAsState()
-    val eventFlow = assignTeacherViewModel.uiEvent.receiveAsFlow()
+    val eventFlow = viewModel.uiEvent.receiveAsFlow()
     Scaffold(
         modifier = Modifier,
         scaffoldState = scaffoldState,
@@ -81,7 +81,7 @@ fun AssignToTeacherScreen(
                         onclickAssignTeacher = {
                             hideKeyboard?.hide()
                             scope.launch {
-                                assignTeacherViewModel.assignRequirementTeacher(
+                                viewModel.assignRequirementTeacher(
                                     AssignRequest(
                                         user = it,
                                         idRequirement = codeTeacher.toInt()
@@ -90,8 +90,33 @@ fun AssignToTeacherScreen(
                                 eventFlow.collect { event ->
                                     when (event) {
                                         is UiEvent.Success -> {
-                                            mToast(context,"Se asigno requerimiento👍")
-                                         navController.navigate(DrawerScreens.CompanyHome.route)
+                                            mToast(context, "Se asigno requerimiento👍")
+                                            navController.navigate(DrawerScreens.CompanyHome.route)
+                                        }
+                                        is UiEvent.ShowSnackBar -> {
+                                            scaffoldState.snackbarHostState.showSnackbar(
+                                                message = event.message.asString(context)
+                                            )
+                                        }
+                                        else -> Unit
+                                    }
+                                }
+                            }
+                        },
+                        onclickDeassignTeacher = {
+                            hideKeyboard?.hide()
+                            scope.launch {
+                                viewModel.deassignRequirementStudent(
+                                    AssignRequest(
+                                        user = it,
+                                        idRequirement = codeTeacher.toInt()
+                                    )
+                                )
+                                eventFlow.collect { event ->
+                                    when (event) {
+                                        is UiEvent.Success -> {
+                                            mToast(context, "Se desasigno requerimiento👍")
+                                            navController.navigate(DrawerScreens.CompanyHome.route)
                                         }
                                         is UiEvent.ShowSnackBar -> {
                                             scaffoldState.snackbarHostState.showSnackbar(
@@ -110,7 +135,7 @@ fun AssignToTeacherScreen(
 }
 
 @Composable
-fun HeaderAssign(navController: NavController,upPress: () -> Unit) {
+fun HeaderAssign(navController: NavController, upPress: () -> Unit) {
     TopPart(onClickAction = { upPress() })
 }
 
@@ -121,10 +146,11 @@ fun BodyAssign(
     listTeacher: List<ResultTeacher> = emptyList(),
     codeTeacher: String,
     onclickAssignTeacher: (List<Int>) -> Unit,
-    assignTeacherViewModel: AssignRequirementViewModel = hiltViewModel()
+    onclickDeassignTeacher: (List<Int>) -> Unit,
+    viewModel: AssignRequirementViewModel = hiltViewModel()
 ) {
     var teacher: List<Int> by remember { mutableStateOf(listOf()) }
-    val state = assignTeacherViewModel.state.collectAsState()
+    val state = viewModel.state.collectAsState()
     val systemUiController = rememberSystemUiController()
     SideEffect {
         systemUiController.setSystemBarsColor(
@@ -138,7 +164,7 @@ fun BodyAssign(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            modifier = Modifier.padding(30.dp),
+            modifier = Modifier.padding(20.dp),
             text = stringResource(R.string.TextField_Assign_Requirement) + " #️⃣${codeTeacher}",
             fontSize = 22.sp,
             color = Color.Black,
@@ -146,21 +172,24 @@ fun BodyAssign(
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.size(20.dp))
-        DropListTeacher(
+        DropDeassignRequirement(
             selectOptionChange = { teacher = arrayListOf(it) },
             text = "Docente",
             options = listTeacher,
             mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.docente_asign)
         )
-        Spacer(modifier = Modifier.size(16.dp))
         ButtonValidation(
             onClick = { onclickAssignTeacher.invoke(teacher) },
             text = "Asignar"
         )
+        Spacer(modifier = Modifier.height(10.dp))
+        ButtonValidation(
+            onClick = { onclickDeassignTeacher.invoke(teacher) },
+            text = "Desasignar"
+        )
         Spacer(modifier = Modifier.height(70.dp))
     }
-    LinearProgressBar(state.value.isLoading,"Asignando...")
+    LinearProgressBar(state.value.isLoading, "Asignando...")
 }
 
 @Composable

@@ -12,17 +12,17 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-class AssignRequirementStudentUseCase @Inject constructor(
+class DeassignRequirementTeacherUseCase @Inject constructor(
     private val repository: AssignRepository
 ) {
     operator fun invoke(
         token: String,
-        teacher: AssignRequest
+        docent: AssignRequest
     ): Flow<Resource<AssignDto>> = flow {
         try {
             emit(Resource.Loading())
-            val tokenRequest = repository.doAssignStudent(token, teacher)
-            emit(Resource.Success(tokenRequest))
+            val request = repository.doDeassignRequirementTeacher(token, docent)
+            emit(Resource.Success(request))
         } catch (e: Exception) {
             val message = when (e) {
                 is HttpException -> {

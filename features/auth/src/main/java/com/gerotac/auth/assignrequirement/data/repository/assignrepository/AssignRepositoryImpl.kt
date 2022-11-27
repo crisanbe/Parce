@@ -21,6 +21,13 @@ class AssignRepositoryImpl @Inject constructor(
         token: String,
         teacher: AssignRequest
     ): AssignDto {
-        return api.doAssignRequirementTeacherApi(token,teacher)
+        return api.doAssignRequirementStudentApi(token,teacher)
+    }
+
+    override suspend fun doDeassignRequirementTeacher(
+        token: String,
+        docent: AssignRequest
+    ): AssignDto {
+        return api.doDeassignRequirementTeacherApi(token,docent)
     }
 }
