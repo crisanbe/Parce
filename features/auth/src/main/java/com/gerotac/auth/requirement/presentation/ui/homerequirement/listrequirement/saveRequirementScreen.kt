@@ -23,6 +23,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
@@ -76,19 +77,19 @@ import okhttp3.internal.concurrent.formatDuration
 import org.apache.commons.io.FileUtils
 import java.io.File
 
-
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun RequirementScreen(
     navController: NavController,
+    scaffoldState: ScaffoldState,
     viewModelLocation: GetApisDropViewModel = hiltViewModel()
 ) {
-    val scaffoldState = rememberScaffoldState()
     val stateGetAreas = viewModelLocation.stateArea.collectAsState()
     Scaffold(
         modifier = Modifier,
-        scaffoldState = scaffoldState, snackbarHost = {
+        scaffoldState = scaffoldState,
+        snackbarHost = {
             SnackbarHost(it) { data ->
                 Snackbar(
                     actionColor = Color.White,
@@ -100,29 +101,32 @@ fun RequirementScreen(
                 )
             }
         }, content = {
-            stateGetAreas.value.areaState.let { listArea ->
-                RequirementBody(
-                    navController = navController,
-                    listArea = listArea
-                )
+            Column(
+                Modifier.fillMaxSize()
+            ) {
+                stateGetAreas.value.areaState.let { listArea ->
+                    RequirementBody(
+                        navController = navController,
+                        listArea = listArea,
+                        scaffoldState = scaffoldState
+                    )
+                }
             }
         })
-
 }
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @ExperimentalComposeUiApi
 @ExperimentalPermissionsApi
 @Composable
 fun RequirementBody(
     navController: NavController,
+    scaffoldState: ScaffoldState,
     listArea: List<ResultArea>,
     viewModel: RequirementViewModel = hiltViewModel()
 ) {
-    val activity = LocalContext.current as Activity
+    val activity = LocalContext.current
     val state = viewModel.state.collectAsState()
     val scope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState()
     val eventFlow = viewModel.uiEvent.receiveAsFlow()
     val hideKeyboard = LocalSoftwareKeyboardController.current
     var description by remember { mutableStateOf("") }
@@ -301,12 +305,12 @@ fun RequirementBody(
                 }
             ) {
                 Icon(
-                    Icons.Filled.Upload,
+                    Icons.Filled.Archive,
                     contentDescription = "Archivo"
                 )
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text(
-                    "Subir archivo🗂️",
+                    "Adjuntar archivo🗂️",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
@@ -328,12 +332,8 @@ fun RequirementBody(
                         eventFlow.collectLatest { event ->
                             when (event) {
                                 is UiEvent.Success -> {
-                                    navController.navigate(DrawerScreens.CompanyHome.route) {restoreState}
-                                    mToast(activity,"Se guardo exitosamente👍")
-                                    scaffoldState.snackbarHostState.showSnackbar(
-                                        message = "Se guardo exitosamente🏅",
-                                        actionLabel = "Continue"
-                                    )
+                                    //navController.navigate(DrawerScreens.CompanyHome.route) { restoreState }
+                                    mToast(activity, "Se guardo exitosamente👍")
                                 }
                                 is UiEvent.ShowSnackBar -> {
                                     scaffoldState.snackbarHostState.showSnackbar(

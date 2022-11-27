@@ -602,7 +602,7 @@ fun ScaffoldSection(
                 composable(route = AppScreens.RequirementScreen.route) {
                     EnterAnimation {
                         onStatusBarColorChange(MaterialTheme.colors.background)
-                        RequirementScreen(controller)
+                        RequirementScreen(controller, scaffoldState)
                     }
                 }
                 composable(

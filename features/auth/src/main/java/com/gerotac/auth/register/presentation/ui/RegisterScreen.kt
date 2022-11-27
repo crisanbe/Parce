@@ -90,9 +90,9 @@ fun BodyRegister(
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val state = viewModel.state.collectAsState()
     val eventFlow = viewModel.uiEvent.receiveAsFlow()
     val scope = rememberCoroutineScope()
-    val state = viewModel.state.collectAsState()
     val systemUiController = rememberSystemUiController()
     SideEffect { systemUiController.setSystemBarsColor(color = com.gerotac.auth.theme.ColorLogin) }
     Register(
