@@ -33,6 +33,7 @@ fun ButtonWithShadow(
         Text(
             modifier = Modifier
                 .padding(all = 4.dp),
+            textAlign = TextAlign.Center,
             text = textoBoton,
             fontSize = 15.sp,
             color = Color.White

@@ -16,6 +16,9 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Badge
+import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -155,7 +158,7 @@ private fun Body(
                 .height(90.dp),
             value = data?.data?.description ?: "",
             onValueChange = { data?.data?.description },
-            label = { Text(stringResource(id = R.string.TextField_Description_problem)) },
+            label = { Text(stringResource(id = R.string.TextField_Description)) },
             colors = androidx.compose.material.TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
             maxLines = 5,
             readOnly = true,
@@ -180,7 +183,7 @@ private fun Body(
             text = data?.data?.user?.name,
             valueText = "Usuario",
             icon = rememberAsyncImagePainter(
-                model = com.gerotac.components_ui.R.drawable.impact
+                model = com.gerotac.components_ui.R.drawable.identity
             )
         )
         FormValueComp(
@@ -188,17 +191,35 @@ private fun Body(
             text = data?.data?.user?.role,
             valueText = "Rol",
             icon = rememberAsyncImagePainter(
-                model = com.gerotac.components_ui.R.drawable.effect
+                model = com.gerotac.components_ui.R.drawable.user
             )
         )
         Spacer(modifier = Modifier.height(18.dp))
-        when (HeaderRequirement.getRol()["rol"]) {
-            "estudiante" -> {
-                ButtonValidation(text = "Crear intervención") {
-                    navController.navigate(AppScreens.SaveInterventionScreen.route)
-                }
+
+        if (HeaderRequirement.getRol()["rol"] == "estudiante") {
+            ButtonValidation(text = "Crear intervención") {
+                navController.navigate(AppScreens.SaveInterventionScreen.route)
             }
-            "empresa" -> {
+        } else if (HeaderRequirement.getRol()["rol"] == "empresa") {
+            //TODO this is the intervention id
+            if (!data?.data?.id.toString().isNullOrEmpty()){
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    ButtonWithShadow(
+                        modifier = Modifier
+                            .width(120.dp)
+                            .height(61.dp),
+                        color = Color.Black,
+                        shape = RoundedCornerShape(20.dp),
+                        onClick = { viewState.onShowRequest() },
+                        textoBoton = "Archivos🗃️"
+                    )
+                }
+            }else{
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -226,74 +247,73 @@ private fun Body(
                                 AppScreens.UpdateRequirementDetailScreen.route + "?code=${data?.data?.id}"
                             )
                         },
-                        textoBoton = "Actualizar",
+                        textoBoton = "Actualizar intervencion",
                     )
                 }
             }
-            "docente" -> {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    ButtonWithShadow(
-                        modifier = Modifier
-                            .width(190.dp)
-                            .height(61.dp),
-                        color = Color.Black,
-                        shape = RoundedCornerShape(20.dp),
-                        onClick = { viewState.onShowRequest() },
-                        textoBoton = "Intervenciones"
 
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    ButtonWithShadow(
-                        modifier = Modifier
-                            .width(130.dp)
-                            .height(58.dp),
-                        color = Color.Black,
-                        shape = RoundedCornerShape(20.dp),
-                        onClick = {
-                            navController.navigate(
-                                AppScreens.AssignToStudentScreen.route + "?code=${data?.data?.id}"
-                            )
-                        },
-                        textoBoton = "Asignar",
-                    )
-                }
-            }
-            else -> {
-                Row(
+        } else if (HeaderRequirement.getRol()["rol"] == "docente") {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ButtonWithShadow(
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    ButtonWithShadow(
-                        modifier = Modifier
-                            .width(190.dp)
-                            .height(61.dp),
-                        color = Color.Black,
-                        shape = RoundedCornerShape(20.dp),
-                        onClick = { viewState.onShowRequest() },
-                        textoBoton = "Intervenciones"
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    ButtonWithShadow(
-                        modifier = Modifier
-                            .width(130.dp)
-                            .height(58.dp),
-                        color = Color.Black,
-                        shape = RoundedCornerShape(20.dp),
-                        onClick = {
-                            navController.navigate(
-                                AppScreens.AssignToTeacherScreen.route + "?codeTeacher=${data?.data?.id}"
-                            )
-                        },
-                        textoBoton = "Asignar",
-                    )
-                }
+                        .width(190.dp)
+                        .height(61.dp),
+                    color = Color.Black,
+                    shape = RoundedCornerShape(20.dp),
+                    onClick = { viewState.onShowRequest() },
+                    textoBoton = "Intervenciones"
+
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                ButtonWithShadow(
+                    modifier = Modifier
+                        .width(130.dp)
+                        .height(58.dp),
+                    color = Color.Black,
+                    shape = RoundedCornerShape(20.dp),
+                    onClick = {
+                        navController.navigate(
+                            AppScreens.AssignToStudentScreen.route + "?code=${data?.data?.id}"
+                        )
+                    },
+                    textoBoton = "Asignar",
+                )
+            }
+        } else {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ButtonWithShadow(
+                    modifier = Modifier
+                        .width(190.dp)
+                        .height(61.dp),
+                    color = Color.Black,
+                    shape = RoundedCornerShape(20.dp),
+                    onClick = { viewState.onShowRequest() },
+                    textoBoton = "Intervenciones"
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                ButtonWithShadow(
+                    modifier = Modifier
+                        .width(130.dp)
+                        .height(58.dp),
+                    color = Color.Black,
+                    shape = RoundedCornerShape(20.dp),
+                    onClick = {
+                        navController.navigate(
+                            AppScreens.AssignToTeacherScreen.route + "?codeTeacher=${data?.data?.id}"
+                        )
+                    },
+                    textoBoton = "Asignar",
+                )
             }
         }
     }
@@ -353,7 +373,6 @@ private fun ListFileContent(
                                 "application/pdf"
                             )
                             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
                             try {
                                 context.startActivity(intent)
                             } catch (e: ActivityNotFoundException) {
@@ -402,14 +421,14 @@ fun ItemFile(
                 modifier = Modifier.fillMaxWidth(0.9f)
             ) {
                 Text(
-                    text = file.filename ?: "😉",
+                    text = file.filename,
                     color = Color.Black
                 )
                 Row {
                     val description = if (file.isDownloading) {
                         "Descargando..."
                     } else {
-                        if (file.downloadedUri.isNullOrEmpty()) "Descargar archivo🗃️" else "Pulse para abrir el archivo"
+                        if (file.url.isNullOrEmpty()) "Descargar archivo🗃️" else "Pulse para abrir el archivo👆"
                     }
                     Text(
                         text = description,
@@ -442,6 +461,7 @@ private fun startDownloadingFile(
     data.apply {
         putString(FileDownloadWorker.FileParams.KEY_FILE_NAME, file.created_at)
         putString(FileDownloadWorker.FileParams.KEY_FILE_URL, file.url)
+        putString(FileDownloadWorker.FileParams.KEY_FILE_URL, file.filename)
     }
 
     val constraints = Constraints.Builder()

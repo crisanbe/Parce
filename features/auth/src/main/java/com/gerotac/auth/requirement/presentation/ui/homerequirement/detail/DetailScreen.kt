@@ -443,7 +443,7 @@ fun ItemFile(
                     val description = if (file.isDownloading) {
                         "Descargando..."
                     } else {
-                        if (file.downloadedUri.isNullOrEmpty()) "Descargar archivo🗃️" else "Pulse para abrir el archivo"
+                        if (file.url.isNullOrEmpty()) "Descargar archivo🗃️" else "Pulse para abrir el archivo👆"
                     }
                     Text(
                         text = description,
@@ -476,6 +476,7 @@ private fun startDownloadingFile(
     data.apply {
         putString(FileDownloadWorker.FileParams.KEY_FILE_NAME, file.created_at)
         putString(FileDownloadWorker.FileParams.KEY_FILE_URL, file.url)
+        putString(FileDownloadWorker.FileParams.KEY_FILE_URL, file.filename)
     }
 
     val constraints = Constraints.Builder()

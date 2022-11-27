@@ -134,7 +134,6 @@ fun RequirementBody(
     var showDialog by remember { mutableStateOf(false) }
     val listPdf: MutableList<MultipartBody.Part> = mutableListOf()
     BackHandler(true) { viewModelDialog.showDialog() }
-    val animatedFloat = remember { androidx.compose.animation.core.Animatable(0f) }
     val permissionsState = rememberMultiplePermissionsState(
         permissions = listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
     )
