@@ -184,8 +184,8 @@ fun HomeCompany(
             ) {
                 RequirementsContent(
                     onItemClicked = { onItemClicked(it) },
-                    nameUser = nameUser.toString(),
                     query = query,
+                    navController = navController,
                     isLoading = state.value.isLoading,
                     resultRequirement = state.value.getRequirement
                 )
@@ -203,7 +203,7 @@ fun HomeCompany(
 private fun RequirementsContent(
     modifier: Modifier = Modifier,
     onItemClicked: (Int) -> Unit,
-    nameUser: String,
+    navController: NavController,
     query: String = remember { mutableStateOf("").toString()},
     hint: String = "",
     isLoading: Boolean = false,
@@ -303,6 +303,7 @@ private fun RequirementsContent(
                     items = resultRequirement
                 ) { _, resultRequirements ->
                     HomeRequirements(
+                        navController  = navController,
                         resultRequirement = resultRequirements,
                         onItemClicked = { onItemClicked(it) }
                     )

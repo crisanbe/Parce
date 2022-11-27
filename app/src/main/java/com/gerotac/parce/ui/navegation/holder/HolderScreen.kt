@@ -41,6 +41,7 @@ import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.Detai
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.ExitAlert
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.RequirementScreen
 import com.gerotac.auth.intervention.getinterventionofdetailrequirement.intervention.InterventionScreen
+import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.DeleteDialog
 import com.gerotac.auth.sendemailforgotmypassword.presentation.components.resendnewcode.SendEmailForgotPasswordView
 import com.gerotac.auth.updaterequirement.presentation.ui.UpdateRequirementDetailScreen
 import com.gerotac.auth.updateuser.presentation.ui.updateUser.admin.AdminProfile
@@ -786,6 +787,19 @@ fun ScaffoldSection(
                     EnterAnimation {
                         onStatusBarColorChange(MaterialTheme.colors.background)
                         ExitAlert(controller)
+                    }
+                }
+
+                composable(route = AppScreens.DeleteRequirementScreen.route + "?id={id}",
+                    arguments = listOf(navArgument(name = "id") {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    })
+                ) {
+                    EnterAnimation {
+                        onStatusBarColorChange(MaterialTheme.colors.background)
+                        it.arguments?.getString("id")
+                            ?.let { id -> DeleteDialog(controller,id = id,) }
                     }
                 }
             }

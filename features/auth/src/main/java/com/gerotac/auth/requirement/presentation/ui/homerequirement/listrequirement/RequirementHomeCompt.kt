@@ -22,9 +22,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.gerotac.auth.requirement.domain.model.getrequirement.Intervention
 import com.gerotac.auth.requirement.domain.model.getrequirement.Result
+import com.gerotac.auth.requirement.presentation.viewmodel.DeleteRequirementViewModel
 import com.gerotac.auth.theme.ShimmerColorShades
+import com.gerotac.components_ui.componets.button.IconButtonDelete
+import com.gerotac.components_ui.componets.drawer.AppScreens
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 fun mToast(context: Context, text: String) {
     Toast.makeText(context, text, Toast.LENGTH_LONG).show()
@@ -90,6 +96,7 @@ fun ShimmerGridItem(brush: Brush) {
 
 @Composable
 fun HomeRequirements(
+    navController: NavController,
     modifier: Modifier = Modifier,
     resultRequirement: Result,
     onItemClicked: (Int) -> Unit
@@ -103,6 +110,7 @@ fun HomeRequirements(
         Row(
             modifier = modifier
                 .clickable(onClick = {
+                    onItemClicked(resultRequirement.id)
                     mToast(context, resultRequirement.id.toString())
                 })
                 .clip(RoundedCornerShape(20.dp))
@@ -142,7 +150,7 @@ fun HomeRequirements(
                     }
                     Text(
                         text = resultRequirement.areaintervention.name ?: "name",
-                        fontSize = 16.sp,
+                        fontSize = 18.sp,
                         color = Color.Black,
                         fontWeight = FontWeight.Bold
                     )
@@ -154,16 +162,17 @@ fun HomeRequirements(
                         color = Color.Gray,
                     )
                 }
-                Button(
-                    modifier = Modifier
-                        .padding(end = 5.dp),
-                    onClick = { onItemClicked(resultRequirement.id) },
-                    colors = ButtonDefaults.buttonColors(Color(0xFF21120B)),
-                    shape = RoundedCornerShape(50.dp)
+                Column(
+                    modifier = modifier.offset(y = (-80).dp), verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.Start
                 ) {
-                    Text(
-                        text = "Detalles",
-                        color = Color.White
+                    IconButtonDelete(
+                        onclick = {
+                            navController.navigate(
+                                AppScreens.DeleteRequirementScreen.route
+                                        + "?id=${resultRequirement.id}"
+                            )
+                        }
                     )
                 }
             }

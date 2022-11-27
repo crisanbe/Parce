@@ -134,7 +134,6 @@ fun DetailScreen(
                 .padding(paddingValues = innerPadding)
         ) {
             Body(data = state.detailRequirement, navController = navController)
-
         }
     }
 }

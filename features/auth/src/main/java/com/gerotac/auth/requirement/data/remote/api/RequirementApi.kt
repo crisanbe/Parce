@@ -1,5 +1,6 @@
 package com.gerotac.auth.requirement.data.remote.api
 
+import com.gerotac.auth.requirement.data.remote.deleterequirement.ResponseDeleteRequirementDto
 import com.gerotac.auth.requirement.data.remote.getdetailrequirement.DataDto
 import com.gerotac.auth.requirement.data.remote.getrequirement.GetRequirementResponse
 import com.gerotac.auth.requirement.data.remote.requirementsave.RequirementResponse
@@ -34,5 +35,11 @@ interface RequirementApi {
         @Header("Authorization") token: String,
         @Path("id") id: Int
     ): DataDto
+
+    @DELETE("requierements/{id}")
+    suspend fun doDeleteRequirementApi(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): ResponseDeleteRequirementDto
 
 }

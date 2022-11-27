@@ -11,11 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import com.gerotac.auth.login.presentation.components.logincomposables.userRepo
+import com.gerotac.auth.requirement.presentation.viewmodel.DeleteRequirementViewModel
 import com.gerotac.components_ui.componets.alertdialog.ExitAlertDialog
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
@@ -24,10 +26,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun ExitAlert(
+fun DeleteDialog(
     navController: NavController,
+    id: String,
+    viewModel: DeleteRequirementViewModel = hiltViewModel()
 ) {
-    val scope = rememberCoroutineScope()
     var showDialog by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -36,7 +39,7 @@ fun ExitAlert(
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data("https://cdn.icon-icons.com/icons2/2596/PNG/512/bye_icon_155703.png")
+                .data("")
                 .transformations(CircleCropTransformation())
                 .build(),
             contentDescription = null,
@@ -45,20 +48,11 @@ fun ExitAlert(
                 .clip(CircleShape)
         )
         ExitAlertDialog(
-            text = "Deseas salir de la sesion👍",
+            text = "Estas seguro, que quieres eliminar el requerimiento #${id}?😉",
             onClickYes = {
                 showDialog = !showDialog
-                scope.launch {
-                    userRepo?.getTokenLoginState()
-                        ?.collect { tokenLogin ->
-                            withContext(Dispatchers.Main) {
-                                if (tokenLogin != "") {
-                                    tokenLogin.let { userRepo?.deleteTokenLoginState() }
-                                    navController.navigate(AppScreens.StartUp.route)
-                                }
-                            }
-                        }
-                }
+                viewModel.doUpdateRequirement(id.toInt())
+                navController.navigate(DrawerScreens.CompanyHome.route)
             },
             onClickNot = {
                 navController.navigate(DrawerScreens.CompanyHome.route)
