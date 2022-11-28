@@ -219,18 +219,6 @@ fun HomeInterventions(
     val eventFlow = viewModel.uiEvent.receiveAsFlow()
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    Scaffold(modifier = modifier, scaffoldState = scaffoldState, snackbarHost = {
-        SnackbarHost(it) { data ->
-            Snackbar(
-                actionColor = Color.White,
-                contentColor = Color.Yellow,
-                snackbarData = data,
-                modifier = Modifier.padding(10.dp),
-                shape = RoundedCornerShape(20),
-                backgroundColor = Color.Black
-            )
-        }
-    }, content = {
         Card(
             modifier = modifier,
             elevation = 10.dp,
@@ -299,7 +287,7 @@ fun HomeInterventions(
                                     eventFlow.collect() { event ->
                                         when (event) {
                                             is UiEvent.Success -> {
-                                                mToast(context,"La intervencion fue aprobada!")
+                                                mToast(context,"La intervencion fue aprobada✔️!")
                                                 scaffoldState.snackbarHostState.showSnackbar(
                                                     message = "Se aprobo correctamente🏅",
                                                     actionLabel = "Continue"
@@ -318,7 +306,26 @@ fun HomeInterventions(
                             textApprove = "Aprobar",
                             textDisapprove = "Desaprobar",
                             onclickDisapprove = {
-
+                                scope.launch {
+                                    viewModel.doDisapproveIntervention(resultInterventions.id)
+                                    eventFlow.collect() { event ->
+                                        when (event) {
+                                            is UiEvent.Success -> {
+                                                mToast(context,"La intervencion fue desaprobada ❌")
+                                                scaffoldState.snackbarHostState.showSnackbar(
+                                                    message = "Se desaprobó🏅",
+                                                    actionLabel = "Continue"
+                                                )
+                                            }
+                                            is UiEvent.ShowSnackBar -> {
+                                                scaffoldState.snackbarHostState.showSnackbar(
+                                                    message = event.message.asString(context)
+                                                )
+                                            }
+                                            else -> Unit
+                                        }
+                                    }
+                                }
                             }
                         )
                     } else {
@@ -339,5 +346,4 @@ fun HomeInterventions(
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
-    })
 }

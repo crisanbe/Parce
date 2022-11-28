@@ -12,7 +12,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 
-class ApproveInterventionCase @Inject constructor(private val repository: ApproveInterventionRepository) {
+class DisapproveInterventionCase @Inject constructor(private val repository: ApproveInterventionRepository) {
     operator fun invoke(
         token: String,
         id: Int
@@ -20,7 +20,7 @@ class ApproveInterventionCase @Inject constructor(private val repository: Approv
         try {
             emit(Resource.Loading())
             val updateRequirement =
-                repository.doApproveIntervention(token = token,id)
+                repository.doDisapproveIntervention(token = token,id)
             emit(Resource.Success(updateRequirement))
         } catch (e: Exception) {
             val message = when (e) {

@@ -11,4 +11,10 @@ interface ApproveInterventionApi {
         @Header("Authorization") token: String,
         @Path("id") id: Int
     ): ResponseApprove
+
+    @GET("interventions-decline/{intervention}")
+    suspend fun doDisapproveIntervention(
+        @Header("Authorization") token: String,
+        @Path("intervention") id: Int
+    ): ResponseApprove
 }

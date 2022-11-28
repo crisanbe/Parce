@@ -116,7 +116,7 @@ fun DetailScreen(
                         Text(text = "No hay, intervenciones!", fontWeight = FontWeight.Bold)
                     }
                     Text(
-                        text = "Archivos del requermiento #${state.detailRequirement?.data?.id}",
+                        text = "Archivos del requerimiento #${state.detailRequirement?.data?.id}",
                         fontWeight = FontWeight.Bold
                     )
                     if (!state.fileRequirement.isNullOrEmpty()) {

@@ -14,4 +14,11 @@ class ApproveInterventionRepositoryImpl @Inject constructor(
     ): ResponseApprove {
         return api.doApproveIntervention(token = token, id)
     }
+
+    override suspend fun doDisapproveIntervention(
+        token: String,
+        id: Int
+    ): ResponseApprove {
+        return api.doDisapproveIntervention(token = token, id)
+    }
 }

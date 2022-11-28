@@ -1,6 +1,6 @@
 @file:Suppress("BlockingMethodInNonBlockingContext") @file:OptIn(ExperimentalPermissionsApi::class)
 
-package com.gerotac.auth.createintervention.presentation.ui
+package com.gerotac.auth.intervention.createintervention.presentation.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -36,21 +36,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.gerotac.auth.R
-import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.ResultArea
-import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropAreas
 import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
 import com.gerotac.auth.intervention.createintervention.data.remote.request.SaveInterventionRequest
 import com.gerotac.auth.intervention.createintervention.presentation.viewmodel.InterventionViewModel
-import com.gerotac.auth.requirement.data.remote.requirementsave.RequirementRequest
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
-import com.gerotac.auth.requirement.presentation.viewmodel.RequirementViewModel
 import com.gerotac.components_ui.componets.TopPart
 import com.gerotac.components_ui.componets.alertdialog.DialogExit
 import com.gerotac.components_ui.componets.alertdialog.ViewModelDialog
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
+import com.gerotac.components_ui.componets.dropdown.DropString
 import com.gerotac.components_ui.componets.progress.LinearProgressBar
 import com.gerotac.core.util.UiEvent
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -59,16 +55,12 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.MultipartBody.Part.Companion.create
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.apache.commons.io.FileUtils
 import java.io.File
-
 
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -118,7 +110,7 @@ fun SaveInterventionBody(
     val hideKeyboard = LocalSoftwareKeyboardController.current
     var description by remember { mutableStateOf("") }
     var requierement_id by remember { mutableStateOf(1) }
-    var type_intervention by remember { mutableStateOf("") }
+    var type_intervention by remember { mutableStateOf("Tipo de intervención") }
     val viewModelDialog: ViewModelDialog = hiltViewModel()
     var showDialog by remember { mutableStateOf(false) }
     val listPdf: MutableList<MultipartBody.Part> = mutableListOf()
@@ -176,25 +168,12 @@ fun SaveInterventionBody(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            TextField(value = type_intervention,
-                onValueChange = { type_intervention = it },
-                label = { Text(stringResource(id = R.string.TextField_Type_intervention)) },
-                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
-                maxLines = 1,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.SmsFailed,
-                        contentDescription = "",
-                    )
-                    Divider(
-                        modifier = Modifier
-                            .width(34.3.dp)
-                            .height(30.dp)
-                            .padding(start = 33.dp)
-                    )
-                })
+            DropString(
+                ValueState = { type_intervention = it },
+                text = type_intervention,
+                options = listOf("Inicial","Avance","Final"),
+                mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.identity)
+            )
             Spacer(Modifier.height(5.dp))
             OutlinedTextField(modifier = Modifier
                 .width(280.dp)

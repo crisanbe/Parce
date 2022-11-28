@@ -9,4 +9,9 @@ interface ApproveInterventionRepository {
         token: String,
         id: Int
     ): ResponseApprove
+
+    suspend fun doDisapproveIntervention(
+        token: String,
+        id: Int
+    ): ResponseApprove
 }
