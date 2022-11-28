@@ -2,12 +2,10 @@ package com.gerotac.auth.updaterequirement.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gerotac.auth.updaterequirement.data.remote.dto.request.ResquestUpdateRequirement
-import com.gerotac.auth.updaterequirement.data.remote.dto.response.ResponseUpdateRequirementDto
+import com.gerotac.auth.updaterequirement.data.remote.dto.request.RequestUpdateRequirement
 import com.gerotac.auth.updaterequirement.domain.usecase.UpdateRequirementCase
 import com.gerotac.auth.updaterequirement.presentation.state.UpdateRequirementState
 import com.gerotac.auth.updateuser.di.UpdateUserHeaders
-import com.gerotac.auth.updateuser.domain.usecase.UpdateUserCase
 import com.gerotac.core.util.UiEvent
 import com.gerotac.core.util.UiText
 import com.gerotac.shared.network.Resource
@@ -27,7 +25,7 @@ class UpdateRequirementViewModel @Inject constructor(
     var uiEvent = Channel<UiEvent>()
         private set
 
-    fun doUpdateRequirement(id: Int, parameterUpdateRequirement: ResquestUpdateRequirement) {
+    fun doUpdateRequirement(id: Int, parameterUpdateRequirement: RequestUpdateRequirement) {
         val token = UpdateUserHeaders.getHeader()["Authorization"]
         viewModelScope.launch {
             updateRequirementCase(

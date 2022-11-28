@@ -91,7 +91,7 @@ fun HolderScreen(
                     controller.navigate(it) {
                         controller.graph.startDestinationRoute?.let { route ->
                             popUpTo(route) {
-                                saveState = true
+                                saveState = false
                             }
                         }
                         launchSingleTop = true
@@ -656,7 +656,8 @@ fun ScaffoldSection(
                             navigateToDetailIntervention(
                                 navigateIntervention
                             )
-                        }
+                        },
+                        scaffoldState = scaffoldState
                     )
                 }
                 composable(

@@ -43,6 +43,7 @@ import androidx.navigation.NavController
 import androidx.work.*
 import coil.compose.rememberAsyncImagePainter
 import com.gerotac.auth.R
+import com.gerotac.auth.approveanddisapprove.presentation.ui.CheckedApproveAndDisapprove
 import com.gerotac.auth.intervention.detailintervention.domain.model.File
 import com.gerotac.auth.intervention.detailintervention.domain.model.DetailResponseIntervention
 import com.gerotac.auth.intervention.detailintervention.presentation.viewmodel.DetailInterventionViewModel

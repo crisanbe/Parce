@@ -77,6 +77,7 @@ fun DetailScreen(
     navController: NavController,
     upPress: () -> Unit,
     onItemClicked: (Int) -> Unit,
+    scaffoldState: ScaffoldState,
     viewModelIntervention: DetailInterventionViewModel = hiltViewModel(),
     viewModel: DetailRequirementViewModel = hiltViewModel(),
     viewModelLowerMenu: MenuInferiorViewModel = hiltViewModel(),
@@ -108,6 +109,7 @@ fun DetailScreen(
                     if (!state.detailRequirement?.data?.relations?.interventions.isNullOrEmpty()) {
                         Text(text = "Intervenciones", fontWeight = FontWeight.Bold)
                         InterventionScreen(
+                            scaffoldState = scaffoldState,
                             onItemClicked = { onItemClicked(it) },
                         )
                     } else {
@@ -164,7 +166,7 @@ private fun Body(
         verticalArrangement = Arrangement.spacedBy(5.dp),
     ) {
         Text(
-            text = stringResource(R.string.TextField_Requirement_Number) + " #️⃣${data?.data?.id}",
+            text = stringResource(R.string.TextField_Requirement_Number) + " #️⃣${data?.data?.id ?: ""}",
             fontSize = 22.sp,
             color = Color.Black,
             fontWeight = FontWeight.Bold,

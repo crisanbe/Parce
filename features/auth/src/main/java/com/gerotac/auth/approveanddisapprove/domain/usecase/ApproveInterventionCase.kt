@@ -1,8 +1,12 @@
-package com.gerotac.auth.requirement.domain.usecase
+package com.gerotac.auth.approveanddisapprove.domain.usecase
 
-import com.gerotac.auth.requirement.data.remote.deleterequirement.ResponseDeleteRequirementDto
-import com.gerotac.auth.requirement.domain.repository.DeleteRequirementRepository
-import com.gerotac.auth.requirement.presentation.state.DeleteRequirementState
+import com.gerotac.auth.approveanddisapprove.data.remote.dto.response.ResponseApprove
+import com.gerotac.auth.approveanddisapprove.domain.repository.ApproveInterventionRepository
+import com.gerotac.auth.approveanddisapprove.presentation.state.ApproveInterventionState
+import com.gerotac.auth.updaterequirement.data.remote.dto.request.RequestUpdateRequirement
+import com.gerotac.auth.updaterequirement.data.remote.dto.response.ResponseUpdateRequirementDto
+import com.gerotac.auth.updaterequirement.domain.repository.UpdateRequirementRepository
+import com.gerotac.auth.updaterequirement.presentation.state.UpdateRequirementState
 import com.gerotac.shared.network.Resource
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
@@ -12,22 +16,22 @@ import java.io.IOException
 import javax.inject.Inject
 
 
-class DeleteRequirementCase @Inject constructor(private val repository: DeleteRequirementRepository) {
+class ApproveInterventionCase @Inject constructor(private val repository: ApproveInterventionRepository) {
     operator fun invoke(
         token: String,
         id: Int
-    ): Flow<Resource<ResponseDeleteRequirementDto>> = flow {
+    ): Flow<Resource<ResponseApprove>> = flow {
         try {
             emit(Resource.Loading())
             val updateRequirement =
-                repository.doDeleteRequirement(token = token,id)
+                repository.doApproveIntervention(token = token,id)
             emit(Resource.Success(updateRequirement))
         } catch (e: Exception) {
             val message = when (e) {
                 is HttpException -> {
                     Gson().fromJson(
                         e.response()?.errorBody()?.string(),
-                        DeleteRequirementState::class.java
+                        ApproveInterventionState::class.java
                     ).message
                 }
                 else -> e.message ?: "error"

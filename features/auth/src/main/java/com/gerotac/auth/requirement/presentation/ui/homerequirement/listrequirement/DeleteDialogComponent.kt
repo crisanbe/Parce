@@ -39,7 +39,7 @@ fun DeleteDialog(
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data("")
+                .data("https://cdn-icons-png.flaticon.com/512/3687/3687412.png")
                 .transformations(CircleCropTransformation())
                 .build(),
             contentDescription = null,

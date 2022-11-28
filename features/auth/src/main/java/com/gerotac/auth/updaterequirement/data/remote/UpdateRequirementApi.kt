@@ -1,6 +1,6 @@
 package com.gerotac.auth.updaterequirement.data.remote
 
-import com.gerotac.auth.updaterequirement.data.remote.dto.request.ResquestUpdateRequirement
+import com.gerotac.auth.updaterequirement.data.remote.dto.request.RequestUpdateRequirement
 import com.gerotac.auth.updaterequirement.data.remote.dto.response.ResponseUpdateRequirementDto
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -12,6 +12,6 @@ interface UpdateRequirementApi {
     suspend fun doUpdateRequirement(
         @Header("Authorization") token: String,
         @Path("id") id: Int,
-        @Body updateRequirement: ResquestUpdateRequirement
+        @Body updateRequirement: RequestUpdateRequirement
     ): ResponseUpdateRequirementDto
 }

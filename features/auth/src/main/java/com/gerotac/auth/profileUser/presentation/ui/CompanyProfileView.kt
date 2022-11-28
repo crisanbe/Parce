@@ -1,6 +1,5 @@
 package com.gerotac.auth.profileUser.presentation.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -27,11 +26,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.gerotac.auth.profileUser.domain.model.User
 import com.gerotac.auth.profileUser.presentation.viewmodel.GetProfileViewModel
-import com.gerotac.auth.requirement.di.HeaderRequirement
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
-import com.gerotac.components_ui.componets.FloatingButtonHome
 import com.gerotac.components_ui.componets.TopBar
-import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.core.util.UiEvent
 import kotlinx.coroutines.flow.collectLatest

@@ -1,15 +1,19 @@
 package com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,13 +28,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.gerotac.auth.requirement.domain.model.getrequirement.Intervention
+import com.gerotac.auth.approveanddisapprove.presentation.ui.CheckedApproveAndDisapprove
+import com.gerotac.auth.approveanddisapprove.presentation.viewmodel.ApproveInterventionViewModel
+import com.gerotac.auth.requirement.di.HeaderRequirement
 import com.gerotac.auth.requirement.domain.model.getrequirement.Result
-import com.gerotac.auth.requirement.presentation.viewmodel.DeleteRequirementViewModel
 import com.gerotac.auth.theme.ShimmerColorShades
 import com.gerotac.components_ui.componets.button.IconButtonDelete
 import com.gerotac.components_ui.componets.drawer.AppScreens
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.gerotac.components_ui.componets.progress.LinearProgressBar
+import com.gerotac.components_ui.componets.progress.ProgressIndicator
+import com.gerotac.core.util.UiEvent
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 fun mToast(context: Context, text: String) {
     Toast.makeText(context, text, Toast.LENGTH_LONG).show()
@@ -111,7 +122,6 @@ fun HomeRequirements(
             modifier = modifier
                 .clickable(onClick = {
                     onItemClicked(resultRequirement.id)
-                    mToast(context, resultRequirement.id.toString())
                 })
                 .clip(RoundedCornerShape(20.dp))
                 .background(Color(0xFFF5F5F5))
@@ -134,7 +144,7 @@ fun HomeRequirements(
                 ) {
                     Card(
                         modifier = Modifier
-                            .widthIn(40.dp)
+                            .widthIn(30.dp)
                             .heightIn(20.dp),
                         backgroundColor = Color.Black,
                         shape = RoundedCornerShape(20.dp),
@@ -162,18 +172,33 @@ fun HomeRequirements(
                         color = Color.Gray,
                     )
                 }
-                Column(
-                    modifier = modifier.offset(y = (-80).dp), verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    IconButtonDelete(
-                        onclick = {
-                            navController.navigate(
-                                AppScreens.DeleteRequirementScreen.route
-                                        + "?id=${resultRequirement.id}"
-                            )
-                        }
-                    )
+                if (HeaderRequirement.getRol()["rol"] == "empresa") {
+                    Column(
+                        modifier = modifier.offset(y = (-80).dp),
+                        verticalArrangement = Arrangement.Top,
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        IconButtonDelete(
+                            onclick = {
+                                navController.navigate(
+                                    AppScreens.DeleteRequirementScreen.route
+                                            + "?id=${resultRequirement.id}"
+                                )
+                            }
+                        )
+                    }
+                } else {
+                    Button(
+                        modifier = Modifier.padding(end = 1.dp),
+                        onClick = { onItemClicked(resultRequirement.id) },
+                        colors = ButtonDefaults.buttonColors(Color(0xFF21120B)),
+                        shape = RoundedCornerShape(60.dp)
+                    ) {
+                        Text(
+                            text = "Detalles",
+                            color = Color.White
+                        )
+                    }
                 }
             }
         }
@@ -181,86 +206,138 @@ fun HomeRequirements(
     Spacer(modifier = Modifier.height(8.dp))
 }
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun HomeInterventions(
     modifier: Modifier = Modifier,
     resultInterventions: com.gerotac.auth.requirement.domain.model.detailrequirement.Intervention,
-    onItemClicked: (Int) -> Unit
+    onItemClicked: (Int) -> Unit,
+    scaffoldState: ScaffoldState,
+    viewModel: ApproveInterventionViewModel = hiltViewModel()
 ) {
+    val state = viewModel.state.collectAsState()
+    val eventFlow = viewModel.uiEvent.receiveAsFlow()
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    Card(
-        modifier = modifier,
-        elevation = 10.dp,
-        shape = RoundedCornerShape(30.dp)
-    ) {
-        Row(
-            modifier = modifier
-                .clickable(onClick = {
-                    mToast(context, resultInterventions.id.toString())
-                })
-                .clip(RoundedCornerShape(20.dp))
-                .background(Color(0xFFF5F5F5))
-                .fillMaxWidth()
-                .height(130.dp),
-            verticalAlignment = Alignment.CenterVertically
+    Scaffold(modifier = modifier, scaffoldState = scaffoldState, snackbarHost = {
+        SnackbarHost(it) { data ->
+            Snackbar(
+                actionColor = Color.White,
+                contentColor = Color.Yellow,
+                snackbarData = data,
+                modifier = Modifier.padding(10.dp),
+                shape = RoundedCornerShape(20),
+                backgroundColor = Color.Black
+            )
+        }
+    }, content = {
+        Card(
+            modifier = modifier,
+            elevation = 10.dp,
+            shape = RoundedCornerShape(40.dp)
         ) {
-            Spacer(modifier = Modifier.width(1.dp))
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.End
+            Row(
+                modifier = modifier
+                    .clickable(onClick = {
+                        onItemClicked(resultInterventions.id)
+                    })
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(Color(0xFFF5F5F5))
+                    .fillMaxWidth()
+                    .height(130.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                Spacer(modifier = Modifier.width(1.dp))
                 Column(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(5.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.End
                 ) {
-                    Card(
-                        modifier = Modifier
-                            .widthIn(40.dp)
-                            .heightIn(20.dp),
-                        backgroundColor = Color.Black,
-                        shape = RoundedCornerShape(20.dp),
-                        elevation = 2.dp
+                    Column(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(5.dp)
                     ) {
+                        Card(
+                            modifier = Modifier
+                                .widthIn(30.dp)
+                                .heightIn(20.dp),
+                            backgroundColor = Color.Black,
+                            shape = RoundedCornerShape(20.dp),
+                            elevation = 5.dp
+                        ) {
+                            Text(
+                                text = resultInterventions.id.toString(),
+                                textAlign = TextAlign.Center,
+                                fontSize = 16.sp,
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                         Text(
-                            text = resultInterventions.id.toString(),
-                            textAlign = TextAlign.Center,
+                            text = resultInterventions.type_intervention,
                             fontSize = 16.sp,
-                            color = Color.White,
+                            color = Color.Black,
                             fontWeight = FontWeight.Bold
                         )
+                        Text(
+                            text = resultInterventions.description,
+                            fontSize = 14.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = Color.Gray,
+                        )
+                        LinearProgressBar(isDisplayed = state.value.isLoading, text = "Aprobando...")
                     }
-                    Text(
-                        text = resultInterventions.type_intervention,
-                        fontSize = 16.sp,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = resultInterventions.description,
-                        fontSize = 14.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = Color.Gray,
-                    )
-                }
-                Button(
-                    modifier = Modifier
-                        .padding(end = 5.dp),
-                    onClick = { onItemClicked(resultInterventions.id) },
-                    colors = ButtonDefaults.buttonColors(Color(0xFF21120B)),
-                    shape = RoundedCornerShape(50.dp)
-                ) {
-                    Text(
-                        text = "Detalles",
-                        color = Color.White
-                    )
+                    if (HeaderRequirement.getRol()["rol"] == "docente") {
+                        CheckedApproveAndDisapprove(
+                            onclickApprove = {
+                                scope.launch {
+                                    viewModel.doApproveIntervention(resultInterventions.id)
+                                    eventFlow.collect() { event ->
+                                        when (event) {
+                                            is UiEvent.Success -> {
+                                                mToast(context,"La intervencion fue aprobada!")
+                                                scaffoldState.snackbarHostState.showSnackbar(
+                                                    message = "Se aprobo correctamente🏅",
+                                                    actionLabel = "Continue"
+                                                )
+                                            }
+                                            is UiEvent.ShowSnackBar -> {
+                                                scaffoldState.snackbarHostState.showSnackbar(
+                                                    message = event.message.asString(context)
+                                                )
+                                            }
+                                            else -> Unit
+                                        }
+                                    }
+                                }
+                            },
+                            textApprove = "Aprobar",
+                            textDisapprove = "Desaprobar",
+                            onclickDisapprove = {
+
+                            }
+                        )
+                    } else {
+                        Button(
+                            modifier = Modifier
+                                .padding(end = 5.dp),
+                            onClick = { onItemClicked(resultInterventions.id) },
+                            colors = ButtonDefaults.buttonColors(Color(0xFF21120B)),
+                            shape = RoundedCornerShape(50.dp)
+                        ) {
+                            Text(
+                                text = "Detalles",
+                                color = Color.White
+                            )
+                        }
+                    }
                 }
             }
         }
-    }
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
+    })
 }

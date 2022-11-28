@@ -2,7 +2,6 @@ package com.gerotac.auth.updaterequirement.presentation.ui
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -34,17 +32,13 @@ import com.gerotac.auth.R
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.ResultArea
 import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropAreas
 import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
-import com.gerotac.auth.requirement.domain.model.detailrequirement.Data
-import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.FormValueComp
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
 import com.gerotac.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
-import com.gerotac.auth.updaterequirement.data.remote.dto.request.ResquestUpdateRequirement
+import com.gerotac.auth.updaterequirement.data.remote.dto.request.RequestUpdateRequirement
 import com.gerotac.auth.updaterequirement.presentation.viewmodel.UpdateRequirementViewModel
 import com.gerotac.components_ui.componets.TopPart
 import com.gerotac.components_ui.componets.button.ButtonWithShadow
-import com.gerotac.components_ui.componets.button.TextButtonPersonalized
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
-import com.gerotac.components_ui.componets.dropdown.DropString
 import com.gerotac.components_ui.componets.progress.LinearProgressBar
 import com.gerotac.components_ui.componets.textfield.FieldValue
 import com.gerotac.core.util.UiEvent
@@ -237,7 +231,7 @@ private fun BodyUpdateRequirement(
                     scope.launch {
                         viewModel.doUpdateRequirement(
                             id = code.toInt(),
-                            ResquestUpdateRequirement(
+                            RequestUpdateRequirement(
                                 area_intervention = areaAcademic,
                                 description = description,
                                 cause_problem = causeProblem,

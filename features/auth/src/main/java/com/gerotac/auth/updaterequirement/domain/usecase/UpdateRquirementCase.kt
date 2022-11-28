@@ -1,6 +1,6 @@
 package com.gerotac.auth.updaterequirement.domain.usecase
 
-import com.gerotac.auth.updaterequirement.data.remote.dto.request.ResquestUpdateRequirement
+import com.gerotac.auth.updaterequirement.data.remote.dto.request.RequestUpdateRequirement
 import com.gerotac.auth.updaterequirement.data.remote.dto.response.ResponseUpdateRequirementDto
 import com.gerotac.auth.updaterequirement.domain.repository.UpdateRequirementRepository
 import com.gerotac.auth.updaterequirement.presentation.state.UpdateRequirementState
@@ -17,7 +17,7 @@ class UpdateRequirementCase @Inject constructor(private val repository: UpdateRe
     operator fun invoke(
         token: String,
         id: Int,
-        parameterUpdateRequirement: ResquestUpdateRequirement
+        parameterUpdateRequirement: RequestUpdateRequirement
     ): Flow<Resource<ResponseUpdateRequirementDto>> = flow {
         try {
             emit(Resource.Loading())

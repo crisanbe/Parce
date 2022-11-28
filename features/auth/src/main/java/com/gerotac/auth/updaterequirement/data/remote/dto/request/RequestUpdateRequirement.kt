@@ -1,6 +1,6 @@
 package com.gerotac.auth.updaterequirement.data.remote.dto.request
 
-data class ResquestUpdateRequirement(
+data class RequestUpdateRequirement(
     val area_intervention: Int,
     val cause_problem: String,
     val description: String,
