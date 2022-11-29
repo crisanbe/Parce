@@ -45,7 +45,7 @@ fun ExitAlert(
                 .clip(CircleShape)
         )
         ExitAlertDialog(
-            text = "Deseas salir de la sesion👍",
+            text = "Deseas cerrar la sesión👍",
             onClickYes = {
                 showDialog = !showDialog
                 scope.launch {
