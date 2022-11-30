@@ -75,13 +75,13 @@ fun CardProfile(
                     .align(Alignment.CenterHorizontally)
             ) {
                 CardView(
-                    item = item.type_document,
+                    item = item.type_document?: "",
                     elevation = 10.dp,
                     text = "Tipo de documento: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.document,
+                    item = item.document?: "",
                     elevation = 10.dp,
                     text = "Documento: ",
                     border = BorderStroke(1.dp, Color.Black)
@@ -93,25 +93,25 @@ fun CardProfile(
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.birthday,
+                    item = item.birthday?: "",
                     elevation = 10.dp,
                     text = "Fecha de nacimiento: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.gener,
+                    item = item.gener?: "",
                     elevation = 10.dp,
                     text = "Genero: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.group_etnic,
+                    item = item.group_etnic?: "",
                     elevation = 10.dp,
                     text = "Grupo étnico: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.presents_disability,
+                    item = item.presents_disability?: "",
                     elevation = 10.dp,
                     text = "Discapacidad: ",
                     border = BorderStroke(1.dp, Color.Black)

@@ -1,22 +1,22 @@
 package com.gerotac.auth.profileUser.domain.model
 
 data class User(
-    val birthday: String,
+    val birthday: String? = null,
     val bussine: Bussine? = null,
     val created_at: Any? = null,
-    val document: String,
+    val document: String? = null,
     val email: String,
-    val gener: String,
-    val group_etnic: String,
+    val gener: String? = null,
+    val group_etnic: String? = null,
     val id: Int,
     val name: String,
     val phone: String,
-    val presents_disability: String,
+    val presents_disability: String? = null,
     val role: String,
     val administrador: List<Any>? = null,
     val teacher: List<Any>? = null,
     val student: Student? = null,
-    val type_document: String,
+    val type_document: String? = null,
     val updated_at: String? = null,
     val user_status: String
 )

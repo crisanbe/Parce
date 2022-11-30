@@ -2,6 +2,8 @@ package com.gerotac.auth.dropdownapi.dropdown.data.remote.response.areaintervent
 
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.GetAreasInterventions
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.Data
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.Links
+import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.Pagination
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.ResultArea
 
 data class GetAreasInterventionsDto(
@@ -16,13 +18,13 @@ fun GetAreasInterventionsDto.toResponseListAreas(): GetAreasInterventions {
     return GetAreasInterventions(
         code = code,
         data = Data(
-            links = com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.Links(
+            links = Links(
                 first = data.links.first,
                 last = data.links.last,
                 next = data.links.next,
                 prev = data.links.prev
             ),
-            pagination = com.gerotac.auth.dropdownapi.dropdown.domain.model.areainterventions.Pagination(
+            pagination = Pagination(
                 current_page = data.pagination.current_page,
                 from = data.pagination.from,
                 last_page = data.pagination.last_page,

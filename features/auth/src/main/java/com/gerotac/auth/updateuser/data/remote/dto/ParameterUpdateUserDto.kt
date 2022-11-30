@@ -16,7 +16,7 @@ data class ParameterUpdateUserRequest(
     @SerializedName("municipality") val municipality: Int? = null,
     @SerializedName("address") val address: String? = null,
     @SerializedName("academic_program") val academic_program: Int? = 0,
-    @SerializedName("birthday") val birthday: String?,
+    @SerializedName("birthday") val birthday: String? = null,
     @SerializedName("gener") val gener: String?,
     @SerializedName("group_etnic") val group_etnic: String?,
     @SerializedName("rol") val rol: String? = null,
