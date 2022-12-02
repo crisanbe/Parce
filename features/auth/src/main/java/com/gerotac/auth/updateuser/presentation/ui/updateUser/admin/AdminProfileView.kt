@@ -1,3 +1,5 @@
+@file:Suppress("UselessCallOnNotNull")
+
 package com.gerotac.auth.updateuser.presentation.ui.updateUser.admin
 
 import android.annotation.SuppressLint
@@ -266,15 +268,15 @@ fun EducationalProfileView(
                     hideKeyboard?.hide()
                     onClickSave.invoke(
                         listOf(
-                            fullName.text,
-                            identificationType.text,
-                            idNumber.text,
-                            gender.text,
-                            ethnicGroup.text,
-                            birthday.text,
-                            phoneNumberState.text,
-                            hasDisability.text,
-                            rol.text,
+                            if(!fullName.text.isNullOrEmpty()){fullName.text}else{""},
+                            if(!identificationType.text.isNullOrEmpty()){identificationType.text}else{""},
+                            if(!idNumber.text.isNullOrEmpty()){idNumber.text}else{""},
+                            if(!gender.text.isNullOrEmpty()){gender.text}else{""},
+                            if(!ethnicGroup.text.isNullOrEmpty()){ethnicGroup.text}else{""},
+                            if(!birthday.text.isNullOrEmpty()){birthday.text}else{""},
+                            if(!phoneNumberState.text.isNullOrEmpty()){phoneNumberState.text}else{""},
+                            if(!hasDisability.text.isNullOrEmpty()){hasDisability.text}else{""},
+                            if(!rol.text.isNullOrEmpty()){rol.text}else{""},
                         )
                     )
                 },

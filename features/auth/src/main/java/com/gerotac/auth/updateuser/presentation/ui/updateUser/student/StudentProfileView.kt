@@ -248,15 +248,15 @@ fun StudentProfileView(
                     hideKeyboard?.hide()
                     onClickSave.invoke(
                         listOf(
-                            fullName.text,
-                            identificationType.text,
-                            idNumber.text,
-                            gender.text,
-                            ethnicGroup.text,
-                            birthday.text,
-                            phone.text,
-                            hasDisability.text,
-                            academicProgram.toString()
+                            if(!fullName.text.isNullOrEmpty()){fullName.text}else{""},
+                            if(!identificationType.text.isNullOrEmpty()){identificationType.text}else{""},
+                            if(!idNumber.text.isNullOrEmpty()){idNumber.text}else{""},
+                            if(!gender.text.isNullOrEmpty()){gender.text}else{""},
+                            if(!ethnicGroup.text.isNullOrEmpty()){ethnicGroup.text}else{""},
+                            if(!birthday.text.isNullOrEmpty()){birthday.text}else{""},
+                            if(!phone.text.isNullOrEmpty()){phone.text}else{""},
+                            if(!hasDisability.text.isNullOrEmpty()){hasDisability.text}else{""},
+                            if(!academicProgram.toString().isNullOrEmpty()){academicProgram.toString()}else{""},
                         )
                     )
                 },

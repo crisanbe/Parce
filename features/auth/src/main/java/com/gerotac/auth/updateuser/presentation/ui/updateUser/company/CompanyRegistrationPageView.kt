@@ -1,3 +1,5 @@
+@file:Suppress("UselessCallOnNotNull")
+
 package com.gerotac.auth.updateuser.presentation.ui.updateUser.company
 
 import androidx.compose.foundation.layout.*
@@ -95,13 +97,13 @@ fun CompanyRegistrationPageView(
                             lifecycleTokenScope.launch {
                                 viewModel.doUpdateUser(
                                     ParameterUpdateUserRequest(
-                                        name = companyName,
-                                        type_document = identificationType,
-                                        document = idNumber!!,
-                                        type_bussiness = companyType,
+                                        name = if(!companyName.isNullOrEmpty()){companyName}else{""},
+                                        type_document = if(!identificationType.isNullOrEmpty()){identificationType}else{""},
+                                        document = if(!idNumber.isNullOrEmpty()){idNumber}else{""},
+                                        type_bussiness = if(!companyType.isNullOrEmpty()){companyType}else{""},
                                         type_society = kindCompany?.toInt(),
-                                        activity_economy = economicActivity,
-                                        phone = phone!!,
+                                        activity_economy = if(!economicActivity.isNullOrEmpty()){economicActivity}else{""},
+                                        phone = if(!phone.isNullOrEmpty()){phone}else{""},
                                         person_contact = it[0],
                                         departament = it[1].toInt(),
                                         municipality = it[2].toInt(),
@@ -269,14 +271,14 @@ fun CompanyRegistrationPage(
                 onClick = {
                     onClickSave.invoke(
                         listOf(
-                            contactPerson,
-                            department.toString(),
-                            municipality.toString(),
-                            address,
-                            birthday,
-                            genre,
-                            ethnicGroup,
-                            presentsDisability
+                            if(!contactPerson.isNullOrEmpty()){contactPerson}else{""},
+                            if(!department.toString().isNullOrEmpty()){department}else{""},
+                            if(!municipality.toString().isNullOrEmpty()){municipality}else{""},
+                            if(!address.isNullOrEmpty()){address}else{""},
+                            if(!birthday.isNullOrEmpty()){birthday}else{""},
+                            if(!genre.isNullOrEmpty()){genre}else{""},
+                            if(!ethnicGroup.isNullOrEmpty()){ethnicGroup}else{""},
+                            if(!presentsDisability.isNullOrEmpty()){presentsDisability}else{""},
                         ) as List<String>
                     )
                 },

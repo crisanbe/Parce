@@ -4,5 +4,5 @@ data class Links(
     val first: String? = null,
     val last: String? = null,
     val next: String? = null,
-    val prev: Any? = null
+    val prev: String? = null
 )

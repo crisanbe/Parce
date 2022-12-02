@@ -48,10 +48,10 @@ fun GetAreasInterventionsDto.toResponseListAreas(): GetAreasInterventions {
         code = code,
         data = Data(
             links = Links(
-                first = data.links.first,
-                last = data.links.last,
-                next = data.links.next,
-                prev = data.links.prev
+                first = if(!data.links.first.isNullOrEmpty()){data.links.first}else{""},
+                last = if(!data.links.last.isNullOrEmpty()){data.links.last}else{""},
+                next = if(!data.links.next.isNullOrEmpty()){data.links.next}else{""},
+                prev = if(!data.links.prev.isNullOrEmpty()){data.links.prev}else{""},
             ),
             pagination = Pagination(
                 current_page = data.pagination.current_page,

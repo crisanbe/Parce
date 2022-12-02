@@ -1,3 +1,5 @@
+@file:Suppress("UselessCallOnNotNull")
+
 package com.gerotac.auth.updateuser.presentation.ui.updateUser.company
 
 import androidx.activity.compose.BackHandler
@@ -214,13 +216,13 @@ fun CompanyRegistration(
                     onClick = {
                         onClickNext.invoke(
                             listOf(
-                                companyName,
-                                identificationType,
-                                idNumber,
-                                companyType,
-                                kindCompany.toString(),
-                                economicActivity,
-                                phone
+                                if(!companyName.isNullOrEmpty()){companyName}else{""},
+                                if(!identificationType.isNullOrEmpty()){identificationType}else{""},
+                                if(!idNumber.isNullOrEmpty()){idNumber}else{""},
+                                if(!companyType.isNullOrEmpty()){companyType}else{""},
+                                if(!kindCompany.toString().isNullOrEmpty()){kindCompany.toString()}else{""},
+                                if(!economicActivity.isNullOrEmpty()){economicActivity}else{""},
+                                if(!phone.isNullOrEmpty()){phone}else{""},
                             )
                         )
                     },

@@ -1,3 +1,5 @@
+@file:Suppress("UselessCallOnNotNull")
+
 package com.gerotac.auth.updateuser.presentation.ui.updateUser.teacher
 
 import android.annotation.SuppressLint
@@ -122,15 +124,7 @@ fun TeacherProfile(
                                     group_etnic = it[4],
                                     birthday = it[5],
                                     phone = it[6],
-                                    presents_disability = it[7],
-                                    academic_program = null,
-                                    activity_economy = null,
-                                    type_bussiness = null,
-                                    type_society = null,
-                                    person_contact = null,
-                                    departament = null,
-                                    municipality = null,
-                                    address = null
+                                    presents_disability = it[7]
                                 )
                             )
                             eventFlow.collect { event ->
@@ -266,14 +260,14 @@ fun EducationalProfileView(
                     hideKeyboard?.hide()
                     onClickSave.invoke(
                         listOf(
-                            fullName.text,
-                            identificationType.text,
-                            idNumber.text,
-                            gender.text,
-                            ethnicGroup.text,
-                            birthday.text,
-                            phoneNumberState.text,
-                            hasDisability.text
+                            if(!fullName.text.isNullOrEmpty()){fullName.text}else{""},
+                            if(!identificationType.text.isNullOrEmpty()){identificationType.text}else{""},
+                            if(!idNumber.text.isNullOrEmpty()){idNumber.text}else{""},
+                            if(!gender.text.isNullOrEmpty()){gender.text}else{""},
+                            if(!ethnicGroup.text.isNullOrEmpty()){ethnicGroup.text}else{""},
+                            if(!birthday.text.isNullOrEmpty()){birthday.text}else{""},
+                            if(!phoneNumberState.text.isNullOrEmpty()){phoneNumberState.text}else{""},
+                            if(!hasDisability.text.isNullOrEmpty()){hasDisability.text}else{""},
                         )
                     )
                 },
