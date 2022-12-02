@@ -1,3 +1,5 @@
+@file:Suppress("UselessCallOnNotNull")
+
 package com.gerotac.auth.updateuser.presentation.ui.updateUser.student
 
 import android.annotation.SuppressLint
@@ -115,14 +117,7 @@ fun StudentProfile(
                                     birthday = it[5],
                                     phone = it[6],
                                     presents_disability = it[7],
-                                    academic_program = it[8].toInt(),
-                                    activity_economy = null,
-                                    type_bussiness = null,
-                                    type_society = null,
-                                    person_contact = null,
-                                    departament = null,
-                                    municipality = null,
-                                    address = null
+                                    academic_program = it[8].toInt()
                                 )
                             )
                             eventFlow.collect { event ->

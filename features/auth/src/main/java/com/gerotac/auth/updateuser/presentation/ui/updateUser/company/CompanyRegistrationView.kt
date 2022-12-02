@@ -76,9 +76,13 @@ fun CompanyRegistrationView(
                 lifecycleTokenScope.launch {
                     navController.navigate(
                         route = AppScreens.CompanyProfileViewPagination.route +
-                                "?companyName=${it[0]}&identificationType=${it[1]}&idNumber=${it[2]}"
-                                + "&companyType=${it[3]}&kindCompany=${it[4]}&economicActivity=${it[5]}"
-                                + "&phone=${it[6]}"
+                                "?companyName=${it[0]}" +
+                                "&identificationType=${it[1]}" +
+                                "&idNumber=${it[2]}" +
+                                "&companyType=${it[3]}" +
+                                "&kindCompany=${it[4]}" +
+                                "&economicActivity=${it[5]}"+
+                                "&phone=${it[6]}"
                     )
                 }
             }

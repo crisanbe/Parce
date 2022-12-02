@@ -142,8 +142,7 @@ private fun Body(
         verticalArrangement = Arrangement.spacedBy(5.dp),
     ) {
         Text(
-            text = stringResource(R.string.TextField_Intervention) +
-                    " #️⃣${data?.data?.id} del requerimiento #️⃣${data?.data?.requierement}",
+            text = stringResource(R.string.TextField_Intervention) + " #️⃣${data?.data?.id}",
             fontSize = 22.sp,
             color = Color.Black,
             fontWeight = FontWeight.Bold,

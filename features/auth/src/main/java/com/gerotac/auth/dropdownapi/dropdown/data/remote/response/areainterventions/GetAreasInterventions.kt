@@ -14,6 +14,35 @@ data class GetAreasInterventionsDto(
     val status: String
 )
 
+data class DataAreasDto(
+    val links: Links,
+    val pagination: Pagination,
+    val result: List<ResultArea>
+)
+
+data class Links(
+    val first: String,
+    val last: String,
+    val next: String,
+    val prev: Any
+)
+
+data class Pagination(
+    val current_page: Int,
+    val from: Int,
+    val last_page: Int,
+    val path: String,
+    val per_page: Int,
+    val to: Int,
+    val total: Int
+)
+
+data class ResultAreaDto(
+    val id: Int,
+    val name: String
+)
+
+
 fun GetAreasInterventionsDto.toResponseListAreas(): GetAreasInterventions {
     return GetAreasInterventions(
         code = code,
