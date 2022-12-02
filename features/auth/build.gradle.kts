@@ -17,15 +17,10 @@ android {
     compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
-        multiDexEnabled = true
         minSdk = ProjectConfig.minSdk
         targetSdk = ProjectConfig.targetSdk
-        versionCode
-        versionName
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildTypes {
@@ -35,7 +30,6 @@ android {
         }
     }
     compileOptions {
-        //isCoreLibraryDesugaringEnabled = true
         sourceCompatibility(JavaVersion.VERSION_1_8)
         targetCompatibility(JavaVersion.VERSION_1_8)
     }
