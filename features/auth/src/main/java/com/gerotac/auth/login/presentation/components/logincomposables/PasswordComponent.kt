@@ -23,7 +23,7 @@ import com.gerotac.components_ui.componets.DividerIcon
 
 @Composable
 fun Password(nameError: Boolean, password: String, onTextChanged: (String) -> Unit) {
-    var passwordVisibility by remember { mutableStateOf(false) }
+    var passwordVisibility by remember { mutableStateOf(true) }
     TextField(value = password,
         onValueChange = {
             if (it.length <= 15) onTextChanged(it)

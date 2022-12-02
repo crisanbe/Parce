@@ -63,8 +63,8 @@
     //Perfil de docente
     <string name="Text_Teacher_profile">Docente</string>
     <string name="TextField_full_name">Nombre Completo</string>
-    <string name="TextField_gender">Genero</string>
-    <string name="TextField_ethnic_group">Grupo etnico</string>
+    <string name="TextField_gender">Género</string>
+    <string name="TextField_ethnic_group">Grupo étnico</string>
     <string name="TextField_birthday_Teacher">Cumpleaños</string>
     <string name="TextField_has_disability">Presenta Discapacidad</string>
 
@@ -76,7 +76,7 @@
     //TextField
     <string name="TextField_Profile_Full_Name">Nombre Completo</string>
     <string name="TextField_age">Fecha de nacimiento</string>
-    <string name="TextField_gener">Genero</string>
+    <string name="TextField_gener">Género</string>
     <string name="TextField_group_etnical">Grupo étnico</string>
     <string name="TextField_discapacidad">Presenta discapacidad</string>
 
