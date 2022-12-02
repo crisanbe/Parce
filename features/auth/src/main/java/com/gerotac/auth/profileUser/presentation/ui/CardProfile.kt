@@ -72,6 +72,7 @@ fun CardProfile(
                     }
                 }
             }
+
             Column(
                 Modifier
                     .fillMaxWidth()
