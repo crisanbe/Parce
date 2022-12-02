@@ -10,7 +10,6 @@ android {
     compileSdk ProjectConfig.compileSdk
 
     defaultConfig {
-        multiDexEnabled = true
         applicationId ProjectConfig.appId
         minSdk ProjectConfig.minSdk
         targetSdk ProjectConfig.targetSdk
@@ -18,14 +17,12 @@ android {
         versionName ProjectConfig.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary true
-        }
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

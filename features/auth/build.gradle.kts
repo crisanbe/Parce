@@ -1,3 +1,6 @@
+import ProjectConfig.appId
+import ProjectConfig.versionCode
+import ProjectConfig.versionName
 import com.google.protobuf.gradle.generateProtoTasks
 import com.google.protobuf.gradle.protobuf
 import com.google.protobuf.gradle.protoc
@@ -11,23 +14,23 @@ plugins {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
-        minSdk = 21
-        targetSdk = 33
-
+        appId
+        minSdk = ProjectConfig.minSdk
+        targetSdk = ProjectConfig.targetSdk
+        versionCode
+        versionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
-
-   /* defaultConfig {
-        // Required when setting minSdkVersion to 20 or lower
-        multiDexEnabled = true
-    }*/
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -45,6 +48,13 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = Compose.composeCompilerVersion
+    }
+
+    packagingOptions {
+        exclude("META-INF/AL2.0")
+        exclude("META-INF/LGPL2.1")
+        exclude("**/attach_hotspot_windows.dll")
+        exclude("META-INF/licenses/ASM")
     }
 }
 
