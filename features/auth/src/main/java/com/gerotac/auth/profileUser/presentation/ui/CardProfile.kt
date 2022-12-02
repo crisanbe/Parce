@@ -90,7 +90,7 @@ fun CardProfile(
                     item = item.phone,
                     elevation = 10.dp,
                     text = "Teléfono: ",
-                    border = BorderStroke(1.dp, Color.Black)
+                    border = BorderStroke(2.dp, Color.Black)
                 )
                 CardView(
                     item = item.birthday?: "",
