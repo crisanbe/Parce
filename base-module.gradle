@@ -5,6 +5,7 @@ android {
     compileSdk ProjectConfig.compileSdk
 
     defaultConfig {
+        multiDexEnabled true
         minSdk ProjectConfig.minSdk
         targetSdk ProjectConfig.targetSdk
         versionCode ProjectConfig.versionCode

@@ -17,7 +17,7 @@ android {
     compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
-        appId
+        multiDexEnabled = true
         minSdk = ProjectConfig.minSdk
         targetSdk = ProjectConfig.targetSdk
         versionCode
@@ -48,13 +48,6 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = Compose.composeCompilerVersion
-    }
-
-    packagingOptions {
-        exclude("META-INF/AL2.0")
-        exclude("META-INF/LGPL2.1")
-        exclude("**/attach_hotspot_windows.dll")
-        exclude("META-INF/licenses/ASM")
     }
 }
 

@@ -10,6 +10,7 @@ android {
     compileSdk ProjectConfig.compileSdk
 
     defaultConfig {
+        multiDexEnabled true
         applicationId ProjectConfig.appId
         minSdk ProjectConfig.minSdk
         targetSdk ProjectConfig.targetSdk
