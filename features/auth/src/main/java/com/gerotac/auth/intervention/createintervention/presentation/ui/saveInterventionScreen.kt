@@ -141,7 +141,7 @@ fun SaveInterventionBody(
             }
         }
 
-    DialogExit(text = "Deseas finalizar?😁", onClickYes = {
+    DialogExit(text = "Deseas salir?😁", onClickYes = {
         showDialog = !showDialog
         navController.navigate(DrawerScreens.CompanyHome.route)
     })

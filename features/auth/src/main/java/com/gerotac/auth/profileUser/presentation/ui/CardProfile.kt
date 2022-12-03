@@ -126,7 +126,7 @@ fun CardProfile(
                         CardAlternative(
                             item =  (if(!item.student?.academicprogram?.name.isNullOrEmpty()){item.student?.academicprogram?.name}else{""}).toString(),
                             elevation = 10.dp,
-                            text = "Programa académico: ",
+                            text = "Programa: ",
                             border = BorderStroke(1.dp, Color.Black)
                         )
                     }

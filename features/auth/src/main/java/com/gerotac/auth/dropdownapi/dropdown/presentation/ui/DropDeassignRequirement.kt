@@ -136,6 +136,7 @@ fun DropDeassignRequirement(
                 ) {
                     options.forEachIndexed { index, selectionOption ->
                         LazyColumn(
+                            userScrollEnabled = false,
                             modifier = Modifier
                                 .clickable {
                                     selectOption = selectionOption.name
