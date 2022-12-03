@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.gerotac.auth.R
 import com.gerotac.auth.approveanddisapprove.presentation.ui.CheckedApproveAndDisapprove
 import com.gerotac.auth.approveanddisapprove.presentation.viewmodel.ApproveInterventionViewModel
 import com.gerotac.auth.requirement.di.HeaderRequirement
@@ -206,7 +207,7 @@ fun HomeRequirements(
     Spacer(modifier = Modifier.height(8.dp))
 }
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "SuspiciousIndentation")
 @Composable
 fun HomeInterventions(
     modifier: Modifier = Modifier,
@@ -277,7 +278,7 @@ fun HomeInterventions(
                             overflow = TextOverflow.Ellipsis,
                             color = Color.Gray,
                         )
-                        LinearProgressBar(isDisplayed = state.value.isLoading, text = "Aprobando...")
+                        LinearProgressBar(isDisplayed = state.value.isLoading, text = "Procesando...")
                     }
                     if (HeaderRequirement.getRol()["rol"] == "docente") {
                         CheckedApproveAndDisapprove(
@@ -287,15 +288,15 @@ fun HomeInterventions(
                                     eventFlow.collect() { event ->
                                         when (event) {
                                             is UiEvent.Success -> {
-                                                mToast(context,"La intervencion fue aprobada✔️!")
+                                                mToast(context, "La intervencion fue aprobada✔️!")
                                                 scaffoldState.snackbarHostState.showSnackbar(
                                                     message = "Se aprobo correctamente🏅",
-                                                    actionLabel = "Continue"
+                                                    actionLabel = "Continue",
                                                 )
                                             }
                                             is UiEvent.ShowSnackBar -> {
                                                 scaffoldState.snackbarHostState.showSnackbar(
-                                                    message = event.message.asString(context)
+                                                    message = event.message.asString(context),
                                                 )
                                             }
                                             else -> Unit
@@ -311,22 +312,24 @@ fun HomeInterventions(
                                     eventFlow.collect() { event ->
                                         when (event) {
                                             is UiEvent.Success -> {
-                                                mToast(context,"La intervencion fue desaprobada ❌")
+                                                mToast(context, "La intervencion fue desaprobada ❌")
                                                 scaffoldState.snackbarHostState.showSnackbar(
                                                     message = "Se desaprobó🏅",
-                                                    actionLabel = "Continue"
+                                                    actionLabel = "Continue",
                                                 )
                                             }
                                             is UiEvent.ShowSnackBar -> {
                                                 scaffoldState.snackbarHostState.showSnackbar(
-                                                    message = event.message.asString(context)
+                                                    message = event.message.asString(context),
                                                 )
                                             }
                                             else -> Unit
                                         }
                                     }
                                 }
-                            }
+                            },
+                            color1 = com.gerotac.components_ui.R.drawable.approve,
+                            color2 = com.gerotac.components_ui.R.drawable.disapprove,
                         )
                     } else {
                         Button(

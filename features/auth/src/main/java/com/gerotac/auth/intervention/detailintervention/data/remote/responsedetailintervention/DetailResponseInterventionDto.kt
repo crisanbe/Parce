@@ -47,6 +47,7 @@ fun DetailResponseInterventionDto.toGetDetailIntervention(): DetailResponseInter
             ),
             user = data.user,
             requierement = data.requierement,
+            status = data.status,
             type_intervention = data.type_intervention
         ),
         message = message,

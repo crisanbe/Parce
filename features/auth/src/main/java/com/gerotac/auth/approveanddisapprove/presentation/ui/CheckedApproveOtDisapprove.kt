@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.DrawerValue
 import androidx.compose.material.Icon
 import androidx.compose.material.IconToggleButton
 import androidx.compose.material3.Text
@@ -15,6 +16,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.gerotac.auth.intervention.detailintervention.presentation.viewmodel.DetailInterventionViewModel
+import com.gerotac.auth.intervention.getinterventionofdetailrequirement.intervention.InterventionScreen
 import com.gerotac.components_ui.R
 
 @Composable
@@ -22,58 +26,106 @@ fun CheckedApproveAndDisapprove(
     onclickApprove: () -> Unit,
     onclickDisapprove: () -> Unit,
     textApprove: String? = null,
-    textDisapprove: String? = null
+    color1 : Int,
+    color2 : Int,
+    textDisapprove: String? = null,
+    viewModelIntervention: DetailInterventionViewModel = hiltViewModel(),
 ) {
-    var checked by remember { mutableStateOf(false) }
+    val stateIntervention = viewModelIntervention.state
+    var checked by remember { mutableStateOf(stateIntervention.intervention?.data?.status) }
     Box(
         Modifier
             .padding(horizontal = 8.dp)
             .fillMaxWidth()
     ) {
-        Row(modifier = Modifier.align(Alignment.CenterEnd)) {
-            Text(
-                modifier = Modifier.padding(horizontal = 5.dp),
-                text = textApprove.toString(),
-                textAlign = TextAlign.Justify,
-                fontWeight = FontWeight.Bold
-            )
-            IconToggleButton(checked = checked, onCheckedChange = { checked = it }) {
-                Spacer(modifier = Modifier.width(5.dp))
-                Icon(
-                    modifier = Modifier
-                        .size(50.dp)
-                        .clickable { onclickApprove() }
-                        .background(
-                            color = Color.Green,
-                            shape = RoundedCornerShape(60.dp)
-                        ),
-                    painter = painterResource(R.drawable.disapprove),
-                    contentDescription =
-                    if (checked) "Añadir a marcadores"
-                    else "Quitar de marcadores"
+            Row(modifier = Modifier.align(Alignment.CenterEnd)) {
+                Text(
+                    modifier = Modifier.padding(horizontal = 5.dp),
+                    text = textApprove.toString(),
+                    textAlign = TextAlign.Justify,
+                    fontWeight = FontWeight.Bold
                 )
+
+                    IconToggleButton(checked = checked.toBoolean(), onCheckedChange = { checked = it.toString() }) {
+                        Spacer(modifier = Modifier.width(5.dp))
+                        Icon(
+                            modifier = Modifier
+                                .size(50.dp)
+                                .clickable { onclickApprove() },
+                            painter = painterResource(
+                                if (checked.toBoolean())color1 else color1
+                            ),
+                            contentDescription =
+                            if (checked.toBoolean()) "Añadir a marcadores"
+                            else "Quitar de marcadores",
+                            tint = Color(0xFF43A047)
+                        )
+                    }
+                    Text(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        text = textDisapprove.toString(),
+                        textAlign = TextAlign.Justify,
+                        fontWeight = FontWeight.Bold
+                    )
+                    IconToggleButton(checked = checked.toBoolean(), onCheckedChange = { checked = it.toString() }) {
+                        Icon(
+                            modifier = Modifier
+                                .size(50.dp)
+                                .clickable { onclickDisapprove() },
+                            painter = painterResource(
+                                if (checked.toBoolean())color2 else color2
+                            ),
+                            contentDescription =
+                            if (checked.toBoolean()) "Añadir a marcadores"
+                            else "Quitar de marcadores",
+                            tint = Color(0xFFE53935)
+                        )
+                    }
             }
-            Text(
-                modifier = Modifier.padding(horizontal = 5.dp),
-                text = textDisapprove.toString(),
-                textAlign = TextAlign.Justify,
-                fontWeight = FontWeight.Bold
-            )
-            IconToggleButton(checked = checked, onCheckedChange = { checked = it }) {
-                Icon(
-                    modifier = Modifier
-                        .size(50.dp)
-                        .clickable { onclickDisapprove() }
-                        .background(
-                            color = Color.Red,
-                            shape = RoundedCornerShape(60.dp)
-                        ),
-                    painter = painterResource(R.drawable.disapprove),
-                    contentDescription =
-                    if (checked) "Añadir a marcadores"
-                    else "Quitar de marcadores"
+        /*else if (checked.toString() == "2"
+            && stateIntervention.intervention?.data?.id == stateIntervention.intervention?.data?.id){
+            Row(modifier = Modifier.align(Alignment.CenterEnd)) {
+                Text(
+                    modifier = Modifier.padding(horizontal = 5.dp),
+                    text = textApprove.toString(),
+                    textAlign = TextAlign.Justify,
+                    fontWeight = FontWeight.Bold
                 )
+
+                    IconToggleButton(checked = checked.toBoolean(), onCheckedChange = { checked = it.toString() }) {
+                        Spacer(modifier = Modifier.width(5.dp))
+                        Icon(
+                            modifier = Modifier
+                                .size(50.dp)
+                                .clickable { onclickApprove() },
+                            painter = painterResource(color1),
+                            contentDescription =
+                            if (checked.toBoolean()) "Añadir a marcadores"
+                            else "Quitar de marcadores",
+                            tint = Color(0xFF090505)
+                        )
+                    }
+                    Text(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        text = textDisapprove.toString(),
+                        textAlign = TextAlign.Justify,
+                        fontWeight = FontWeight.Bold
+                    )
+                    IconToggleButton(checked = checked.toBoolean(), onCheckedChange = { checked = it.toString() }) {
+                        Icon(
+                            modifier = Modifier
+                                .size(50.dp)
+                                .clickable { onclickDisapprove() },
+                            painter = painterResource(
+                                if (checked.toBoolean())color2 else R.drawable.disapprovempty
+                            ),
+                            contentDescription =
+                            if (checked.toBoolean()) "Añadir a marcadores"
+                            else "Quitar de marcadores",
+                            tint = Color(0xFFE53935)
+                        )
+                }
             }
-        }
+        }*/
     }
 }

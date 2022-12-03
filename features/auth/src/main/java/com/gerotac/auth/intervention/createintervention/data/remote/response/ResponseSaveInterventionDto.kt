@@ -16,6 +16,7 @@ data class ResultDto(
     val id: Int,
     val relations: List<Any>,
     val requierement: String,
+    val status: String,
     val type_intervention: String,
     val user: UserDto
 ):java.io.Serializable

@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -54,6 +55,7 @@ import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.FormV
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.dowloadfile.FileDownloadWorker
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
+import com.gerotac.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
 import com.gerotac.components_ui.componets.TopPart
 import com.gerotac.components_ui.componets.button.BottomSheetDialog
 import com.gerotac.components_ui.componets.button.ButtonValidation
@@ -201,7 +203,8 @@ private fun Body(
         Spacer(modifier = Modifier.height(18.dp))
 
          if (HeaderRequirement.getRol()["rol"] == "empresa" ||
-             HeaderRequirement.getRol()["rol"] == "docente") {
+             HeaderRequirement.getRol()["rol"] == "docente" ||
+             HeaderRequirement.getRol()["rol"] == "admin"){
             //TODO this is the intervention id
             if (!data?.data?.id.toString().isNullOrEmpty()) {
                 Row(

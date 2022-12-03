@@ -59,7 +59,6 @@ private fun InterventionContent(
                     items = resultIntervention
                 ) { _, resultIntervention ->
                     HomeInterventions(
-
                         resultInterventions = resultIntervention,
                         onItemClicked = { onItemClicked(it) },
                         scaffoldState = scaffoldState
