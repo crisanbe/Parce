@@ -7,6 +7,7 @@ import com.gerotac.auth.assignrequirement.domain.usecase.AssignRequirementStuden
 import com.gerotac.auth.assignrequirement.domain.usecase.AssignRequirementTeacherUseCase
 import com.gerotac.auth.assignrequirement.domain.usecase.DeassignRequirementTeacherUseCase
 import com.gerotac.auth.assignrequirement.presentation.state.AssignState
+import com.gerotac.auth.assignrequirement.presentation.state.DeassignState
 import com.gerotac.auth.updateuser.di.UpdateUserHeaders
 import com.gerotac.core.util.UiEvent
 import com.gerotac.core.util.UiText
@@ -29,6 +30,8 @@ class AssignRequirementViewModel @Inject constructor(
     ) : ViewModel() {
 
     var state = MutableStateFlow(AssignState())
+        private set
+    var stateDeassign = MutableStateFlow(DeassignState())
         private set
     var uiEvent = Channel<UiEvent>()
         private set
@@ -103,16 +106,16 @@ class AssignRequirementViewModel @Inject constructor(
             deassignRequirementTeacherUseCase(token = token.toString(), request).onEach { result ->
                 when (result) {
                     is Resource.Success -> {
-                        state.update { AssignState(assign = result.data) }
+                        stateDeassign.update { DeassignState(deassign = result.data) }
                         uiEvent.send(UiEvent.Success)
                         uiEvent.send(
                             UiEvent.ShowSnackBar(
-                                UiText.DynamicString(result.message ?: "Asignado correctamente👍")
+                                UiText.DynamicString(result.message ?: "Desasignado correctamente👍")
                             )
                         )
                     }
                     is Resource.Error -> {
-                        state.value = AssignState(false)
+                        stateDeassign.value = DeassignState(false)
                         uiEvent.send(
                             UiEvent.ShowSnackBar(
                                 UiText.DynamicString(result.message ?: "Error")
@@ -121,7 +124,7 @@ class AssignRequirementViewModel @Inject constructor(
                         uiEvent.send(UiEvent.Error)
                     }
                     is Resource.Loading -> {
-                        state.value = AssignState(true)
+                        stateDeassign.value = DeassignState(true)
                     }
                     else -> Unit
                 }

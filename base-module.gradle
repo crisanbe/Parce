@@ -1,21 +1,23 @@
 apply plugin: 'com.android.library'
-apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdk ProjectConfig.compileSdk
 
     defaultConfig {
-        multiDexEnabled true
         minSdk ProjectConfig.minSdk
         targetSdk ProjectConfig.targetSdk
         versionCode ProjectConfig.versionCode
         versionName ProjectConfig.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        consumerProguardFiles "consumer-rules.pro"
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion Compose.composeCompilerVersion
     }
     buildTypes {
         release {
@@ -25,6 +27,7 @@ android {
     }
     compileOptions {
         coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -34,5 +37,34 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.0'
+    coreLibraryDesugaring(Google.coreLibraryDesugaring)
+    implementation(Compose.ui)
+    implementation(Compose.uiToolingPreview)
+    implementation(Compose.hiltNavigationCompose)
+    implementation(Compose.material)
+    implementation(Compose.runtime)
+    implementation(Compose.navigation)
+    implementation(Compose.viewModelCompose)
+    implementation(Compose.activityCompose)
+    implementation(Compose.uiTooling)
+    implementation(Compose.runtime_livedata)
+    debugApi(AndroidX.customView)
+    debugApi(AndroidX.customView_PoolingContainer)
+
+    implementation(AndroidX.coreKtx)
+    implementation(AndroidX.appCompat)
+    implementation(AndroidX.runtimeKtx)
+
+    implementation(Coil.coilCompose)
+    implementation(Coil.coilAccompanist)
+    implementation(Material.material)
+    implementation(Material.materialGoogle)
+
+    implementation(Accompanist.accompanistIndicators)
+    implementation(Accompanist.accompanistPager)
+    implementation(Accompanist.accompanistGlide)
+    implementation(Accompanist.accompanistPermission)
+    implementation(Accompanist.accompanistSystemUiController)
+    implementation(Accompanist.accompanistNavigationAnimation)
+    implementation(Accompanist.navigationCompose)
 }

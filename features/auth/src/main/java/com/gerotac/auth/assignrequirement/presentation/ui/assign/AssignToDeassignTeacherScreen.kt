@@ -151,6 +151,7 @@ fun BodyAssign(
 ) {
     var teacher: List<Int> by remember { mutableStateOf(listOf()) }
     val state = viewModel.state.collectAsState()
+    val stateDeassign = viewModel.stateDeassign.collectAsState()
     val systemUiController = rememberSystemUiController()
     SideEffect {
         systemUiController.setSystemBarsColor(
@@ -190,6 +191,7 @@ fun BodyAssign(
         Spacer(modifier = Modifier.height(70.dp))
     }
     LinearProgressBar(state.value.isLoading, "Asignando...")
+    LinearProgressBar(stateDeassign.value.isLoading, "Desasignando...")
 }
 
 @Composable

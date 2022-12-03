@@ -7,6 +7,8 @@ object Compose {
     private const val hiltNavigationComposeVersion = "1.0.0-beta01"
     private const val lifecycleVersion = "2.5.1"
     private const val lifecycleRuntimeComposeVersion = "2.6.0-alpha01"
+    private const val lottieComposeVersion = "5.2.0"
+    private const val composeMaterial3Version = "1.1.0-alpha02"
     const val material = "androidx.compose.material:material:$composeVersion"
     const val ui = "androidx.compose.ui:ui:$composeVersion"
     const val uiFoundation = "androidx.compose.foundation:foundation:$composeVersion"
@@ -21,4 +23,7 @@ object Compose {
     const val activityCompose = "androidx.activity:activity-compose:$activityComposeVersion"
     const val viewModelCompose = "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion"
     const val lifecycleRuntimeCompose = "androidx.lifecycle:lifecycle-runtime-compose:$lifecycleRuntimeComposeVersion"
+    const val lottieCompose = "com.airbnb.android:lottie-compose:$lottieComposeVersion"
+    const val composeMaterial3 = "androidx.compose.material3:material3:$composeMaterial3Version"
+
 }
