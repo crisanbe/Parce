@@ -148,13 +148,13 @@ fun CompanyRegistrationPageView(
                                     when (event) {
                                         is UiEvent.Success -> {
                                             userRepo?.saveNameUser(companyName)
-                                            userRepo?.saveUserStatus("completed")
                                             userRepo?.getTokenLoginState()?.collect { tokenLogin ->
                                                 withContext(Dispatchers.Main) {
                                                     userRepo?.getUserStatus()
                                                         ?.collect { userStatus ->
                                                             withContext(Dispatchers.Main) {
-                                                                if (tokenLogin != "" && userStatus == "completed") {
+                                                                if (tokenLogin != "" && userStatus == "pending") {
+                                                                    userRepo?.saveUserStatus("completed")
                                                                     navController.navigate(
                                                                         DrawerScreens.CompanyHome.route + "?user=$companyName"
                                                                     )
