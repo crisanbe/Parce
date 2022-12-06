@@ -738,7 +738,6 @@ fun ScaffoldSection(
                         title = DrawerScreens.CompanyHome,
                         navController = controller,
                         scaffoldState = scaffoldState,
-                        nameUser = it.arguments?.getString("user"),
                         onClickIconButton = { itScaffold ->
                             onClickIconButton(itScaffold)
                         },

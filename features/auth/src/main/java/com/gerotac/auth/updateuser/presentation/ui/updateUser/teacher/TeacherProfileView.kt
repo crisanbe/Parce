@@ -50,6 +50,7 @@ import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.dropdown.DropDownAlternative
 import com.gerotac.core.util.UiEvent
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -69,7 +70,12 @@ fun TeacherProfile(
     val context = LocalContext.current
     val eventFlow = viewModelUpdateUser.uiEvent.receiveAsFlow()
     val state = viewModelUpdateUser.state.collectAsState()
-    val stateAcademic = viewModelAcademic.stateAcademic.collectAsState()
+    val systemUiController = rememberSystemUiController()
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = com.gerotac.auth.theme.ColorLogin,
+        )
+    }
     BackHandler(true) { viewModelDialog.showDialog() }
     DialogExit(
         text = "Deseas salir sin actualizar tus datos!🤦‍♂",
@@ -130,14 +136,23 @@ fun TeacherProfile(
                             eventFlow.collect { event ->
                                 when (event) {
                                     is UiEvent.Success -> {
-                                        navController.navigate(
-                                            DrawerScreens.CompanyHome.route
-                                                    + "?user=Bienvenido!"
-                                        )
-                                        scaffoldState.snackbarHostState.showSnackbar(
-                                            message = "Se guardo exitosamente🏅",
-                                            actionLabel = "Continue"
-                                        )
+                                        userRepo?.saveUserStatus("completed")
+                                        userRepo?.getTokenLoginState()?.collect { tokenLogin ->
+                                            withContext(Dispatchers.Main) {
+                                                userRepo?.getUserStatus()?.collect { userStatus ->
+                                                    withContext(Dispatchers.Main) {
+                                                        if (tokenLogin != "" && userStatus == "completed") {
+                                                            navController.navigate(DrawerScreens.CompanyHome.route + "?user=Bienvenido!")
+                                                        }
+
+                                                        scaffoldState.snackbarHostState.showSnackbar(
+                                                            message = "Se guardo exitosamente🏅",
+                                                            actionLabel = "Continue"
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                     is UiEvent.ShowSnackBar -> {
                                         scaffoldState.snackbarHostState.showSnackbar(
@@ -260,14 +275,46 @@ fun EducationalProfileView(
                     hideKeyboard?.hide()
                     onClickSave.invoke(
                         listOf(
-                            if(!fullName.text.isNullOrEmpty()){fullName.text}else{""},
-                            if(!identificationType.text.isNullOrEmpty()){identificationType.text}else{""},
-                            if(!idNumber.text.isNullOrEmpty()){idNumber.text}else{""},
-                            if(!gender.text.isNullOrEmpty()){gender.text}else{""},
-                            if(!ethnicGroup.text.isNullOrEmpty()){ethnicGroup.text}else{""},
-                            if(!birthday.text.isNullOrEmpty()){birthday.text}else{""},
-                            if(!phoneNumberState.text.isNullOrEmpty()){phoneNumberState.text}else{""},
-                            if(!hasDisability.text.isNullOrEmpty()){hasDisability.text}else{""},
+                            if (!fullName.text.isNullOrEmpty()) {
+                                fullName.text
+                            } else {
+                                ""
+                            },
+                            if (!identificationType.text.isNullOrEmpty()) {
+                                identificationType.text
+                            } else {
+                                ""
+                            },
+                            if (!idNumber.text.isNullOrEmpty()) {
+                                idNumber.text
+                            } else {
+                                ""
+                            },
+                            if (!gender.text.isNullOrEmpty()) {
+                                gender.text
+                            } else {
+                                ""
+                            },
+                            if (!ethnicGroup.text.isNullOrEmpty()) {
+                                ethnicGroup.text
+                            } else {
+                                ""
+                            },
+                            if (!birthday.text.isNullOrEmpty()) {
+                                birthday.text
+                            } else {
+                                ""
+                            },
+                            if (!phoneNumberState.text.isNullOrEmpty()) {
+                                phoneNumberState.text
+                            } else {
+                                ""
+                            },
+                            if (!hasDisability.text.isNullOrEmpty()) {
+                                hasDisability.text
+                            } else {
+                                ""
+                            },
                         )
                     )
                 },

@@ -113,7 +113,6 @@ fun HomeRequirements(
     resultRequirement: Result,
     onItemClicked: (Int) -> Unit
 ) {
-    val context = LocalContext.current
     Card(
         modifier = modifier,
         elevation = 5.dp,

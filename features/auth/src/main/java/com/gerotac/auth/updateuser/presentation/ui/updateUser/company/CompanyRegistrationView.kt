@@ -40,6 +40,7 @@ import com.gerotac.components_ui.componets.alertdialog.DialogExit
 import com.gerotac.components_ui.componets.alertdialog.ViewModelDialog
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.dropdown.DropString
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -53,6 +54,10 @@ fun CompanyRegistrationView(
     val lifecycleTokenScope = rememberCoroutineScope()
     val viemodel: ViewModelDialog = hiltViewModel()
     var showDialog by remember { mutableStateOf(false) }
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(
+        color = com.gerotac.auth.theme.ColorLogin,
+    )
     BackHandler(true) { viemodel.showDialog() }
     DialogExit(
         text = "Desea salir sin actualizar tus datos?🚨",

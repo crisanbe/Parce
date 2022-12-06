@@ -48,6 +48,7 @@ import com.gerotac.components_ui.componets.progress.ProgressIndicator
 import com.gerotac.components_ui.componets.state.TextFieldValueState
 import com.gerotac.components_ui.componets.state.ValueState
 import com.gerotac.core.util.UiEvent
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -68,6 +69,12 @@ fun StudentProfile(
     val state = viewModelUpdateUser.state.collectAsState()
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
+    val systemUiController = rememberSystemUiController()
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = com.gerotac.auth.theme.ColorLogin,
+        )
+    }
     BackHandler(true) { viewModelDialog.showDialog() }
     DialogExit(text = "Deseas salir sin actualizar tus datos!🤦‍♂", onClickYes = {
         showDialog = !showDialog
@@ -123,13 +130,22 @@ fun StudentProfile(
                             eventFlow.collect { event ->
                                 when (event) {
                                     is UiEvent.Success -> {
-                                        navController.navigate(
-                                            DrawerScreens.CompanyHome.route + "?user=Bienvenido!"
-                                        )
-                                        scaffoldState.snackbarHostState.showSnackbar(
-                                            message = "Se guardo exitosamente🏅",
-                                            actionLabel = "Continue"
-                                        )
+                                        userRepo?.saveUserStatus("completed")
+                                        userRepo?.getTokenLoginState()?.collect { tokenLogin ->
+                                            withContext(Dispatchers.Main) {
+                                                userRepo?.getUserStatus()?.collect { userStatus ->
+                                                    withContext(Dispatchers.Main) {
+                                                        if (tokenLogin != "" && userStatus == "completed") {
+                                                            navController.navigate(DrawerScreens.CompanyHome.route + "?user=Bienvenido!")
+                                                        }
+                                                        scaffoldState.snackbarHostState.showSnackbar(
+                                                            message = "Se guardo exitosamente🏅",
+                                                            actionLabel = "Continue"
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                     is UiEvent.ShowSnackBar -> {
                                         scaffoldState.snackbarHostState.showSnackbar(
@@ -248,15 +264,51 @@ fun StudentProfileView(
                     hideKeyboard?.hide()
                     onClickSave.invoke(
                         listOf(
-                            if(!fullName.text.isNullOrEmpty()){fullName.text}else{""},
-                            if(!identificationType.text.isNullOrEmpty()){identificationType.text}else{""},
-                            if(!idNumber.text.isNullOrEmpty()){idNumber.text}else{""},
-                            if(!gender.text.isNullOrEmpty()){gender.text}else{""},
-                            if(!ethnicGroup.text.isNullOrEmpty()){ethnicGroup.text}else{""},
-                            if(!birthday.text.isNullOrEmpty()){birthday.text}else{""},
-                            if(!phone.text.isNullOrEmpty()){phone.text}else{""},
-                            if(!hasDisability.text.isNullOrEmpty()){hasDisability.text}else{""},
-                            if(!academicProgram.toString().isNullOrEmpty()){academicProgram.toString()}else{""},
+                            if (!fullName.text.isNullOrEmpty()) {
+                                fullName.text
+                            } else {
+                                ""
+                            },
+                            if (!identificationType.text.isNullOrEmpty()) {
+                                identificationType.text
+                            } else {
+                                ""
+                            },
+                            if (!idNumber.text.isNullOrEmpty()) {
+                                idNumber.text
+                            } else {
+                                ""
+                            },
+                            if (!gender.text.isNullOrEmpty()) {
+                                gender.text
+                            } else {
+                                ""
+                            },
+                            if (!ethnicGroup.text.isNullOrEmpty()) {
+                                ethnicGroup.text
+                            } else {
+                                ""
+                            },
+                            if (!birthday.text.isNullOrEmpty()) {
+                                birthday.text
+                            } else {
+                                ""
+                            },
+                            if (!phone.text.isNullOrEmpty()) {
+                                phone.text
+                            } else {
+                                ""
+                            },
+                            if (!hasDisability.text.isNullOrEmpty()) {
+                                hasDisability.text
+                            } else {
+                                ""
+                            },
+                            if (!academicProgram.toString().isNullOrEmpty()) {
+                                academicProgram.toString()
+                            } else {
+                                ""
+                            },
                         )
                     )
                 },

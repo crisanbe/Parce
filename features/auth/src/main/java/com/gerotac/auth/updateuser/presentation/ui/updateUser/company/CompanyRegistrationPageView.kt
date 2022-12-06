@@ -42,6 +42,7 @@ import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.dropdown.DropString
 import com.gerotac.components_ui.componets.progress.LinearProgressBar
 import com.gerotac.core.util.UiEvent
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -61,13 +62,18 @@ fun CompanyRegistrationPageView(
     phone: String?
 ) {
     val context = LocalContext.current
+    val systemUiController = rememberSystemUiController()
     val eventFlow = viewModel.uiEvent.receiveAsFlow()
     val scaffoldState = rememberScaffoldState()
     val lifecycleTokenScope = rememberCoroutineScope()
     val state = viewModel.state.collectAsState()
     val stateMunicipality = viewModelLocation.stateMuni.collectAsState()
     val stateLocation = viewModelLocation.stateLocation.collectAsState()
-
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = com.gerotac.auth.theme.ColorLogin,
+        )
+    }
     Scaffold(
         scaffoldState = scaffoldState,
         snackbarHost = {
@@ -97,13 +103,37 @@ fun CompanyRegistrationPageView(
                             lifecycleTokenScope.launch {
                                 viewModel.doUpdateUser(
                                     ParameterUpdateUserRequest(
-                                        name = if(!companyName.isNullOrEmpty()){companyName}else{""},
-                                        type_document = if(!identificationType.isNullOrEmpty()){identificationType}else{""},
-                                        document = if(!idNumber.isNullOrEmpty()){idNumber}else{""},
-                                        type_bussiness = if(!companyType.isNullOrEmpty()){companyType}else{""},
+                                        name = if (!companyName.isNullOrEmpty()) {
+                                            companyName
+                                        } else {
+                                            ""
+                                        },
+                                        type_document = if (!identificationType.isNullOrEmpty()) {
+                                            identificationType
+                                        } else {
+                                            ""
+                                        },
+                                        document = if (!idNumber.isNullOrEmpty()) {
+                                            idNumber
+                                        } else {
+                                            ""
+                                        },
+                                        type_bussiness = if (!companyType.isNullOrEmpty()) {
+                                            companyType
+                                        } else {
+                                            ""
+                                        },
                                         type_society = kindCompany?.toInt(),
-                                        activity_economy = if(!economicActivity.isNullOrEmpty()){economicActivity}else{""},
-                                        phone = if(!phone.isNullOrEmpty()){phone}else{""},
+                                        activity_economy = if (!economicActivity.isNullOrEmpty()) {
+                                            economicActivity
+                                        } else {
+                                            ""
+                                        },
+                                        phone = if (!phone.isNullOrEmpty()) {
+                                            phone
+                                        } else {
+                                            ""
+                                        },
                                         person_contact = it[0],
                                         departament = it[1].toInt(),
                                         municipality = it[2].toInt(),
@@ -118,14 +148,25 @@ fun CompanyRegistrationPageView(
                                     when (event) {
                                         is UiEvent.Success -> {
                                             userRepo?.saveNameUser(companyName)
-                                            navController.navigate(
-                                                DrawerScreens.CompanyHome.route
-                                                        + "?user=$companyName"
-                                            )
-                                            scaffoldState.snackbarHostState.showSnackbar(
-                                                message = "Se guardo exitosamente🏅",
-                                                actionLabel = "Continue"
-                                            )
+                                            userRepo?.saveUserStatus("completed")
+                                            userRepo?.getTokenLoginState()?.collect { tokenLogin ->
+                                                withContext(Dispatchers.Main) {
+                                                    userRepo?.getUserStatus()
+                                                        ?.collect { userStatus ->
+                                                            withContext(Dispatchers.Main) {
+                                                                if (tokenLogin != "" && userStatus == "completed") {
+                                                                    navController.navigate(
+                                                                        DrawerScreens.CompanyHome.route + "?user=$companyName"
+                                                                    )
+                                                                    scaffoldState.snackbarHostState.showSnackbar(
+                                                                        message = "Se guardo exitosamente🏅",
+                                                                        actionLabel = "Continue"
+                                                                    )
+                                                                }
+                                                            }
+                                                        }
+                                                }
+                                            }
                                         }
                                         is UiEvent.ShowSnackBar -> {
                                             scaffoldState.snackbarHostState.showSnackbar(
@@ -238,17 +279,17 @@ fun CompanyRegistrationPage(
                     )
                 }
             )
-            DataTimeString(dateState = {birthday = it}, value = birthday)
+            DataTimeString(dateState = { birthday = it }, value = birthday)
             Spacer(Modifier.height(5.dp))
             DropString(
-                ValueState = {genre = it},
+                ValueState = { genre = it },
                 text = "Tipo de genero",
                 options = listOf("Hombre", "Mujer", "Prefiero no decir"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.genders)
             )
             Spacer(Modifier.height(5.dp))
             DropString(
-                ValueState = {ethnicGroup = it},
+                ValueState = { ethnicGroup = it },
                 text = "Grupo etnico",
                 options = listOf(
                     "Afrocolombiano",
@@ -261,7 +302,7 @@ fun CompanyRegistrationPage(
             )
             Spacer(Modifier.height(5.dp))
             DropString(
-                ValueState = {presentsDisability = it},
+                ValueState = { presentsDisability = it },
                 text = "Tipo de discapasidad",
                 options = listOf("NO", "SI"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.ic_disability)
@@ -271,15 +312,39 @@ fun CompanyRegistrationPage(
                 onClick = {
                     onClickSave.invoke(
                         listOf(
-                            if(!contactPerson.isNullOrEmpty()){contactPerson}else{""},
-                            if(!department.toString().isNullOrEmpty()){department}else{""},
-                            if(!municipality.toString().isNullOrEmpty()){municipality}else{""},
-                            if(!address.isNullOrEmpty()){address}else{""},
-                            if(!birthday.isNullOrEmpty()){birthday}else{""},
-                            if(!genre.isNullOrEmpty()){genre}else{""},
-                            if(!ethnicGroup.isNullOrEmpty()){ethnicGroup}else{""},
-                            if(!presentsDisability.isNullOrEmpty()){presentsDisability}else{""},
-                        ) as List<String>
+                            if (!contactPerson.isNullOrEmpty()) {
+                                contactPerson
+                            } else {
+                                ""
+                            },
+                            department.toString(),
+                            municipality.toString(),
+                            if (!address.isNullOrEmpty()) {
+                                address
+                            } else {
+                                ""
+                            },
+                            if (!birthday.isNullOrEmpty()) {
+                                birthday
+                            } else {
+                                ""
+                            },
+                            if (!genre.isNullOrEmpty()) {
+                                genre
+                            } else {
+                                ""
+                            },
+                            if (!ethnicGroup.isNullOrEmpty()) {
+                                ethnicGroup
+                            } else {
+                                ""
+                            },
+                            if (!presentsDisability.isNullOrEmpty()) {
+                                presentsDisability
+                            } else {
+                                ""
+                            },
+                        )
                     )
                 },
                 shape = RoundedCornerShape(percent = 45),

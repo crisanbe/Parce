@@ -82,7 +82,6 @@ fun HomeCompany(
     title: DrawerScreens,
     navController: NavController,
     scaffoldState: ScaffoldState,
-    nameUser: String?,
     onItemClicked: (Int) -> Unit,
     onClickIconButton: (ScaffoldState) -> Unit,
     onClickDestination: (screen: String) -> Unit,
@@ -115,7 +114,7 @@ fun HomeCompany(
         }
     }
     com.gerotac.components_ui.componets.alertdialog.DialogExit(
-        text = "Deseas salir de la sesión ?",
+        text = "Deseas salir de la sesión?",
         onClickYes = {
             showDialog = !showDialog
             lifecycleTokenScope.launch {

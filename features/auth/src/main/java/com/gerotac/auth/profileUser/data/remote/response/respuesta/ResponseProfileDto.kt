@@ -34,7 +34,7 @@ data class BussineDto(
     @SerializedName("address") val address: String,
     @SerializedName("departament") val departament: Int,
     @SerializedName("id") val id: Int,
-    @SerializedName("municipality") val municipality: Any? = null,
+    @SerializedName("municipality") val municipality: Int? = null,
     @SerializedName("person_contact") val person_contact: String,
     @SerializedName("type_bussiness") val type_bussiness: String,
     @SerializedName("typesociety") val typesociety: Typesociety
