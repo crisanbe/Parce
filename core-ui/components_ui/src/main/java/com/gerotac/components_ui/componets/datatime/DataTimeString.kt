@@ -23,7 +23,7 @@ import com.gerotac.components_ui.R
 import java.util.*
 
 @Composable
-fun DataTimeString(dateState: (String) -> Unit, value: String) {
+fun DataTimeString(dateState: (String) -> Unit, value: String, text: String? = "Fecha de nacimiento") {
     val focusManager = LocalFocusManager.current
     val c = Calendar.getInstance()
     val year = c.get(Calendar.YEAR)
@@ -55,7 +55,7 @@ fun DataTimeString(dateState: (String) -> Unit, value: String) {
         value = value,
         enabled = false,
         onValueChange = { dateState(it) },
-        label = { Text("Fecha de nacimiento", color = Color.Black) },
+        label = { Text(text.toString(), color = Color.Black) },
         placeholder = { Text(text = dateState.toString(), color = Color.Black) },
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next,

@@ -36,6 +36,8 @@ import com.gerotac.auth.assignrequirement.presentation.ui.assign.AssignToStudent
 import com.gerotac.auth.assignrequirement.presentation.ui.assign.AssignToTeacherScreen
 import com.gerotac.auth.intervention.createintervention.presentation.ui.SaveInterventionScreen
 import com.gerotac.auth.intervention.detailintervention.presentation.ui.DetailInterventionScreen
+import com.gerotac.auth.reports.presentation.ui.ReportScreen
+import com.gerotac.auth.reports.presentation.ui.viewreport.CompanyReportScreen
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.DetailScreen
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.ExitAlert
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.RequirementScreen
@@ -753,6 +755,40 @@ fun ScaffoldSection(
                     EnterAnimation {
                         ProfileCompany(
                             title = DrawerScreens.CompanyProfile,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            }
+                        )
+                    }
+                }
+                composable(
+                    route = DrawerScreens.Report.route,
+                ) {
+                    EnterAnimation {
+                        ReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            }
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.CompanyReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        CompanyReportScreen(
+                            title = DrawerScreens.Report,
                             navController = controller,
                             scaffoldState = scaffoldState,
                             onClickIconButton = {
