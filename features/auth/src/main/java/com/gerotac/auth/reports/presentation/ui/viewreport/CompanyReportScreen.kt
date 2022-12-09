@@ -23,9 +23,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.gerotac.auth.profileUser.presentation.ui.Drawer
+import com.gerotac.auth.reports.data.remote.request.ReportRequest
+import com.gerotac.auth.reports.presentation.viewmodel.ReportViewModel
+import com.gerotac.auth.requirement.data.remote.requirementsave.RequirementRequest
 import com.gerotac.components_ui.componets.TopBar
 import com.gerotac.components_ui.componets.button.ButtonValidation
 import com.gerotac.components_ui.componets.button.ButtonWithIcon
@@ -33,8 +37,15 @@ import com.gerotac.components_ui.componets.datatime.DataTime
 import com.gerotac.components_ui.componets.datatime.DataTimeString
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
+import com.gerotac.components_ui.componets.progress.LinearProgress
 import com.gerotac.components_ui.componets.ui.theme.ParceTheme
+import com.gerotac.core.util.UiEvent
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 
 @OptIn(ExperimentalAnimationApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -106,9 +117,12 @@ fun CompanyReportScreen(
 fun BodyReport(
     modifier: Modifier = Modifier,
     navController: NavController,
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
+    viewModel : ReportViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val state = viewModel.state.collectAsState()
+    val eventFlow = viewModel.uiEvent.receiveAsFlow()
     var dateInitial by remember { mutableStateOf("") }
     var dateFinish by remember { mutableStateOf("") }
     val hideKeyboard = LocalSoftwareKeyboardController.current
@@ -124,8 +138,30 @@ fun BodyReport(
         DataTimeString(dateState = { dateFinish = it }, value = dateFinish, "Fecha final")
         Spacer(modifier = Modifier.height(10.dp))
         ButtonValidation(text = "Consultar reporte") {
-
+            scope.launch {
+                viewModel.doReport(
+                    ReportRequest(
+                        dateInitial,
+                        dateFinish
+                    )
+                )
+                eventFlow.collect { event ->
+                    when (event) {
+                        is UiEvent.Success -> {
+                            //delay(5000)
+                            //navController.navigate(DrawerScreens.CompanyHome.route) { restoreState }
+                        }
+                        is UiEvent.ShowSnackBar -> {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = event.message.asString(context)
+                            )
+                        }
+                        else -> Unit
+                    }
+                }
+            }
         }
         Spacer(modifier = Modifier.height(50.dp))
     }
+    LinearProgress(isDisplayed = state.value.isLoading, text = "Cargando...")
 }
