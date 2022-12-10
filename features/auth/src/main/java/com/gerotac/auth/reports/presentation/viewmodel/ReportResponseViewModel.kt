@@ -2,13 +2,9 @@ package com.gerotac.auth.reports.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gerotac.auth.reports.data.ReportApi
 import com.gerotac.auth.reports.data.remote.request.ReportRequest
 import com.gerotac.auth.reports.domain.usecase.ReportUseCase
 import com.gerotac.auth.reports.presentation.statereports.ReportState
-import com.gerotac.auth.requirement.data.remote.requirementsave.RequirementRequest
-import com.gerotac.auth.requirement.domain.usecase.RequirementUseCase
-import com.gerotac.auth.requirement.presentation.state.RequirementState
 import com.gerotac.auth.updateuser.di.UpdateUserHeaders
 import com.gerotac.core.util.UiEvent
 import com.gerotac.core.util.UiText
@@ -23,16 +19,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ReportViewModel @Inject constructor(
-    private val reportUseCase: ReportUseCase
-) : ViewModel() {
+class ReportResponseViewModel @Inject constructor(private val reportUseCase: ReportUseCase) : ViewModel() {
     var state = MutableStateFlow(ReportState())
         private set
     var uiEvent = Channel<UiEvent>()
         private set
-
-    init {
-    }
 
     suspend fun doReport(request: ReportRequest) {
         val token = UpdateUserHeaders.getHeader()["Authorization"]

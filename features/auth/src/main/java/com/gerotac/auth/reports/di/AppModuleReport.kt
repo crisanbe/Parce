@@ -1,6 +1,6 @@
 package com.gerotac.auth.reports.di
 
-import com.gerotac.auth.reports.data.ReportApi
+import com.gerotac.auth.reports.data.api.ReportResponseApi
 import com.gerotac.shared.commons.Constant
 import dagger.Module
 import dagger.Provides
@@ -13,14 +13,13 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModuleReport {
-
     @Provides
     @Singleton
-    fun provideReportRepository(): ReportApi {
+    fun provideReportResponseRepository(): ReportResponseApi {
         return Retrofit.Builder()
             .baseUrl(Constant.URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(ReportApi::class.java)
+            .create(ReportResponseApi::class.java)
     }
 }

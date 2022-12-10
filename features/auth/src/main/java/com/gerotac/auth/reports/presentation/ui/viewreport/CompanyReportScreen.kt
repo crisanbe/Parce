@@ -1,51 +1,52 @@
 package com.gerotac.auth.reports.presentation.ui.viewreport
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.rounded.LocalActivity
-import androidx.compose.material.icons.rounded.MergeType
+import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.Report
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import coil.transform.CircleCropTransformation
 import com.gerotac.auth.profileUser.presentation.ui.Drawer
 import com.gerotac.auth.reports.data.remote.request.ReportRequest
-import com.gerotac.auth.reports.presentation.viewmodel.ReportViewModel
-import com.gerotac.auth.requirement.data.remote.requirementsave.RequirementRequest
+import com.gerotac.auth.reports.presentation.statereports.FileDownloadScreenState
+import com.gerotac.auth.reports.presentation.viewmodel.ReportResponseViewModel
+import com.gerotac.auth.reports.presentation.viewmodel.ReportFileViewModel
 import com.gerotac.components_ui.componets.TopBar
 import com.gerotac.components_ui.componets.button.ButtonValidation
-import com.gerotac.components_ui.componets.button.ButtonWithIcon
-import com.gerotac.components_ui.componets.datatime.DataTime
+import com.gerotac.components_ui.componets.button.ButtonWithShadow
 import com.gerotac.components_ui.componets.datatime.DataTimeString
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
-import com.gerotac.components_ui.componets.progress.LinearProgress
-import com.gerotac.components_ui.componets.ui.theme.ParceTheme
+import com.gerotac.components_ui.componets.progress.CircularProgress
 import com.gerotac.core.util.UiEvent
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
 
 @OptIn(ExperimentalAnimationApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -57,6 +58,7 @@ fun CompanyReportScreen(
     onClickIconButton: (ScaffoldState) -> Unit,
     onClickDestination: (screen: String) -> Unit,
 ) {
+    val viewModel: ReportFileViewModel = viewModel()
     var visible by remember { mutableStateOf(false) }
     AnimatedVisibility(
         visible = visible,
@@ -102,7 +104,9 @@ fun CompanyReportScreen(
                     BodyReport(
                         Modifier.align(Alignment.Center),
                         navController = navController,
-                        scaffoldState = scaffoldState
+                        scaffoldState = scaffoldState,
+                        state = viewModel.state,
+                        onBackToIdleRequested = viewModel::onIdleRequested,
                     )
                 }
             })
@@ -112,56 +116,145 @@ fun CompanyReportScreen(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BodyReport(
     modifier: Modifier = Modifier,
     navController: NavController,
     scaffoldState: ScaffoldState,
-    viewModel : ReportViewModel = hiltViewModel()
+    state: FileDownloadScreenState,
+    onBackToIdleRequested: () -> Unit,
+    viewModelReportFile: ReportFileViewModel = hiltViewModel(),
+    viewModelReportResponse: ReportResponseViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
-    val state = viewModel.state.collectAsState()
-    val eventFlow = viewModel.uiEvent.receiveAsFlow()
+    val activity = LocalContext.current as Activity
+    val stateReportResponse = viewModelReportResponse.state.collectAsState()
+    val eventFlow = viewModelReportResponse.uiEvent.receiveAsFlow()
     var dateInitial by remember { mutableStateOf("") }
     var dateFinish by remember { mutableStateOf("") }
-    val hideKeyboard = LocalSoftwareKeyboardController.current
     val scope = rememberCoroutineScope()
     BackHandler(true) { navController.navigate(AppScreens.StartUp.route) }
+
     Column(
-        modifier = modifier.padding(all = 40.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(all = 40.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
-        DataTimeString(dateState = { dateInitial = it }, value = dateInitial, "Fecha inicial")
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data("https://img.freepik.com/vector-premium/informe-auditoria-investigacion-datos-impuestos-financieros-ventas-vector-dibujos-animados-plana_212005-120.jpg")
+                .transformations(CircleCropTransformation())
+                .build(),
+            contentDescription = null,
+            modifier = Modifier.clip(CircleShape)
+        )
         Spacer(modifier = Modifier.height(10.dp))
-        DataTimeString(dateState = { dateFinish = it }, value = dateFinish, "Fecha final")
+        DataTimeString(dateState = { dateInitial = it }, value = dateInitial, "Fecha inicial", icon = painterResource(id = com.gerotac.components_ui.R.drawable.calendar_month))
+        Spacer(modifier = Modifier.height(5.dp))
+        DataTimeString(dateState = { dateFinish = it }, value = dateFinish, "Fecha final", icon = painterResource(id = com.gerotac.components_ui.R.drawable.date_range))
         Spacer(modifier = Modifier.height(10.dp))
-        ButtonValidation(text = "Consultar reporte") {
-            scope.launch {
-                viewModel.doReport(
-                    ReportRequest(
-                        dateInitial,
-                        dateFinish
-                    )
+        when (state) {
+            FileDownloadScreenState.Idle -> {
+                Text(
+                    text = "Descargar el archivo🗂️.",
+                    style = MaterialTheme.typography.h6,
                 )
-                eventFlow.collect { event ->
-                    when (event) {
-                        is UiEvent.Success -> {
-                            //delay(5000)
-                            //navController.navigate(DrawerScreens.CompanyHome.route) { restoreState }
-                        }
-                        is UiEvent.ShowSnackBar -> {
-                            scaffoldState.snackbarHostState.showSnackbar(
-                                message = event.message.asString(context)
+                Spacer(modifier = Modifier.height(8.dp))
+                CircularProgress(showDialog = stateReportResponse.value.isLoading)
+                ButtonValidation(
+                    text = "Consultar reporte.",
+                    onClick = {
+                        scope.launch() {
+                            viewModelReportFile.downloadFile(ReportRequest(dateInitial, dateFinish))
+                            viewModelReportResponse.doReport(
+                                ReportRequest(
+                                    dateInitial,
+                                    dateFinish
+                                )
                             )
+                            eventFlow.collect { event ->
+                                when (event) {
+                                    is UiEvent.Success -> {}
+                                    is UiEvent.ShowSnackBar -> {
+                                        scaffoldState.snackbarHostState.showSnackbar(
+                                            message = event.message.asString(activity)
+                                        )
+                                    }
+                                    else -> Unit
+                                }
+                            }
                         }
-                        else -> Unit
+                    })
+            }
+            is FileDownloadScreenState.Downloading -> {
+                DownloadFilesWithProgressLayout(progress = state.progress)
+            }
+            is FileDownloadScreenState.Failed -> {
+                Text(
+                    text = "Fallo la descarga❌",
+                    style = MaterialTheme.typography.h6,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(onClick = onBackToIdleRequested) {
+                    Text(
+                        text = "OK",
+                        style = MaterialTheme.typography.button,
+                    )
+                }
+            }
+            FileDownloadScreenState.Downloaded -> {
+                Text(
+                    text = "Descarga completa✔️" +
+                            "\nVerifica en descargas.",
+                    color = Color.Green,
+                    style = MaterialTheme.typography.h6,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                val launcher =
+                    rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
                     }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    ButtonWithShadow(
+                        modifier = Modifier
+                            .width(150.dp)
+                            .height(65.dp),
+                        color = Color.Black,
+                        shape = RoundedCornerShape(20.dp),
+                        onClick = { launcher.launch("application/pdf") },
+                        textoBoton = "Ir a descargas🗃️"
+
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    ButtonWithShadow(
+                        modifier = Modifier
+                            .width(150.dp)
+                            .height(65.dp),
+                        color = Color.Black,
+                        shape = RoundedCornerShape(20.dp),
+                        onClick = { onBackToIdleRequested() },
+                        textoBoton = "Nueva consulta",
+                    )
                 }
             }
         }
-        Spacer(modifier = Modifier.height(50.dp))
     }
-    LinearProgress(isDisplayed = state.value.isLoading, text = "Cargando...")
+}
+
+@Composable
+private fun DownloadFilesWithProgressLayout(progress: Int) {
+    Text(
+        text = "Downloaded $progress%",
+        style = MaterialTheme.typography.h6,
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+    LinearProgressIndicator(
+        progress = progress.toFloat() / 100f,
+        modifier = Modifier.fillMaxWidth(),
+    )
 }

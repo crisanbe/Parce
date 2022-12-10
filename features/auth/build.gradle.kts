@@ -19,6 +19,8 @@ dependencies {
     "implementation"(project(Modules.network))
     "implementation"(project(Modules.core))
     "implementation"(project(Modules.components_ui))
+    // Moshi
+    "implementation" ("com.squareup.moshi:moshi-kotlin:1.13.0")
 
     "implementation"(Compose.ui)
     "debugImplementation"(Compose.uiToolingPreview)

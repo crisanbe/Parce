@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -23,7 +24,11 @@ import com.gerotac.components_ui.R
 import java.util.*
 
 @Composable
-fun DataTimeString(dateState: (String) -> Unit, value: String, text: String? = "Fecha de nacimiento") {
+fun DataTimeString(
+    dateState: (String) -> Unit,
+    value: String, text: String? = "Fecha de nacimiento",
+    icon : Painter? = painterResource(id = R.drawable.calendar_month)
+) {
     val focusManager = LocalFocusManager.current
     val c = Calendar.getInstance()
     val year = c.get(Calendar.YEAR)
@@ -66,14 +71,16 @@ fun DataTimeString(dateState: (String) -> Unit, value: String, text: String? = "
         }),
         trailingIcon = {
             rotateIcon = if (expanded) 180f else 0f
-            Icon(
-                modifier = Modifier
-                    .clickable { datePickerDialog.show() }
-                    .rotate(rotateIcon),
-                painter = painterResource(id = R.drawable.calendar_month),
-                contentDescription = "",
-                tint = Color.Black
-            )
+            icon?.let {
+                Icon(
+                    modifier = Modifier
+                        .clickable { datePickerDialog.show() }
+                        .rotate(rotateIcon),
+                    painter = it,
+                    contentDescription = "",
+                    tint = Color.Black
+                )
+            }
             Divider(
                 modifier = Modifier
                     .width(34.3.dp)

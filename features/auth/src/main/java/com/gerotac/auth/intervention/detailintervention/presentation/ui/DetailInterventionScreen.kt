@@ -9,7 +9,9 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -19,10 +21,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Archive
-import androidx.compose.material.icons.filled.Badge
-import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -44,9 +43,8 @@ import androidx.navigation.NavController
 import androidx.work.*
 import coil.compose.rememberAsyncImagePainter
 import com.gerotac.auth.R
-import com.gerotac.auth.approveanddisapprove.presentation.ui.CheckedApproveAndDisapprove
-import com.gerotac.auth.intervention.detailintervention.domain.model.File
 import com.gerotac.auth.intervention.detailintervention.domain.model.DetailResponseIntervention
+import com.gerotac.auth.intervention.detailintervention.domain.model.File
 import com.gerotac.auth.intervention.detailintervention.presentation.viewmodel.DetailInterventionViewModel
 import com.gerotac.auth.intervention.getinterventionofdetailrequirement.intervention.MenuInferiorViewModel
 import com.gerotac.auth.intervention.getinterventionofdetailrequirement.intervention.component.DialogContent
@@ -55,15 +53,10 @@ import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.FormV
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.dowloadfile.FileDownloadWorker
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
-import com.gerotac.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
 import com.gerotac.components_ui.componets.TopPart
 import com.gerotac.components_ui.componets.button.BottomSheetDialog
-import com.gerotac.components_ui.componets.button.ButtonValidation
-import com.gerotac.components_ui.componets.button.ButtonWithShadow
-import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.flow.MutableStateFlow
 

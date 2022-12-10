@@ -796,7 +796,7 @@ fun ScaffoldSection(
                             },
                             onClickDestination = {
                                 onClickDestination(it)
-                            }
+                            },
                         )
                     }
                 }
