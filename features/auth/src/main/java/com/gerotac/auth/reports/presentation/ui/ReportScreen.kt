@@ -133,7 +133,7 @@ fun BodyReport(
             icon = Icons.Outlined.Apartment
         )
         ButtonWithIcon(
-            onClick = {},
+            onClick = {navController.navigate(AppScreens.GenderReportScreen.route)},
             modifier = modifier,
             textButton = "Reporte por genero",
             icon = Icons.Outlined.Transgender

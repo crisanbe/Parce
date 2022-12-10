@@ -12,10 +12,9 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-class ReportUseCase @Inject constructor(
+class ReportCompanyUseCase @Inject constructor(
     private val repository: ReportMessageRepository
 ) {
-
     operator fun invoke(
         token: String,
         date: ReportRequest

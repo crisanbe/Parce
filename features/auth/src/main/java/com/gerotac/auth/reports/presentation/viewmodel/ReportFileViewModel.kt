@@ -34,11 +34,33 @@ class ReportFileViewModel : ViewModel() {
         throwable.printStackTrace()
     }
 
-    fun downloadFile(date:ReportRequest) {
+    fun downloadFileCompany(date:ReportRequest) {
         val token = UpdateUserHeaders.getHeader()["Authorization"]
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             val timestamp = System.currentTimeMillis()
             api.doReportApi(token.toString(),date)
+                .saveFile(timestamp.toString())
+                .collect { downloadState ->
+                    state = when (downloadState) {
+                        is DownloadState.Downloading -> {
+                            FileDownloadScreenState.Downloading(progress = downloadState.progress)
+                        }
+                        is DownloadState.Failed -> {
+                            FileDownloadScreenState.Failed(error = downloadState.error)
+                        }
+                        DownloadState.Finished -> {
+                            FileDownloadScreenState.Downloaded
+                        }
+                    }
+                }
+        }
+    }
+
+    fun downloadFileGender(date:ReportRequest) {
+        val token = UpdateUserHeaders.getHeader()["Authorization"]
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+            val timestamp = System.currentTimeMillis()
+            api.doReportGenderApi(token.toString(),date)
                 .saveFile(timestamp.toString())
                 .collect { downloadState ->
                     state = when (downloadState) {

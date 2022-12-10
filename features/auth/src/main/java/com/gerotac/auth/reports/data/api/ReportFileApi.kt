@@ -14,4 +14,11 @@ interface ReportFileApi {
         @Header("Authorization") token: String,
         @Body date: ReportRequest
     ): ResponseBody
+
+    @Streaming
+    @POST("report-gender")
+    suspend fun doReportGenderApi(
+        @Header("Authorization") token: String,
+        @Body date: ReportRequest
+    ): ResponseBody
 }

@@ -38,6 +38,7 @@ import com.gerotac.auth.intervention.createintervention.presentation.ui.SaveInte
 import com.gerotac.auth.intervention.detailintervention.presentation.ui.DetailInterventionScreen
 import com.gerotac.auth.reports.presentation.ui.ReportScreen
 import com.gerotac.auth.reports.presentation.ui.viewreport.CompanyReportScreen
+import com.gerotac.auth.reports.presentation.ui.viewreport.GenderReportScreen
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.DetailScreen
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.ExitAlert
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.RequirementScreen
@@ -788,6 +789,23 @@ fun ScaffoldSection(
                 ) {
                     EnterAnimation {
                         CompanyReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.GenderReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        GenderReportScreen(
                             title = DrawerScreens.Report,
                             navController = controller,
                             scaffoldState = scaffoldState,

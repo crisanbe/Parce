@@ -14,4 +14,10 @@ interface ReportResponseApi {
         @Header("Authorization") token: String,
         @Body date: ReportRequest
     ): ResponseReportDto
+
+    @POST("report-type-bussines")
+    suspend fun doReportGenderResponseApi(
+        @Header("Authorization") token: String,
+        @Body date: ReportRequest
+    ): ResponseReportDto
 }
