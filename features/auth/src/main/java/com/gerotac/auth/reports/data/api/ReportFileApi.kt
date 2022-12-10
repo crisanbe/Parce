@@ -21,4 +21,53 @@ interface ReportFileApi {
         @Header("Authorization") token: String,
         @Body date: ReportRequest
     ): ResponseBody
+
+    @Streaming
+    @POST("report-disability")
+    suspend fun doReportDisabilityApi(
+        @Header("Authorization") token: String,
+        @Body date: ReportRequest
+    ): ResponseBody
+
+    @Streaming
+    @POST("report-type-societies")
+    suspend fun doReportSocietiesApi(
+        @Header("Authorization") token: String,
+        @Body date: ReportRequest
+    ): ResponseBody
+
+    @Streaming
+    @POST("report-ethnic-group")
+    suspend fun doReportEthnicGroupApi(
+        @Header("Authorization") token: String,
+        @Body date: ReportRequest
+    ): ResponseBody
+
+    @Streaming
+    @POST("report-intervention-area")
+    suspend fun doReportInterventionAreaApi(
+        @Header("Authorization") token: String,
+        @Body date: ReportRequest
+    ): ResponseBody
+
+    @Streaming
+    @POST("report-type-intervention")
+    suspend fun doReportTypeInterventionApi(
+        @Header("Authorization") token: String,
+        @Body date: ReportRequest
+    ): ResponseBody
+
+    @Streaming
+    @POST("report-department")
+    suspend fun doReportDepartmentApi(
+        @Header("Authorization") token: String,
+        @Body date: ReportRequest
+    ): ResponseBody
+
+    @Streaming
+    @POST("report-city")
+    suspend fun doReportCityApi(
+        @Header("Authorization") token: String,
+        @Body date: ReportRequest
+    ): ResponseBody
 }

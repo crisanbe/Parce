@@ -135,7 +135,7 @@ fun BodyGenderReport(
     var dateInitial by remember { mutableStateOf("") }
     var dateFinish by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
-    BackHandler(true) { navController.navigate(AppScreens.StartUp.route) }
+    BackHandler(true) { navController.navigate(DrawerScreens.Report.route)}
 
     Column(
         modifier = modifier
@@ -178,7 +178,7 @@ fun BodyGenderReport(
                     onClick = {
                         scope.launch() {
                             viewModelReportFile.downloadFileGender(ReportRequest(dateInitial, dateFinish))
-                            viewModelReportResponse.doReportResponse(
+                            viewModelReportResponse.doReport(
                                 ReportRequest(
                                     dateInitial,
                                     dateFinish

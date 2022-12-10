@@ -37,8 +37,7 @@ import com.gerotac.auth.assignrequirement.presentation.ui.assign.AssignToTeacher
 import com.gerotac.auth.intervention.createintervention.presentation.ui.SaveInterventionScreen
 import com.gerotac.auth.intervention.detailintervention.presentation.ui.DetailInterventionScreen
 import com.gerotac.auth.reports.presentation.ui.ReportScreen
-import com.gerotac.auth.reports.presentation.ui.viewreport.CompanyReportScreen
-import com.gerotac.auth.reports.presentation.ui.viewreport.GenderReportScreen
+import com.gerotac.auth.reports.presentation.ui.viewreport.*
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.DetailScreen
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.ExitAlert
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.RequirementScreen
@@ -806,6 +805,125 @@ fun ScaffoldSection(
                 ) {
                     EnterAnimation {
                         GenderReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.DisabilityReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        DisabilityReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.SocietiesReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        SocietiesReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.EthnicGroupReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        EthnicGroupReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.InterventionAreaReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        InterventionAreaReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.TypeInterventionReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        TypeInterventionReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.DepartmentReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        DepartmentReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.CityReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        CityReportScreen(
                             title = DrawerScreens.Report,
                             navController = controller,
                             scaffoldState = scaffoldState,

@@ -54,7 +54,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalAnimationApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun CompanyReportScreen(
+fun DepartmentReportScreen(
     title: DrawerScreens,
     navController: NavController,
     scaffoldState: ScaffoldState,
@@ -104,7 +104,7 @@ fun CompanyReportScreen(
             },
             content = {
                 Box(Modifier.fillMaxSize()) {
-                    BodyReport(
+                    BodyDepartmentReport(
                         Modifier.align(Alignment.Center),
                         navController = navController,
                         scaffoldState = scaffoldState,
@@ -120,7 +120,7 @@ fun CompanyReportScreen(
 }
 
 @Composable
-fun BodyReport(
+fun BodyDepartmentReport(
     modifier: Modifier = Modifier,
     navController: NavController,
     scaffoldState: ScaffoldState,
@@ -145,7 +145,7 @@ fun BodyReport(
         verticalArrangement = Arrangement.Top
     ) {
         Text(
-            text = "Reporte por empresa.",
+            text = "Reporte por departamento.",
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.Default,
@@ -177,7 +177,7 @@ fun BodyReport(
                     text = "Consultar reporte.",
                     onClick = {
                         scope.launch() {
-                            viewModelReportFile.downloadFileCompany(ReportRequest(dateInitial, dateFinish))
+                            viewModelReportFile.downloadFileDepartment(ReportRequest(dateInitial, dateFinish))
                             viewModelReportResponse.doReport(
                                 ReportRequest(
                                     dateInitial,

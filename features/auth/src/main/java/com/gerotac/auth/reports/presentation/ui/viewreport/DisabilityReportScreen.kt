@@ -54,7 +54,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalAnimationApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun CompanyReportScreen(
+fun DisabilityReportScreen(
     title: DrawerScreens,
     navController: NavController,
     scaffoldState: ScaffoldState,
@@ -104,7 +104,7 @@ fun CompanyReportScreen(
             },
             content = {
                 Box(Modifier.fillMaxSize()) {
-                    BodyReport(
+                    BodyDisabilityReport(
                         Modifier.align(Alignment.Center),
                         navController = navController,
                         scaffoldState = scaffoldState,
@@ -120,7 +120,7 @@ fun CompanyReportScreen(
 }
 
 @Composable
-fun BodyReport(
+fun BodyDisabilityReport(
     modifier: Modifier = Modifier,
     navController: NavController,
     scaffoldState: ScaffoldState,
@@ -135,7 +135,7 @@ fun BodyReport(
     var dateInitial by remember { mutableStateOf("") }
     var dateFinish by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
-    BackHandler(true) { navController.navigate(DrawerScreens.Report.route) }
+    BackHandler(true) { navController.navigate(DrawerScreens.Report.route)}
 
     Column(
         modifier = modifier
@@ -145,7 +145,7 @@ fun BodyReport(
         verticalArrangement = Arrangement.Top
     ) {
         Text(
-            text = "Reporte por empresa.",
+            text = "Reporte por discapacidad.",
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.Default,
@@ -177,7 +177,7 @@ fun BodyReport(
                     text = "Consultar reporte.",
                     onClick = {
                         scope.launch() {
-                            viewModelReportFile.downloadFileCompany(ReportRequest(dateInitial, dateFinish))
+                            viewModelReportFile.downloadFileDisability(ReportRequest(dateInitial, dateFinish))
                             viewModelReportResponse.doReport(
                                 ReportRequest(
                                     dateInitial,

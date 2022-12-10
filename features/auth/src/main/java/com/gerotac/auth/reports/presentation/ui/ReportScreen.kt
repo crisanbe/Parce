@@ -139,43 +139,43 @@ fun BodyReport(
             icon = Icons.Outlined.Transgender
         )
         ButtonWithIcon(
-            onClick = {},
+            onClick = {navController.navigate(AppScreens.CityReportScreen.route)},
             modifier = modifier,
             textButton = "Reporte por ciudad",
             icon = Icons.Outlined.LocationCity
         )
         ButtonWithIcon(
-            onClick = {},
+            onClick = {navController.navigate(AppScreens.EthnicGroupReportScreen.route)},
             modifier = modifier,
             textButton = "Reporte por grupo étnico",
             icon = Icons.Outlined.Groups
         )
         ButtonWithIcon(
-            onClick = {},
+            onClick = {navController.navigate(AppScreens.DisabilityReportScreen.route)},
             modifier = modifier,
             textButton = "Reporte por discapacidad",
             icon = Icons.Outlined.Blind
         )
         ButtonWithIcon(
-            onClick = {},
+            onClick = {navController.navigate(AppScreens.DepartmentReportScreen.route)},
             modifier = modifier,
             textButton = "Reporte por departamento",
             icon = Icons.Outlined.Map
         )
         ButtonWithIcon(
-            onClick = {},
+            onClick = {navController.navigate(AppScreens.SocietiesReportScreen.route)},
             modifier = modifier,
             textButton = "Reporte por tipo de sociedad",
             icon = Icons.Outlined.Handshake
         )
         ButtonWithIcon(
-            onClick = {},
+            onClick = {navController.navigate(AppScreens.InterventionAreaReportScreen.route)},
             modifier = modifier,
             textButton = "Reporte por area de intervención",
             icon = Icons.Rounded.LocalActivity
         )
         ButtonWithIcon(
-            onClick = {},
+            onClick = {navController.navigate(AppScreens.TypeInterventionReportScreen.route)},
             modifier = modifier,
             textButton = "Reporte por tipo de intervención",
             icon = Icons.Rounded.MergeType

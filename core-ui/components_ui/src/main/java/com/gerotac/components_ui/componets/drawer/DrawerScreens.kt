@@ -39,6 +39,13 @@ sealed class AppScreens(val route: String) {
     object DeleteRequirementScreen : AppScreens(route = "DeleteRequirementScreen")
     object CompanyReportScreen : AppScreens(route = "CompanyReportScreen")
     object GenderReportScreen : AppScreens(route = "GenderReportScreen")
+    object SocietiesReportScreen : AppScreens(route = "SocietiesReportScreen")
+    object EthnicGroupReportScreen : AppScreens(route = "EthnicGroupReportScreen")
+    object InterventionAreaReportScreen : AppScreens(route = "InterventionAreaReportScreen")
+    object DisabilityReportScreen : AppScreens(route = "DisabilityReportScreen")
+    object TypeInterventionReportScreen : AppScreens(route = "TypeInterventionReportScreen")
+    object DepartmentReportScreen : AppScreens(route = "DepartmentReportScreen")
+    object CityReportScreen : AppScreens(route = "CityReportScreen")
     object DetailScreen : AppScreens(route = "DetailScreen?id={id}") {
         fun passId(id: Int): String {
             return "DetailScreen?id=$id"

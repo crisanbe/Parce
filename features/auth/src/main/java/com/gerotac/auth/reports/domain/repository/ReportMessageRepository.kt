@@ -8,9 +8,4 @@ interface ReportMessageRepository {
         token: String,
         date: ReportRequest
     ): ResponseReportDto
-
-    suspend fun doReportGenderResponse(
-        token: String,
-        date: ReportRequest
-    ): ResponseReportDto
 }

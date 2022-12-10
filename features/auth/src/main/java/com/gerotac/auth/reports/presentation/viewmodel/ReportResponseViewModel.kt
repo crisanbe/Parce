@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gerotac.auth.reports.data.remote.request.ReportRequest
 import com.gerotac.auth.reports.domain.usecase.ReportCompanyUseCase
-import com.gerotac.auth.reports.domain.usecase.ReportGenderUseCase
 import com.gerotac.auth.reports.presentation.statereports.ReportState
 import com.gerotac.auth.updateuser.di.UpdateUserHeaders
 import com.gerotac.core.util.UiEvent
@@ -21,8 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReportResponseViewModel @Inject constructor(
-    private val reportUseCase: ReportCompanyUseCase,
-    private val reportGenderUseCase: ReportGenderUseCase,
+    private val reportUseCase: ReportCompanyUseCase
     ) : ViewModel() {
     var state = MutableStateFlow(ReportState())
         private set
@@ -56,36 +54,6 @@ class ReportResponseViewModel @Inject constructor(
                         else -> Unit
                     }
                 }.launchIn(this)
-        }
-    }
-
-    suspend fun doReportResponse(request: ReportRequest) {
-        val token = UpdateUserHeaders.getHeader()["Authorization"]
-        viewModelScope.launch {
-            reportGenderUseCase(
-                token = token.toString(),
-                request
-            ).onEach { result ->
-                when (result) {
-                    is Resource.Success -> {
-                        state.update { ReportState(message = result.data.toString()) }
-                        uiEvent.send(UiEvent.Success)
-                    }
-                    is Resource.Error -> {
-                        state.value = ReportState(false)
-                        uiEvent.send(
-                            UiEvent.ShowSnackBar(
-                                UiText.DynamicString(result.message ?: "Error")
-                            )
-                        )
-                        uiEvent.send(UiEvent.Error)
-                    }
-                    is Resource.Loading -> {
-                        state.value = ReportState(true)
-                    }
-                    else -> Unit
-                }
-            }.launchIn(this)
         }
     }
 }

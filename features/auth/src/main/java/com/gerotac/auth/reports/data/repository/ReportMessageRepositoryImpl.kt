@@ -19,14 +19,4 @@ class ReportMessageRepositoryImpl @Inject constructor(
             date = date
         )
     }
-
-    override suspend fun doReportGenderResponse(
-        token: String,
-        date: ReportRequest,
-    ): ResponseReportDto {
-        return api.doReportResponseApi(
-            token = token,
-            date = date
-        )
-    }
 }

@@ -78,6 +78,160 @@ class ReportFileViewModel : ViewModel() {
         }
     }
 
+    fun downloadFileDisability(date:ReportRequest) {
+        val token = UpdateUserHeaders.getHeader()["Authorization"]
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+            val timestamp = System.currentTimeMillis()
+            api.doReportDisabilityApi(token.toString(),date)
+                .saveFile(timestamp.toString())
+                .collect { downloadState ->
+                    state = when (downloadState) {
+                        is DownloadState.Downloading -> {
+                            FileDownloadScreenState.Downloading(progress = downloadState.progress)
+                        }
+                        is DownloadState.Failed -> {
+                            FileDownloadScreenState.Failed(error = downloadState.error)
+                        }
+                        DownloadState.Finished -> {
+                            FileDownloadScreenState.Downloaded
+                        }
+                    }
+                }
+        }
+    }
+
+    fun downloadFileSocieties(date:ReportRequest) {
+        val token = UpdateUserHeaders.getHeader()["Authorization"]
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+            val timestamp = System.currentTimeMillis()
+            api.doReportSocietiesApi(token.toString(),date)
+                .saveFile(timestamp.toString())
+                .collect { downloadState ->
+                    state = when (downloadState) {
+                        is DownloadState.Downloading -> {
+                            FileDownloadScreenState.Downloading(progress = downloadState.progress)
+                        }
+                        is DownloadState.Failed -> {
+                            FileDownloadScreenState.Failed(error = downloadState.error)
+                        }
+                        DownloadState.Finished -> {
+                            FileDownloadScreenState.Downloaded
+                        }
+                    }
+                }
+        }
+    }
+
+    fun downloadFileInterventionArea(date:ReportRequest) {
+        val token = UpdateUserHeaders.getHeader()["Authorization"]
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+            val timestamp = System.currentTimeMillis()
+            api.doReportInterventionAreaApi(token.toString(),date)
+                .saveFile(timestamp.toString())
+                .collect { downloadState ->
+                    state = when (downloadState) {
+                        is DownloadState.Downloading -> {
+                            FileDownloadScreenState.Downloading(progress = downloadState.progress)
+                        }
+                        is DownloadState.Failed -> {
+                            FileDownloadScreenState.Failed(error = downloadState.error)
+                        }
+                        DownloadState.Finished -> {
+                            FileDownloadScreenState.Downloaded
+                        }
+                    }
+                }
+        }
+    }
+
+    fun downloadFileEthnicGroup(date:ReportRequest) {
+        val token = UpdateUserHeaders.getHeader()["Authorization"]
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+            val timestamp = System.currentTimeMillis()
+            api.doReportEthnicGroupApi(token.toString(),date)
+                .saveFile(timestamp.toString())
+                .collect { downloadState ->
+                    state = when (downloadState) {
+                        is DownloadState.Downloading -> {
+                            FileDownloadScreenState.Downloading(progress = downloadState.progress)
+                        }
+                        is DownloadState.Failed -> {
+                            FileDownloadScreenState.Failed(error = downloadState.error)
+                        }
+                        DownloadState.Finished -> {
+                            FileDownloadScreenState.Downloaded
+                        }
+                    }
+                }
+        }
+    }
+
+    fun downloadFileTypeInterventionGroup(date:ReportRequest) {
+        val token = UpdateUserHeaders.getHeader()["Authorization"]
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+            val timestamp = System.currentTimeMillis()
+            api.doReportTypeInterventionApi(token.toString(),date)
+                .saveFile(timestamp.toString())
+                .collect { downloadState ->
+                    state = when (downloadState) {
+                        is DownloadState.Downloading -> {
+                            FileDownloadScreenState.Downloading(progress = downloadState.progress)
+                        }
+                        is DownloadState.Failed -> {
+                            FileDownloadScreenState.Failed(error = downloadState.error)
+                        }
+                        DownloadState.Finished -> {
+                            FileDownloadScreenState.Downloaded
+                        }
+                    }
+                }
+        }
+    }
+
+    fun downloadFileDepartment(date:ReportRequest) {
+        val token = UpdateUserHeaders.getHeader()["Authorization"]
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+            val timestamp = System.currentTimeMillis()
+            api.doReportDepartmentApi(token.toString(),date)
+                .saveFile(timestamp.toString())
+                .collect { downloadState ->
+                    state = when (downloadState) {
+                        is DownloadState.Downloading -> {
+                            FileDownloadScreenState.Downloading(progress = downloadState.progress)
+                        }
+                        is DownloadState.Failed -> {
+                            FileDownloadScreenState.Failed(error = downloadState.error)
+                        }
+                        DownloadState.Finished -> {
+                            FileDownloadScreenState.Downloaded
+                        }
+                    }
+                }
+        }
+    }
+
+    fun downloadFileCity(date:ReportRequest) {
+        val token = UpdateUserHeaders.getHeader()["Authorization"]
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+            val timestamp = System.currentTimeMillis()
+            api.doReportCityApi(token.toString(),date)
+                .saveFile(timestamp.toString())
+                .collect { downloadState ->
+                    state = when (downloadState) {
+                        is DownloadState.Downloading -> {
+                            FileDownloadScreenState.Downloading(progress = downloadState.progress)
+                        }
+                        is DownloadState.Failed -> {
+                            FileDownloadScreenState.Failed(error = downloadState.error)
+                        }
+                        DownloadState.Finished -> {
+                            FileDownloadScreenState.Downloaded
+                        }
+                    }
+                }
+        }
+    }
+
     fun onIdleRequested() {
         state = FileDownloadScreenState.Idle
     }
