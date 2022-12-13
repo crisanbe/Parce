@@ -62,6 +62,6 @@ open class LoginViewModel @Inject constructor(
     }
 
     private fun enableLogin(Login: LoginDto) =
-        Patterns.EMAIL_ADDRESS.matcher(Login.email).matches() && Login.password.length > -0
+        Patterns.EMAIL_ADDRESS.matcher(Login.email).matches() && Login.password.length > 5
 
 }

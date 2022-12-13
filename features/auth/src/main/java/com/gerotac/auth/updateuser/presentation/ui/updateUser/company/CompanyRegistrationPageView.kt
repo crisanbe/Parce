@@ -283,14 +283,14 @@ fun CompanyRegistrationPage(
             Spacer(Modifier.height(5.dp))
             DropString(
                 ValueState = { genre = it },
-                text = "Tipo de genero",
+                text = "Tipo de género",
                 options = listOf("Hombre", "Mujer", "Prefiero no decir"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.genders)
             )
             Spacer(Modifier.height(5.dp))
             DropString(
                 ValueState = { ethnicGroup = it },
-                text = "Grupo etnico",
+                text = "Grupo étnico",
                 options = listOf(
                     "Afrocolombiano",
                     "Sin Pertenencia a Grupo",
@@ -303,7 +303,7 @@ fun CompanyRegistrationPage(
             Spacer(Modifier.height(5.dp))
             DropString(
                 ValueState = { presentsDisability = it },
-                text = "Tipo de discapasidad",
+                text = "Tipo de discapacidad",
                 options = listOf("NO", "SI"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.ic_disability)
             )

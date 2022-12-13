@@ -14,7 +14,7 @@ data class Data(
     val id: Int,
     val relations: Relations,
     val requierement: Int,
-    val status: String,
+    val status: String? = null,
     val type_intervention: String,
     val user: User
 ):Serializable

@@ -18,7 +18,7 @@ import com.gerotac.components_ui.componets.DividerIcon
 fun Email(nameError: Boolean, email: String, onTextChanged: (String) -> Unit) {
     TextField(value = email,
         onValueChange = {
-            if (it.length <= 25) onTextChanged(it)
+            if (it.length <= 120) onTextChanged(it)
             !nameError
         },
         label = { Text(stringResource(string.TextField_Email_address)) },

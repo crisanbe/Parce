@@ -86,7 +86,7 @@
     //TextField
     <string name="TextField_Email">Correo electrónico</string>
     <string name="TextField_Identification_type">Tipo de identificación</string>
-    <string name="TextField_Id_number">*Numero de identificación</string>
+    <string name="TextField_Id_number">*Número de identificación</string>
     <string name="TextField_Phone">*Teléfono</string>
 
     //Requerimiento

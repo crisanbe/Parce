@@ -99,8 +99,7 @@ fun DrawerItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-
-                        if (item.route == "Report"){mToast(context,"No posse permisos de administador🔑")}else{
+                        if (item.route == "Report"){mToast(context,"No posee permisos de administrador🔑")}else{
                             onItemClick(item)
                         }
                     }

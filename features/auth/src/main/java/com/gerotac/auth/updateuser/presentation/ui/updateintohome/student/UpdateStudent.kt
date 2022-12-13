@@ -264,7 +264,7 @@ fun UpdateStudent(
             DropString(
                 ValueState = { identificationType = it },
                 text = identificationType.toString(),
-                options = listOf("NIT", "Cedula", "Pasaporte", "Cédula de Extranjería"),
+                options = listOf("NIT", "Cédula", "Pasaporte", "Cédula de Extranjería"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.identity)
             )
             Spacer(Modifier.height(5.dp))

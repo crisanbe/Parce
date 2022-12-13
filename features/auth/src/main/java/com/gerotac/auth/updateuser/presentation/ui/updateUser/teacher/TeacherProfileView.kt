@@ -226,7 +226,7 @@ fun EducationalProfileView(
             DropDownAlternative(
                 ValueState = identificationType,
                 text = "Tipo de identificación",
-                options = listOf("NIT", "Cedula", "Pasaporte", "Cédula de Extranjería"),
+                options = listOf("NIT", "Cédula", "Pasaporte", "Cédula de Extranjería"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.identity)
             )
             Spacer(Modifier.height(5.dp))
@@ -252,7 +252,7 @@ fun EducationalProfileView(
             Spacer(Modifier.height(5.dp))
             DropDownAlternative(
                 ValueState = hasDisability,
-                text = "Tipo de discapasidad",
+                text = "Tipo de discapacidad",
                 options = listOf("NO", "SI"),
                 keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.ic_disability)

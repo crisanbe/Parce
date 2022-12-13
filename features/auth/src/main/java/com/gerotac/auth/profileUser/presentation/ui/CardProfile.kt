@@ -106,7 +106,7 @@ fun CardProfile(
                 CardView(
                     item = if(!item.gener.isNullOrEmpty()){item.gener}else{""},
                     elevation = 10.dp,
-                    text = "Genero: ",
+                    text = "Género: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
