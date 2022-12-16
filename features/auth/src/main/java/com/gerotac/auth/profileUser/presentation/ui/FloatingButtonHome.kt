@@ -1,6 +1,5 @@
 package com.gerotac.auth.profileUser.presentation.ui
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding

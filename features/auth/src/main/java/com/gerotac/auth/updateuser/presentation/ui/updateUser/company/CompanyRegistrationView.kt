@@ -147,7 +147,7 @@ fun CompanyRegistration(
                 DropString(
                     ValueState = {identificationType = it},
                     text = "Tipo de identificación",
-                    options = listOf("NIT", "Cedula", "Pasaporte", "Cédula de Extranjería"),
+                    options = listOf("NIT", "Cédula", "Pasaporte", "Cédula de Extranjería"),
                     mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.identity)
                 )
                 TextField(
