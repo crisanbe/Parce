@@ -34,14 +34,14 @@ fun FloatingButton(text: String, onClickFloatingButton: () -> Unit) {
                 contentDescription = null,
                 tint = Color.White
             )
-            AnimatedVisibility(extendedState) {
+            //AnimatedVisibility(extendedState) {
                 Text(
                     text = text,
                     color = Color.White,
                     modifier = Modifier
                         .padding(start = 8.dp, top = 3.dp)
                 )
-            }
+            //}
             LaunchedEffect(extendedState) {
                 while (secondsDisappear > 0) {
                     delay(1.seconds)

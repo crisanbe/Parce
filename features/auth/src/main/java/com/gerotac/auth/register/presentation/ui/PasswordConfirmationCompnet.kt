@@ -1,5 +1,8 @@
 package com.gerotac.auth.register.presentation.ui
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -81,4 +84,13 @@ fun PasswordConfirmation(passwordConfirmationState: TextFieldValueState = rememb
             }
         }
     )
+    val assistiveElementText = "* Obligatorio minimo 6 caracteres"
+    val assistiveElementColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
+    Text(
+        text = assistiveElementText,
+        color = assistiveElementColor,
+        style = MaterialTheme.typography.caption,
+        modifier = Modifier.offset(x = (-1).dp)
+    )
+    Spacer(Modifier.size(5.dp))
 }

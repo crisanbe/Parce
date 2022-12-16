@@ -166,10 +166,9 @@ fun Register(
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
         IncomeRegister(modifier = modifier)
-        Spacer(modifier = Modifier.size(14.dp))
         Column(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally,

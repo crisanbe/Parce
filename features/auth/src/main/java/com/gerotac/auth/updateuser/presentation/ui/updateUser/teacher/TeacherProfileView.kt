@@ -232,7 +232,7 @@ fun EducationalProfileView(
             Spacer(Modifier.height(5.dp))
             DropDownAlternative(
                 ValueState = gender,
-                text = "Tipo de genero",
+                text = "Tipo de género",
                 options = listOf("Hombre", "Mujer", "Prefiero no decir"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.genders)
             )

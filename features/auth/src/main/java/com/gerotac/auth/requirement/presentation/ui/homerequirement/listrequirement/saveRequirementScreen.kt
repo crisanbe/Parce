@@ -52,6 +52,7 @@ import com.gerotac.core.util.UiEvent
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -303,7 +304,7 @@ fun RequirementBody(
             }
             Button(
                 onClick = {
-                    scope.launch {
+                    scope.launch(Dispatchers.Main) {
                         viewModel.doRequirement(
                             RequirementRequest(
                                 area_intervention = interventionArea,
@@ -318,7 +319,7 @@ fun RequirementBody(
                             when (event) {
                                 is UiEvent.Success -> {
                                     delay(5000)
-                                    navController.navigate(DrawerScreens.CompanyHome.route) { restoreState }
+                                    //navController.navigate(DrawerScreens.CompanyHome.route) { restoreState }
                                 }
                                 is UiEvent.ShowSnackBar -> {
                                     scaffoldState.snackbarHostState.showSnackbar(
