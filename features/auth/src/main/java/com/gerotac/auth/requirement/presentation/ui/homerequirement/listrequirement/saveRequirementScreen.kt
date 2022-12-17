@@ -292,7 +292,7 @@ fun RequirementBody(
                             },
                         painter = painterResource(
                             id = com.gerotac.components_ui.R.drawable.info_requirement),
-                        contentDescription = "icono informativo"
+                        contentDescription = "icono info"
                     )
                 }
 
