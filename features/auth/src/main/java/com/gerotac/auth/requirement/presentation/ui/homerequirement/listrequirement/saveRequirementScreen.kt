@@ -2,24 +2,26 @@
 
 package com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement
 
+import Tooltip
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.text.Html
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -30,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -71,6 +74,7 @@ fun RequirementScreen(
     navController: NavController,
     scaffoldState: ScaffoldState,
     viewModelLocation: GetApisDropViewModel = hiltViewModel()
+
 ) {
     val stateGetAreas = viewModelLocation.stateArea.collectAsState()
     Scaffold(
@@ -117,7 +121,7 @@ fun RequirementBody(
     val eventFlow = viewModel.uiEvent.receiveAsFlow()
     val hideKeyboard = LocalSoftwareKeyboardController.current
     var description by remember { mutableStateOf("") }
-    var interventionArea by remember { mutableStateOf(1) }
+    var interventionArea by remember { mutableStateOf(0) }
     var causeOfTheProblem by remember { mutableStateOf("") }
     var effectsOfTheProblem by remember { mutableStateOf("") }
     var impactOfTheProblem by remember { mutableStateOf("") }
@@ -268,39 +272,65 @@ fun RequirementBody(
                             .padding(start = 33.dp)
                     )
                 })
-            OutlinedButton(
+            Row(
                 modifier = Modifier
-                    .widthIn(300.dp)
-                    .background(Color(0xFFFFFFFF), CircleShape)
-                    .padding(vertical = 20.dp)
-                    .shadow(3.dp, CircleShape),
-                onClick = {
-                    permissionsState.permissions.forEach { perm ->
-                        when (perm.permission) {
-                            Manifest.permission.READ_EXTERNAL_STORAGE -> {
-                                when {
-                                    perm.status.isGranted -> {
-                                        launcher.launch("application/pdf")
-                                    }
-                                    !perm.status.isGranted -> {
-                                        navController.navigate(AppScreens.PermissionScreen.route)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Image(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clickable {
+                                mToast(
+                                    activity,
+                                    Html
+                                        .fromHtml("<font color='#e3f2fd' ><b>" + "Campo opcional" + "</b></font>")
+                                        .toString()
+                                )
+                            },
+                        painter = painterResource(
+                            id = com.gerotac.components_ui.R.drawable.info_requirement),
+                        contentDescription = "icono info"
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(5.dp))
+                OutlinedButton(
+                    modifier = Modifier
+                        .widthIn(200.dp)
+                        .background(Color(0xFFFFFFFF), CircleShape)
+                        .padding(vertical = 20.dp)
+                        .shadow(3.dp, CircleShape),
+                    onClick = {
+                        permissionsState.permissions.forEach { perm ->
+                            when (perm.permission) {
+                                Manifest.permission.READ_EXTERNAL_STORAGE -> {
+                                    when {
+                                        perm.status.isGranted -> {
+                                            launcher.launch("application/pdf")
+                                        }
+                                        !perm.status.isGranted -> {
+                                            navController.navigate(AppScreens.PermissionScreen.route)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                ) {
+                    Icon(
+                        Icons.Filled.Archive,
+                        contentDescription = "Archivo"
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(
+                        "Adjuntar archivo🗂️",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
                 }
-            ) {
-                Icon(
-                    Icons.Filled.Archive,
-                    contentDescription = "Archivo"
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text(
-                    "Adjuntar archivo🗂️",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
             }
             Button(
                 onClick = {
@@ -318,8 +348,9 @@ fun RequirementBody(
                         eventFlow.collect { event ->
                             when (event) {
                                 is UiEvent.Success -> {
-                                    delay(5000)
-                                    //navController.navigate(DrawerScreens.CompanyHome.route) { restoreState }
+                                    if (state.value.requirement?.status == true) {
+                                        navController.navigate(DrawerScreens.CompanyHome.route) { restoreState }
+                                    }
                                 }
                                 is UiEvent.ShowSnackBar -> {
                                     scaffoldState.snackbarHostState.showSnackbar(
@@ -346,4 +377,39 @@ fun RequirementBody(
         }
     }
     LinearProgress(isDisplayed = state.value.isLoading, text = "Subiendo Archivos...")
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+fun TooltipOnLongClickExample(onClick: () -> Unit = {}) {
+    Box {
+        val showTooltip = remember { mutableStateOf(false) }
+
+        Box(
+            modifier = Modifier
+                .combinedClickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(),
+                    onClickLabel = "Button action description",
+                    role = Role.Button,
+                    onClick = onClick,
+                    onLongClick = { showTooltip.value = true },
+                ),
+        ) {
+            Image(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable {
+                        onClick()
+                    },
+                painter = painterResource(
+                    id = com.gerotac.components_ui.R.drawable.info_requirement),
+                contentDescription = "icono info"
+            )
+        }
+
+        Tooltip(showTooltip) {
+            Text("Tooltip Text!!")
+        }
+    }
 }

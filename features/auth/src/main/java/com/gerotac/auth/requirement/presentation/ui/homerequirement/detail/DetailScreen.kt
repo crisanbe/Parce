@@ -348,8 +348,7 @@ private fun Body(
                     modifier = Modifier
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                    verticalAlignment = Alignment.CenterVertically) {
                     ButtonWithShadow(
                         modifier = Modifier
                             .width(190.dp)

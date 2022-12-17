@@ -5,17 +5,16 @@ package com.gerotac.auth.intervention.createintervention.presentation.ui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.text.Html
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Upload
@@ -68,10 +67,8 @@ import java.io.File
 fun SaveInterventionScreen(
     navController: NavController,
     code: String,
-    viewModelLocation: GetApisDropViewModel = hiltViewModel()
+    scaffoldState: ScaffoldState
 ) {
-    val scaffoldState = rememberScaffoldState()
-    val stateGetAreas = viewModelLocation.stateArea.collectAsState()
     Scaffold(
         modifier = Modifier,
         scaffoldState = scaffoldState, snackbarHost = {
@@ -86,10 +83,11 @@ fun SaveInterventionScreen(
                 )
             }
         }, content = {
-                SaveInterventionBody(
-                    navController = navController,
-                    code = code
-                )
+            SaveInterventionBody(
+                navController = navController,
+                code = code,
+                scaffoldState
+            )
         })
 }
 
@@ -100,12 +98,12 @@ fun SaveInterventionScreen(
 fun SaveInterventionBody(
     navController: NavController,
     code: String,
+    scaffoldState: ScaffoldState,
     viewModel: InterventionViewModel = hiltViewModel()
 ) {
     val activity = LocalContext.current as Activity
     val state = viewModel.state.collectAsState()
     val scope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState()
     val eventFlow = viewModel.uiEvent.receiveAsFlow()
     val hideKeyboard = LocalSoftwareKeyboardController.current
     var description by remember { mutableStateOf("") }
@@ -171,7 +169,7 @@ fun SaveInterventionBody(
             DropString(
                 ValueState = { type_intervention = it },
                 text = type_intervention,
-                options = listOf("Inicial","Avance","Final"),
+                options = listOf("Inicial", "Avance", "Final"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.identity)
             )
             Spacer(Modifier.height(5.dp))
@@ -199,39 +197,63 @@ fun SaveInterventionBody(
                     )
                 })
             Spacer(Modifier.height(5.dp))
-            OutlinedButton(
+            Row(
                 modifier = Modifier
-                    .widthIn(300.dp)
-                    .background(Color(0xFFFFFFFF), CircleShape)
-                    .padding(vertical = 20.dp)
-                    .shadow(3.dp, CircleShape),
-                onClick = {
-                    permissionsState.permissions.forEach { perm ->
-                        when (perm.permission) {
-                            Manifest.permission.READ_EXTERNAL_STORAGE -> {
-                                when {
-                                    perm.status.isGranted -> {
-                                        launcher.launch("application/pdf")
-                                    }
-                                    !perm.status.isGranted -> {
-                                        navController.navigate(AppScreens.PermissionScreen.route)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clickable {
+                            mToast(
+                                activity,
+                                Html
+                                    .fromHtml("<font color='#e3f2fd' ><b>" + "Campo opcional" + "</b></font>")
+                                    .toString()
+                            )
+                        },
+                    painter = painterResource(
+                        id = com.gerotac.components_ui.R.drawable.info_requirement
+                    ),
+                    contentDescription = "icono info"
+                )
+                Spacer(modifier = Modifier.width(5.dp))
+                OutlinedButton(
+                    modifier = Modifier
+                        .widthIn(200.dp)
+                        .background(Color(0xFFFFFFFF), CircleShape)
+                        .padding(vertical = 20.dp)
+                        .shadow(3.dp, CircleShape),
+                    onClick = {
+                        permissionsState.permissions.forEach { perm ->
+                            when (perm.permission) {
+                                Manifest.permission.READ_EXTERNAL_STORAGE -> {
+                                    when {
+                                        perm.status.isGranted -> {
+                                            launcher.launch("application/pdf")
+                                        }
+                                        !perm.status.isGranted -> {
+                                            navController.navigate(AppScreens.PermissionScreen.route)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                ) {
+                    Icon(
+                        Icons.Filled.Upload,
+                        contentDescription = "Archivo"
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(
+                        "Subir archivo🗂️",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
                 }
-            ) {
-                Icon(
-                    Icons.Filled.Upload,
-                    contentDescription = "Archivo"
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text(
-                    "Subir archivo🗂️",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
             }
             Button(
                 onClick = {
@@ -245,15 +267,10 @@ fun SaveInterventionBody(
                                 file = listPdf
                             )
                         )
-                        eventFlow.collectLatest { event ->
+                        eventFlow.collect { event ->
                             when (event) {
                                 is UiEvent.Success -> {
-                                    navController.navigate(
-                                        DrawerScreens.CompanyHome.route) {}
-                                    scaffoldState.snackbarHostState.showSnackbar(
-                                        message = "Se guardo exitosamente🏅",
-                                        actionLabel = "Continue"
-                                    )
+                                    navController.navigate(DrawerScreens.CompanyHome.route)
                                 }
                                 is UiEvent.ShowSnackBar -> {
                                     scaffoldState.snackbarHostState.showSnackbar(

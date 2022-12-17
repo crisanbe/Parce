@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.gerotac.auth.R
 import com.gerotac.auth.approveanddisapprove.presentation.ui.CheckedApproveAndDisapprove
 import com.gerotac.auth.approveanddisapprove.presentation.viewmodel.ApproveInterventionViewModel
 import com.gerotac.auth.requirement.di.HeaderRequirement
@@ -37,12 +36,10 @@ import com.gerotac.auth.theme.ShimmerColorShades
 import com.gerotac.components_ui.componets.button.IconButtonDelete
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.progress.LinearProgressBar
-import com.gerotac.components_ui.componets.progress.ProgressIndicator
 import com.gerotac.core.util.UiEvent
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+
 
 fun mToast(context: Context, text: String) {
     Toast.makeText(context, text, Toast.LENGTH_LONG).show()

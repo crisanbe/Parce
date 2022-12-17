@@ -635,6 +635,7 @@ fun ScaffoldSection(
                         onStatusBarColorChange(MaterialTheme.colors.background)
                         SaveInterventionScreen(
                             controller,
+                            scaffoldState = scaffoldState,
                             code = backStackEntry.arguments?.getString("code").toString(),
                         )
                     }
