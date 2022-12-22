@@ -87,7 +87,7 @@ fun PasswordRegister(passwordState: TextFieldValueState = remember { PasswordSta
             }
         }
     )
-    val assistiveElementText = "* Obligatorio minimo 6 caracteres"
+    val assistiveElementText = "* Obligatorio mínimo 6 caracteres"
     val assistiveElementColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
     Text(
         text = assistiveElementText,

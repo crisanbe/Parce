@@ -63,7 +63,7 @@ fun Password(nameError: Boolean, password: String, onTextChanged: (String) -> Un
                 }
             }
         })
-    val assistiveElementText = if (nameError) "Error: Obligatorio" else "* Obligatorio minimo 6 caracteres"
+    val assistiveElementText = if (nameError) "Error: Obligatorio" else "* Obligatorio mínimo 6 caracteres"
     val assistiveElementColor = if (nameError) {
         MaterialTheme.colors.error
     } else {
