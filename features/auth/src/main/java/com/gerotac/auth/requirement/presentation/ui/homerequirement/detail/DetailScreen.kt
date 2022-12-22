@@ -65,6 +65,7 @@ import com.gerotac.components_ui.componets.button.TextButtonPersonalized
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.ui.theme.ParceTheme
+import com.gerotac.shared.commons.Constant.URL_VIEW_PRODUCTION_FILE
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -428,7 +429,7 @@ private fun ListFileContent(
                         openFile = {
                             val intent = Intent(Intent.ACTION_VIEW)
                             intent.setDataAndType(
-                                "https://parces.gerotac.com/${it.url}".toUri(),
+                                "$URL_VIEW_PRODUCTION_FILE${it.url}".toUri(),
                                 "application/pdf"
                             )
                             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
