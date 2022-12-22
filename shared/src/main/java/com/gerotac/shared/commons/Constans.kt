@@ -1,8 +1,8 @@
 package com.gerotac.shared.commons
 
 object Constant {
-    const val URL_LOCAL: String = "https://parces.gerotac.com/api/v1/"
-    //const val URL_PRODUCTION: String = "https://parce-api-app.gerotac.com/api/v1/"
+    const val URL: String = "https://parces.gerotac.com/api/v1/"
+    //const val URL: String = "https://parce-api-app.gerotac.com/api/v1/"
 
     //TODO https://parces.gerotac.com/ RUTA lOCAL PARA VER LOS ARCHIVOS
     const val URL_VIEW_LOCAL_FILE: String = "https://parces.gerotac.com/"
