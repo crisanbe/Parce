@@ -150,16 +150,16 @@ fun DropDeassignRequirement(
                                 items(
                                     options.filter {
                                         it.name.lowercase()
-                                            .contains(selectOption.lowercase()) || options[index].name.lowercase()
+                                            .contains(selectOption.lowercase()) || it.name.lowercase()
                                             .lowercase()
                                             .contains("others")
                                     }
                                         .sortedBy { it.name }
                                 ) {
-                                    TeacherItems(name = it.name, id = options[index].id)
+                                    TeacherItems(name = it.name, id = it.id)
                                     { _, _ ->
-                                        selectOption = selectionOption.name
-                                        selectOptionChange(selectionOption.id)
+                                        selectOption = it.name
+                                        selectOptionChange(it.id)
                                         expanded = false
                                     }
                                 }
@@ -167,10 +167,10 @@ fun DropDeassignRequirement(
                                 items(
                                     options.sortedBy { it.name }
                                 ) {
-                                    TeacherItems(name = it.name, id = options[index].id)
+                                    TeacherItems(name = it.name, id = it.id)
                                     { _, _ ->
-                                        selectOption = selectionOption.name
-                                        selectOptionChange(selectionOption.id)
+                                        selectOption = it.name
+                                        selectOptionChange(it.id)
                                         expanded = false
                                     }
                                 }

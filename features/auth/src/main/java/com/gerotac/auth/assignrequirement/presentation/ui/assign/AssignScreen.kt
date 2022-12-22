@@ -26,7 +26,7 @@ import com.gerotac.auth.R
 import com.gerotac.auth.assignrequirement.data.remote.assignteacherdto.assignrequirement.request.AssignRequest
 import com.gerotac.auth.assignrequirement.presentation.viewmodel.AssignRequirementViewModel
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.listateacher.ResultTeacher
-import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropDeassignRequirement
+import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropListTeacher
 import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
 import com.gerotac.components_ui.componets.TextButtonNavigation
@@ -36,25 +36,26 @@ import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.progress.LinearProgressBar
 import com.gerotac.core.util.UiEvent
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun AssignToTeacherScreen(
+fun AssignScreen(
     navController: NavController,
     codeTeacher: String,
     scaffoldState: ScaffoldState,
     upPress: () -> Unit,
     viewModelLocation: GetApisDropViewModel = hiltViewModel(),
-    viewModel: AssignRequirementViewModel = hiltViewModel()
+    assignTeacherViewModel: AssignRequirementViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val hideKeyboard = LocalSoftwareKeyboardController.current
     val stateGetTeacher = viewModelLocation.stateTeacher.collectAsState()
-    val eventFlow = viewModel.uiEvent.receiveAsFlow()
+    val eventFlow = assignTeacherViewModel.uiEvent.receiveAsFlow()
     Scaffold(
         modifier = Modifier,
         scaffoldState = scaffoldState,
@@ -72,7 +73,7 @@ fun AssignToTeacherScreen(
         },
         content = {
             Box(Modifier.fillMaxSize()) {
-                HeaderTeacherScreen(navController, upPress)
+                HeaderAssign(navController, upPress)
                 stateGetTeacher.value.teacherState.let { listTeacher ->
                     BodyAssign(Modifier.align(Alignment.Center),
                         navController = navController,
@@ -81,42 +82,12 @@ fun AssignToTeacherScreen(
                         onclickAssignTeacher = {
                             hideKeyboard?.hide()
                             scope.launch {
-                                viewModel.assignRequirementTeacher(
-                                    AssignRequest(
-                                        user = it,
-                                        idRequirement = codeTeacher.toInt()
-                                    )
-                                )
+
                                 eventFlow.collect { event ->
                                     when (event) {
                                         is UiEvent.Success -> {
-                                            mToast(context, "Se asigno requerimiento👍")
-                                            navController.navigate(DrawerScreens.CompanyHome.route)
-                                        }
-                                        is UiEvent.ShowSnackBar -> {
-                                            scaffoldState.snackbarHostState.showSnackbar(
-                                                message = event.message.asString(context)
-                                            )
-                                        }
-                                        else -> Unit
-                                    }
-                                }
-                            }
-                        },
-                        onclickDeassignTeacher = {
-                            hideKeyboard?.hide()
-                            scope.launch {
-                                viewModel.deassignRequirementStudent(
-                                    AssignRequest(
-                                        user = it,
-                                        idRequirement = codeTeacher.toInt()
-                                    )
-                                )
-                                eventFlow.collect { event ->
-                                    when (event) {
-                                        is UiEvent.Success -> {
-                                            mToast(context, "Se desasigno requerimiento👍")
-                                            navController.navigate(DrawerScreens.CompanyHome.route)
+                                            mToast(context,"Se asigno requerimiento👍")
+                                         navController.navigate(DrawerScreens.CompanyHome.route)
                                         }
                                         is UiEvent.ShowSnackBar -> {
                                             scaffoldState.snackbarHostState.showSnackbar(
@@ -135,7 +106,7 @@ fun AssignToTeacherScreen(
 }
 
 @Composable
-fun HeaderTeacherScreen(navController: NavController, upPress: () -> Unit) {
+fun HeaderAssign(navController: NavController,upPress: () -> Unit) {
     TopPart(onClickAction = { upPress() })
 }
 
@@ -146,12 +117,10 @@ fun BodyAssign(
     listTeacher: List<ResultTeacher> = emptyList(),
     codeTeacher: String,
     onclickAssignTeacher: (List<Int>) -> Unit,
-    onclickDeassignTeacher: (List<Int>) -> Unit,
-    viewModel: AssignRequirementViewModel = hiltViewModel()
+    assignTeacherViewModel: AssignRequirementViewModel = hiltViewModel()
 ) {
     var teacher: List<Int> by remember { mutableStateOf(listOf()) }
-    val state = viewModel.state.collectAsState()
-    val stateDeassign = viewModel.stateDeassign.collectAsState()
+    val state = assignTeacherViewModel.state.collectAsState()
     val systemUiController = rememberSystemUiController()
     SideEffect {
         systemUiController.setSystemBarsColor(
@@ -165,7 +134,7 @@ fun BodyAssign(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(30.dp),
             text = stringResource(R.string.TextField_Assign_Requirement) + " #️⃣${codeTeacher}",
             fontSize = 22.sp,
             color = Color.Black,
@@ -173,29 +142,25 @@ fun BodyAssign(
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
-        DropDeassignRequirement(
+        Spacer(modifier = Modifier.size(20.dp))
+        DropListTeacher(
             selectOptionChange = { teacher = arrayListOf(it) },
             text = "Docente",
             options = listTeacher,
             mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.docente_asign)
         )
+        Spacer(modifier = Modifier.size(16.dp))
         ButtonValidation(
             onClick = { onclickAssignTeacher.invoke(teacher) },
             text = "Asignar"
         )
-        Spacer(modifier = Modifier.height(10.dp))
-        ButtonValidation(
-            onClick = { onclickDeassignTeacher.invoke(teacher) },
-            text = "Desasignar"
-        )
         Spacer(modifier = Modifier.height(70.dp))
     }
-    LinearProgressBar(state.value.isLoading, "Asignando...")
-    LinearProgressBar(stateDeassign.value.isLoading, "Desasignando...")
+    LinearProgressBar(state.value.isLoading,"Asignando...")
 }
 
 @Composable
-fun FooterTeacherScreen(modifier: Modifier, onClickRegister: () -> Unit) {
+fun FooterAssign(modifier: Modifier, onClickRegister: () -> Unit) {
     Row(
         modifier,
         verticalAlignment = Alignment.CenterVertically,
@@ -211,8 +176,8 @@ fun FooterTeacherScreen(modifier: Modifier, onClickRegister: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-fun AssignTeacherScreenPreview() {
-    AssignToTeacherScreen(
+fun AssignPreview() {
+    AssignScreen(
         navController = rememberNavController(),
         "",
         rememberScaffoldState(),
