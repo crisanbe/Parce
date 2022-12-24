@@ -48,7 +48,7 @@ fun DeleteDialog(
                 .clip(CircleShape)
         )
         ExitAlertDialog(
-            text = "Estas seguro, que quieres eliminar el requerimiento #${id}?😉",
+            text = "Estas seguro, que quieres eliminar el requerimiento #${id}?",
             onClickYes = {
                 showDialog = !showDialog
                 viewModel.doUpdateRequirement(id.toInt())
