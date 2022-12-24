@@ -86,7 +86,7 @@ fun DropAreas(
                         if (index != options.lastIndex) {
                             Spacer(modifier = Modifier.size(10.dp))
                             Divider(
-                                thickness = 2.dp, color = Color.Black
+                                thickness = 2.dp, color = Color.Transparent
                             )
                         }
                     }

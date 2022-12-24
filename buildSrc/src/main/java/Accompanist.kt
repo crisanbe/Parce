@@ -8,6 +8,7 @@ object Accompanist {
     private const val accompanistNavigationAnimationVersion = "0.26.2-beta"
     private const val accompanistPlaceHolderVersion = "0.26.1-alpha"
     private const val accompanistFlowlayoutVersion = "0.25.1"
+    private const val accompanistSwiperefreshVersion = "0.27.0"
     const val accompanistPermission = "com.google.accompanist:accompanist-permissions:$versionAccompanistPermissions"
     const val accompanistGlide= "dev.chrisbanes.accompanist:accompanist-glide:$versionAccompanistGlide"
     const val accompanistPager= "com.google.accompanist:accompanist-pager:$versionAccompanist"
@@ -16,5 +17,6 @@ object Accompanist {
     const val navigationCompose= "androidx.navigation:navigation-compose:$navigationComposeVersion"
     const val accompanistNavigationAnimation= "com.google.accompanist:accompanist-navigation-animation:$accompanistNavigationAnimationVersion"
     const val accompanistPlaceHolder = "com.google.accompanist:accompanist-placeholder:$accompanistPlaceHolderVersion"
+    const val accompanistSwipereFresh = "com.google.accompanist:accompanist-swiperefresh:$accompanistSwiperefreshVersion"
     const val accompanistFlowlayout = "com.google.accompanist:accompanist-flowlayout:$accompanistFlowlayoutVersion"
 }

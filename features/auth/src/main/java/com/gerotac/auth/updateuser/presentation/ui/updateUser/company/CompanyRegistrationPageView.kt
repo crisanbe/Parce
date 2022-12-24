@@ -303,7 +303,7 @@ fun CompanyRegistrationPage(
             Spacer(Modifier.height(5.dp))
             DropString(
                 ValueState = { presentsDisability = it },
-                text = "Tipo de discapacidad",
+                text = "Presenta discapacidad",
                 options = listOf("NO", "SI"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.ic_disability)
             )

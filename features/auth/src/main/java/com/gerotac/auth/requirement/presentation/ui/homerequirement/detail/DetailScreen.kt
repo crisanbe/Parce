@@ -42,10 +42,12 @@ import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.work.*
 import coil.compose.rememberAsyncImagePainter
 import com.gerotac.auth.R
+import com.gerotac.auth.approveanddisapprove.presentation.viewmodel.RefreshViewModel
 import com.gerotac.auth.intervention.detailintervention.presentation.viewmodel.DetailInterventionViewModel
 import com.gerotac.auth.requirement.di.HeaderRequirement
 import com.gerotac.auth.requirement.domain.model.detailrequirement.Data
@@ -68,7 +70,11 @@ import com.gerotac.components_ui.componets.ui.theme.ParceTheme
 import com.gerotac.shared.commons.Constant.URL_VIEW_PRODUCTION_FILE
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 
 @SuppressLint(
     "UnusedMaterialScaffoldPaddingParameter"
@@ -258,7 +264,7 @@ private fun Body(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    ButtonWithShadow(
+                    /*ButtonWithShadow(
                         modifier = Modifier
                             .width(190.dp)
                             .height(61.dp),
@@ -266,12 +272,11 @@ private fun Body(
                         shape = RoundedCornerShape(20.dp),
                         onClick = { navController.navigate(AppScreens.SaveInterventionScreen.route + "?code=${data?.data?.id}") },
                         textoBoton = "Crear intervención"
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
+                    )*/
                     ButtonWithShadow(
                         modifier = Modifier
-                            .width(130.dp)
-                            .height(58.dp),
+                            .width(300.dp)
+                            .height(45.dp),
                         color = Color.Black,
                         shape = RoundedCornerShape(20.dp),
                         onClick = {
@@ -349,7 +354,8 @@ private fun Body(
                     modifier = Modifier
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically) {
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     ButtonWithShadow(
                         modifier = Modifier
                             .width(190.dp)
@@ -441,15 +447,15 @@ private fun ListFileContent(
                             }
                         })
                 }
-            }
-        )
-        Column() {
-            repeat(7) {
-                if (isLoading) AnimationEffect()
-            }
+            })
+    }
+    Column() {
+        repeat(7) {
+            if (isLoading) AnimationEffect()
         }
     }
 }
+
 
 @Composable
 fun ItemFile(

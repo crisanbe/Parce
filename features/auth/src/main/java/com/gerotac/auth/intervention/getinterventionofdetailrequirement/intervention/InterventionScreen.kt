@@ -12,9 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.gerotac.auth.approveanddisapprove.presentation.viewmodel.RefreshViewModel
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.AnimationEffect
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.HomeInterventions
 import com.gerotac.auth.requirement.presentation.viewmodel.DetailRequirementViewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -49,6 +54,21 @@ private fun InterventionContent(
     scaffoldState: ScaffoldState,
     resultIntervention: List<com.gerotac.auth.requirement.domain.model.detailrequirement.Intervention> = ArrayList(),
 ) {
+    val viewModelRefresh = viewModel<DetailRequirementViewModel>()
+    val isLoading = viewModelRefresh.state.isLoading
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
+    SwipeRefresh(
+        state = swipeRefreshState,
+        onRefresh = viewModelRefresh::detailRequirement,
+        indicator = { state, refreshTrigger ->
+            SwipeRefreshIndicator(
+                state = state,
+                refreshTriggerDistance = refreshTrigger,
+                backgroundColor = Color.Yellow,
+                contentColor = Color.DarkGray
+            )
+        }
+    ) {
     Column(modifier = modifier.heightIn(min = 100.dp, max = 500.dp)) {
         Spacer(modifier = Modifier.height(16.dp))
         LazyColumn(
@@ -71,5 +91,6 @@ private fun InterventionContent(
                 if (isLoading) AnimationEffect()
             }
         }
+    }
     }
 }

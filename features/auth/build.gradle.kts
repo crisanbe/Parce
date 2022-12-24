@@ -43,6 +43,7 @@ dependencies {
 
     "implementation"(Apache.commonsIo)
     "implementation"(Accompanist.accompanistPlaceHolder)
+    "implementation"(Accompanist.accompanistSwipereFresh)
 
     "kapt"(DaggerHilt.hiltCompiler)
     "kapt"(DaggerHilt.hiltCompilerAndroidx)

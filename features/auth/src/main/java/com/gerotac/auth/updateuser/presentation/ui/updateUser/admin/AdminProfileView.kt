@@ -246,7 +246,7 @@ fun EducationalProfileView(
             Spacer(Modifier.height(5.dp))
             DropDownAlternative(
                 ValueState = hasDisability,
-                text = "Tipo de discapacidad",
+                text = "Presenta discapacidad",
                 options = listOf("NO", "SI"),
                 keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.ic_disability)

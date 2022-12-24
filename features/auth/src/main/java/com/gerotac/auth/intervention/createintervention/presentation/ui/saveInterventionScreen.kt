@@ -139,7 +139,7 @@ fun SaveInterventionBody(
             }
         }
 
-    DialogExit(text = "Deseas salir?😁", onClickYes = {
+    DialogExit(text = "Desea volver atrás?😁", onClickYes = {
         showDialog = !showDialog
         navController.navigate(DrawerScreens.CompanyHome.route)
     })

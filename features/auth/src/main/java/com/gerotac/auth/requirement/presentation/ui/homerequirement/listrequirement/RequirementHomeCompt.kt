@@ -276,7 +276,8 @@ fun HomeInterventions(
                         )
                         LinearProgressBar(isDisplayed = state.value.isLoading, text = "Procesando...")
                     }
-                    if (HeaderRequirement.getRol()["rol"] == "docente") {
+                    if (HeaderRequirement.getRol()["rol"] == "docente"
+                        || HeaderRequirement.getRol()["rol"] == "empresa") {
                         CheckedApproveAndDisapprove(
                             onclickApprove = {
                                 scope.launch {
@@ -326,6 +327,7 @@ fun HomeInterventions(
                             },
                             color1 = com.gerotac.components_ui.R.drawable.approve,
                             color2 = com.gerotac.components_ui.R.drawable.disapprove,
+                            statusIntervention = resultInterventions
                         )
                     } else {
                         Button(

@@ -32,7 +32,9 @@ fun DataDto.toGetDetail(): Data {
 
 
 fun RelationsDto.toGetFile(): Relations {
-    return  Relations(files = files.map { file -> file.toContenidoFileModel()})
+    return  Relations(
+        files = files.map { file -> file.toContenidoFileModel()}
+    )
 }
 
 fun File.toContenidoFileModel(): com.gerotac.auth.requirement.domain.model.detailrequirement.File {
