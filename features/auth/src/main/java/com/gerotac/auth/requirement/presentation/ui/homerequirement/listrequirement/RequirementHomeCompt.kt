@@ -287,9 +287,9 @@ fun HomeInterventions(
                                     eventFlow.collect() { event ->
                                         when (event) {
                                             is UiEvent.Success -> {
-                                                mToast(context, "La intervencion fue aprobada✔️!")
+                                                mToast(context, "La intervención fue aprobada ✔!")
                                                 scaffoldState.snackbarHostState.showSnackbar(
-                                                    message = "Se aprobo correctamente🏅",
+                                                    message = "Se aprobó correctamente🏅",
                                                     actionLabel = "Continue",
                                                 )
                                             }
@@ -311,9 +311,9 @@ fun HomeInterventions(
                                     eventFlow.collect() { event ->
                                         when (event) {
                                             is UiEvent.Success -> {
-                                                mToast(context, "La intervencion fue desaprobada ❌")
+                                                mToast(context, "La intervención no fue aprobada ❌")
                                                 scaffoldState.snackbarHostState.showSnackbar(
-                                                    message = "Se desaprobó🏅",
+                                                    message = "No se aprobó🏅",
                                                     actionLabel = "Continue",
                                                 )
                                             }

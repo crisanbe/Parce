@@ -154,7 +154,7 @@ fun RequirementBody(
             }
         }
 
-    DialogExit(text = "Deseas finalizar la sesión?😁", onClickYes = {
+    DialogExit(text = "Desea volver atrás", onClickYes = {
         showDialog = !showDialog
         navController.navigate(DrawerScreens.CompanyHome.route)
     })
