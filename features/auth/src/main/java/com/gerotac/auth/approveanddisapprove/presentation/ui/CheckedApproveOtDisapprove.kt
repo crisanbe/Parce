@@ -91,7 +91,7 @@ fun CheckedApproveAndDisapprove(
                     )
                 }
             }
-        }else if(checked.toString() == "1" && HeaderRequirement.getRol()["rol"] == "empresa"){
+        }else if(checked.toString() == "1"){
             Text(
                 text = "Pendiente...",
                 color = Color.Blue,
@@ -102,14 +102,14 @@ fun CheckedApproveAndDisapprove(
         }
         else if(checked.toString() == "0"){
             Text(
-                text = "Intervencion aprobada",
+                text = "Intervención aprobada",
                 color = Color.Green,
                 maxLines = 1,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.ExtraBold
             )
         }else if(checked.toString() == "2"){
-            Text(text = "Intervencion rechazada",
+            Text(text = "Intervención rechazada",
                 color = Color.Red,
                 maxLines = 1,
                 fontSize = 15.sp,

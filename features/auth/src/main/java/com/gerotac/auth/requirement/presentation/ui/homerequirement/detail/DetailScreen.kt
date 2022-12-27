@@ -256,6 +256,34 @@ private fun Body(
                         textoBoton = "Crear intervención"
                     )
                 }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    OutlinedButton(
+                        modifier = Modifier
+                            .widthIn(300.dp)
+                            .background(Color(0xFFFFFFFF), CircleShape)
+                            .padding(vertical = 20.dp)
+                            .shadow(3.dp, CircleShape),
+                        onClick = {
+                            viewState.onShowRequest()
+                        }
+                    ) {
+                        Icon(
+                            Icons.Filled.Archive,
+                            contentDescription = "Archivo"
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(
+                            "Intervenciones y archivos🗂️",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.ExtraBold
+                        )
+                    }
+                }
             }
             "empresa" -> {
                 Row(

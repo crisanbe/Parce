@@ -277,7 +277,9 @@ fun HomeInterventions(
                         LinearProgressBar(isDisplayed = state.value.isLoading, text = "Procesando...")
                     }
                     if (HeaderRequirement.getRol()["rol"] == "docente"
-                        || HeaderRequirement.getRol()["rol"] == "empresa") {
+                        || HeaderRequirement.getRol()["rol"] == "empresa"
+                        || HeaderRequirement.getRol()["rol"] == "estudiante")
+                    {
                         CheckedApproveAndDisapprove(
                             onclickApprove = {
                                 scope.launch {

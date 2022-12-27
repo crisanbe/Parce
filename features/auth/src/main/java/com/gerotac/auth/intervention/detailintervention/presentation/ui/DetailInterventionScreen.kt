@@ -198,6 +198,7 @@ private fun Body(
 
          if (HeaderRequirement.getRol()["rol"] == "empresa" ||
              HeaderRequirement.getRol()["rol"] == "docente" ||
+             HeaderRequirement.getRol()["rol"] == "estudiante" ||
              HeaderRequirement.getRol()["rol"] == "admin"){
             //TODO this is the intervention id
             if (!data?.data?.id.toString().isNullOrEmpty()) {
