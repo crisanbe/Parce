@@ -153,9 +153,8 @@ private fun Body(
         )
         androidx.compose.material.OutlinedTextField(
             modifier = Modifier
-                .width(280.dp)
-                .wrapContentSize()
-                .height(90.dp),
+                .width(350.dp)
+                .height(150.dp),
             value = data?.data?.description ?: "",
             onValueChange = { data?.data?.description },
             label = { Text(stringResource(id = R.string.TextField_Description)) },
@@ -194,8 +193,7 @@ private fun Body(
                 model = com.gerotac.components_ui.R.drawable.user
             )
         )
-        Spacer(modifier = Modifier.height(18.dp))
-
+        Spacer(modifier = Modifier.height(1.dp))
          if (HeaderRequirement.getRol()["rol"] == "empresa" ||
              HeaderRequirement.getRol()["rol"] == "docente" ||
              HeaderRequirement.getRol()["rol"] == "estudiante" ||
@@ -210,7 +208,7 @@ private fun Body(
                 ) {
                     OutlinedButton(
                         modifier = Modifier
-                            .widthIn(300.dp)
+                            .widthIn(350.dp)
                             .background(Color(0xFFFFFFFF), CircleShape)
                             .padding(vertical = 20.dp)
                             .shadow(3.dp, CircleShape),

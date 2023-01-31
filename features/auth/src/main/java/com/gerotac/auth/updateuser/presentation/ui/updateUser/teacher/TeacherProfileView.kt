@@ -261,8 +261,7 @@ fun EducationalProfileView(
             DataTimeAlternative(birthday)
             Spacer(Modifier.height(10.dp))
             Button(
-                modifier = Modifier
-                    .size(height = 55.dp, width = 300.dp)
+                modifier = Modifier.widthIn(350.dp)
                     .onFocusChanged { focusState ->
                         idNumber.onFocusedChange(focusState.isFocused)
                         phoneNumberState.onFocusedChange(focusState.isFocused)

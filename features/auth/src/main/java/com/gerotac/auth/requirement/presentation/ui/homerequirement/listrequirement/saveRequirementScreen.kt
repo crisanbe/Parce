@@ -189,8 +189,7 @@ fun RequirementBody(
             )
             Spacer(Modifier.height(5.dp))
             OutlinedTextField(modifier = Modifier
-                .width(280.dp)
-                .wrapContentSize()
+                .width(350.dp)
                 .height(150.dp),
                 value = description,
                 onValueChange = { description = it },
@@ -212,7 +211,9 @@ fun RequirementBody(
                     )
                 })
             Spacer(Modifier.height(5.dp))
-            TextField(value = causeOfTheProblem,
+            TextField(
+                modifier = Modifier.widthIn(350.dp),
+                value = causeOfTheProblem,
                 onValueChange = { causeOfTheProblem = it },
                 label = { Text(stringResource(id = R.string.TextField_causas_problems)) },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
@@ -232,7 +233,9 @@ fun RequirementBody(
                     )
                 })
             Spacer(Modifier.height(5.dp))
-            TextField(value = effectsOfTheProblem,
+            TextField(
+                modifier = Modifier.widthIn(350.dp),
+                value = effectsOfTheProblem,
                 onValueChange = { effectsOfTheProblem = it },
                 label = { Text(stringResource(id = R.string.TextField_efect_problems)) },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
@@ -253,6 +256,7 @@ fun RequirementBody(
                 })
             Spacer(Modifier.height(5.dp))
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = impactOfTheProblem,
                 onValueChange = { impactOfTheProblem = it },
                 label = { Text(stringResource(id = R.string.TextField_impact_problems)) },
@@ -299,7 +303,7 @@ fun RequirementBody(
                 Spacer(modifier = Modifier.width(5.dp))
                 OutlinedButton(
                     modifier = Modifier
-                        .widthIn(200.dp)
+                        .widthIn(300.dp)
                         .background(Color(0xFFFFFFFF), CircleShape)
                         .padding(vertical = 20.dp)
                         .shadow(3.dp, CircleShape),
@@ -363,7 +367,7 @@ fun RequirementBody(
                     }
                 },
                 shape = RoundedCornerShape(percent = 45),
-                modifier = Modifier.size(height = 55.dp, width = 300.dp),
+                modifier = Modifier.widthIn(350.dp),
                 colors = ButtonDefaults.textButtonColors(backgroundColor = Color.Black)
             ) {
                 Text(

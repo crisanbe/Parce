@@ -1,6 +1,7 @@
 package com.gerotac.components_ui.componets.button
 
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -21,7 +22,7 @@ fun ButtonValidation(
     Button(
         onClick = { onClick.invoke() },
         shape = RoundedCornerShape(percent = 45),
-        modifier = Modifier.size(height = 50.dp, width = 300.dp),
+        modifier = Modifier.widthIn(350.dp),
         colors = ButtonDefaults.textButtonColors(backgroundColor = Color.Black)
     ) {
         Text(
@@ -43,7 +44,7 @@ fun ButtonValidationLogin(
         onClick = { onClickAction() },
         enabled = isLoginEnable,
         shape = RoundedCornerShape(percent = 45),
-        modifier = Modifier.size(height = 50.dp, width = 300.dp),
+        modifier = Modifier.widthIn(350.dp),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color(0xFF030303),
             disabledBackgroundColor = Color(0xFFFFD164),

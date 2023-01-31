@@ -174,8 +174,7 @@ fun SaveInterventionBody(
             )
             Spacer(Modifier.height(5.dp))
             OutlinedTextField(modifier = Modifier
-                .width(280.dp)
-                .wrapContentSize()
+                .width(350.dp)
                 .height(150.dp),
                 value = description,
                 onValueChange = { description = it },
@@ -222,7 +221,7 @@ fun SaveInterventionBody(
                 Spacer(modifier = Modifier.width(5.dp))
                 OutlinedButton(
                     modifier = Modifier
-                        .widthIn(200.dp)
+                        .widthIn(300.dp)
                         .background(Color(0xFFFFFFFF), CircleShape)
                         .padding(vertical = 20.dp)
                         .shadow(3.dp, CircleShape),
@@ -283,7 +282,7 @@ fun SaveInterventionBody(
                     }
                 },
                 shape = RoundedCornerShape(percent = 45),
-                modifier = Modifier.size(height = 55.dp, width = 300.dp),
+                modifier = Modifier.widthIn(350.dp),
                 colors = ButtonDefaults.textButtonColors(backgroundColor = Color.Black)
             ) {
                 Text(

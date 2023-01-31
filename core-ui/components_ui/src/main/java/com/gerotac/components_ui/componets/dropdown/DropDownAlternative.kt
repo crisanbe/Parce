@@ -33,6 +33,7 @@ fun DropDownAlternative(
         expanded = !expanded
     }) {
         OutlinedTextField(
+            modifier = Modifier.widthIn(350.dp),
             value = ValueState.text,
             maxLines = 1,
             enabled = false,

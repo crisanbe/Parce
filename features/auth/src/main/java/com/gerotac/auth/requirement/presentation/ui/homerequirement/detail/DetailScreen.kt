@@ -188,9 +188,8 @@ private fun Body(
         )
         androidx.compose.material.OutlinedTextField(
             modifier = Modifier
-                .width(280.dp)
-                .wrapContentSize()
-                .height(90.dp),
+                .width(350.dp)
+                .height(150.dp),
             value = data?.data?.description ?: "",
             onValueChange = { data?.data?.description },
             label = { Text(stringResource(id = R.string.TextField_Description_problem)) },
@@ -248,7 +247,7 @@ private fun Body(
                 ) {
                     ButtonWithShadow(
                         modifier = Modifier
-                            .width(300.dp)
+                            .width(350.dp)
                             .height(61.dp),
                         color = Color.Black,
                         shape = RoundedCornerShape(20.dp),
@@ -264,7 +263,7 @@ private fun Body(
                 ) {
                     OutlinedButton(
                         modifier = Modifier
-                            .widthIn(300.dp)
+                            .widthIn(350.dp)
                             .background(Color(0xFFFFFFFF), CircleShape)
                             .padding(vertical = 20.dp)
                             .shadow(3.dp, CircleShape),
@@ -303,7 +302,7 @@ private fun Body(
                     )*/
                     ButtonWithShadow(
                         modifier = Modifier
-                            .width(300.dp)
+                            .width(350.dp)
                             .height(45.dp),
                         color = Color.Black,
                         shape = RoundedCornerShape(20.dp),
@@ -323,7 +322,7 @@ private fun Body(
                 ) {
                     OutlinedButton(
                         modifier = Modifier
-                            .widthIn(300.dp)
+                            .widthIn(350.dp)
                             .background(Color(0xFFFFFFFF), CircleShape)
                             .padding(vertical = 20.dp)
                             .shadow(3.dp, CircleShape),

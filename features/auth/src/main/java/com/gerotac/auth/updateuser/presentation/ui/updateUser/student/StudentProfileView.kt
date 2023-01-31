@@ -313,7 +313,7 @@ fun StudentProfileView(
                     )
                 },
                 shape = RoundedCornerShape(percent = 45),
-                modifier = Modifier.size(height = 55.dp, width = 300.dp),
+                modifier = Modifier.widthIn(350.dp),
                 colors = ButtonDefaults.textButtonColors(backgroundColor = Color.Black)
             ) {
                 Text(

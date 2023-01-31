@@ -189,8 +189,7 @@ fun NewPasswordForget(
                         }
                     }
                 },
-                modifier = Modifier
-                    .width(300.dp)
+                modifier = Modifier.widthIn(350.dp),
             )
             TextField(
                 value = password,
@@ -223,8 +222,7 @@ fun NewPasswordForget(
                         }
                     }
                 },
-                modifier = Modifier
-                    .width(300.dp)
+                modifier = Modifier.widthIn(350.dp),
             )
             Spacer(modifier = Modifier.height(20.dp))
             ButtonValidation(

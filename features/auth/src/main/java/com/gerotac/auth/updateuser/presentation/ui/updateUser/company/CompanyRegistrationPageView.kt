@@ -244,6 +244,7 @@ fun CompanyRegistrationPage(
                 mainIcon = null
             )
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = contactPerson,
                 onValueChange = { contactPerson = it },
                 label = { Text("Contacto de persona") },
@@ -262,6 +263,7 @@ fun CompanyRegistrationPage(
                 }
             )
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = address,
                 onValueChange = { address = it },
                 label = { Text(stringResource(id = R.string.TextField_Address)) },
@@ -348,7 +350,7 @@ fun CompanyRegistrationPage(
                     )
                 },
                 shape = RoundedCornerShape(percent = 45),
-                modifier = Modifier.size(height = 55.dp, width = 300.dp),
+                modifier = Modifier.widthIn(350.dp),
                 colors = ButtonDefaults.textButtonColors(backgroundColor = Color.Black)
             ) {
                 Text(

@@ -117,6 +117,7 @@ sealed class DrawerScreens(
         title = "Perfil",
         IconDrawer = Icons.Outlined.Person
     )
+
     object Report : DrawerScreens(
         route = "Report",
         title = "Reportes",

@@ -1,6 +1,7 @@
 package com.gerotac.auth.profileUser.presentation.ui
 
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -17,7 +18,7 @@ fun ButtonValid(text: String, fontSize: TextUnit = 20.sp, onClick: () -> Unit) {
     Button(
         onClick = {onClick.invoke()},
         shape = RoundedCornerShape(percent = 45),
-        modifier = Modifier.size(height = 50.dp, width = 300.dp),
+        modifier = Modifier.widthIn(350.dp),
         colors = ButtonDefaults.textButtonColors(backgroundColor = Color.Black)
     ) {
         Text(

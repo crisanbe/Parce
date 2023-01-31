@@ -131,6 +131,7 @@ fun SendEmailForgotPassword(
             )
             Spacer(modifier = Modifier.height(8.dp))
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = email,
                 onValueChange = { email = it },
                 label = { Text(text = stringResource(R.string.TextField_Email_address)) },

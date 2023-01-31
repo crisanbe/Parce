@@ -3,6 +3,7 @@ package com.gerotac.auth.login.presentation.components.logincomposables
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -24,7 +25,9 @@ import com.gerotac.components_ui.componets.DividerIcon
 @Composable
 fun Password(nameError: Boolean, password: String, onTextChanged: (String) -> Unit) {
     var passwordVisibility by remember { mutableStateOf(true) }
-    TextField(value = password,
+    TextField(
+        modifier = Modifier.widthIn(350.dp),
+        value = password,
         onValueChange = {
             if (it.length <= 20) onTextChanged(it)
             !nameError

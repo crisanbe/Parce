@@ -151,6 +151,7 @@ fun CompanyRegistration(
                     mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.identity)
                 )
                 TextField(
+                    modifier = Modifier.widthIn(350.dp),
                     value = idNumber,
                     onValueChange = { idNumber = it },
                     label = { Text(stringResource(id = R.string.TextField_Id_number)) },
@@ -164,6 +165,7 @@ fun CompanyRegistration(
                     }
                 )
                 TextField(
+                    modifier = Modifier.widthIn(350.dp),
                     value = companyName,
                     onValueChange = { companyName = it },
                     label = { Text(stringResource(id = R.string.TextField_Company_name)) },
@@ -177,6 +179,7 @@ fun CompanyRegistration(
                     }
                 )
                 TextField(
+                    modifier = Modifier.widthIn(350.dp),
                     value = phone,
                     onValueChange = { phone = it },
                     label = { Text(stringResource(id = R.string.TextField_Phone)) },
@@ -190,6 +193,7 @@ fun CompanyRegistration(
                     }
                 )
                 TextField(
+                    modifier = Modifier.widthIn(350.dp),
                     value = economicActivity,
                     onValueChange = { economicActivity = it },
                     label = { Text(stringResource(id = R.string.TextField_Economic_activity)) },
@@ -232,7 +236,7 @@ fun CompanyRegistration(
                         )
                     },
                     shape = RoundedCornerShape(percent = 45),
-                    modifier = Modifier.size(height = 55.dp, width = 300.dp),
+                    modifier = Modifier.widthIn(350.dp),
                     colors = ButtonDefaults.textButtonColors(backgroundColor = Color.Black)
                 ) {
                     Text(

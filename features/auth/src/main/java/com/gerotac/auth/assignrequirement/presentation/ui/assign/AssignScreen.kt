@@ -177,10 +177,10 @@ fun FooterAssign(modifier: Modifier, onClickRegister: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun AssignPreview() {
-    AssignScreen(
+    /*AssignScreen(
         navController = rememberNavController(),
         "",
         rememberScaffoldState(),
         upPress = {}
-    )
+    )*/
 }

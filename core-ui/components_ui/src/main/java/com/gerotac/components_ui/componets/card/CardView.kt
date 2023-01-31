@@ -22,14 +22,13 @@ fun CardView(
     text : String,
     border: BorderStroke? = null
 ) {
-
         Card(
         elevation = elevation,
         border = border,
         modifier = Modifier
             .background(color = Color.White)
             .fillMaxWidth()
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = 0.dp)
     ) {
         Row(
             Modifier

@@ -23,7 +23,7 @@ fun FormValueComp(
     valueText: String? = null
 ) {
     TextField(
-        modifier = Modifier.width(280.dp),
+        modifier = Modifier.widthIn(350.dp),
         value = text ?: "",
         onValueChange = { ValueState(it) },
         label = { Text(valueText.toString()) },

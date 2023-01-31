@@ -90,11 +90,11 @@ fun HolderScreen(
                     controller.navigate(it) {
                         controller.graph.startDestinationRoute?.let { route ->
                             popUpTo(route) {
-                                saveState = false
+                                saveState = true
                             }
                         }
                         launchSingleTop = true
-                        restoreState = true
+                        restoreState = false
                     }
                     scope.launch {
                         scaffoldState.drawerState.close()

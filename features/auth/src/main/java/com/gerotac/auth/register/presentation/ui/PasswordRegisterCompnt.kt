@@ -1,9 +1,6 @@
 package com.gerotac.auth.register.presentation.ui
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -44,7 +41,7 @@ fun PasswordRegister(passwordState: TextFieldValueState = remember { PasswordSta
             )
         },
         modifier = Modifier
-            .width(300.dp)
+            .widthIn(350.dp)
             .onFocusChanged { focusState ->
                 passwordState.onFocusedChange(focusState.isFocused)
                 if (!focusState.isFocused) {

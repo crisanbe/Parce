@@ -1,6 +1,7 @@
 package com.gerotac.auth.login.presentation.components.logincomposables
 
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -16,7 +17,9 @@ import com.gerotac.components_ui.componets.DividerIcon
 
 @Composable
 fun Email(nameError: Boolean, email: String, onTextChanged: (String) -> Unit) {
-    TextField(value = email,
+    TextField(
+        modifier = Modifier.widthIn(350.dp),
+        value = email,
         onValueChange = {
             if (it.length <= 120) onTextChanged(it)
             !nameError

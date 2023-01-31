@@ -222,6 +222,7 @@ fun UpdateStudent(
         ) {
             Spacer(Modifier.height(12.dp))
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = studentName.toString(),
                 onValueChange = { studentName = it },
                 label = { Text(stringResource(id = R.string.TextField_full_name)) },
@@ -235,6 +236,7 @@ fun UpdateStudent(
                 }
             )
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = idNumber.toString(),
                 onValueChange = { idNumber = it },
                 label = { Text(stringResource(id = R.string.TextField_Id_number)) },
@@ -248,6 +250,7 @@ fun UpdateStudent(
                 }
             )
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = phone.toString(),
                 onValueChange = { phone = it },
                 label = { Text(stringResource(id = R.string.TextField_Phone)) },
@@ -320,7 +323,7 @@ fun UpdateStudent(
                     )
                 },
                 shape = RoundedCornerShape(percent = 45),
-                modifier = Modifier.size(height = 55.dp, width = 300.dp),
+                modifier = Modifier.widthIn(350.dp),
                 colors = ButtonDefaults.textButtonColors(backgroundColor = Color.Black)
             ) {
                 Text(

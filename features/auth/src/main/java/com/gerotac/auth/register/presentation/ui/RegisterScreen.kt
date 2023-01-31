@@ -190,7 +190,7 @@ fun Register(
             Spacer(modifier = Modifier.size(10.dp))
             PasswordRegister(passwordState)
             passwordState.getErros()?.let { error -> TextFieldError(textError = error) }
-            Spacer(modifier = Modifier.size(10.dp))
+            Spacer(modifier = Modifier.size(5.dp))
             PasswordConfirmation(passwordConfirmationState)
             passwordConfirmationState.getErros()
                 ?.let { error -> TextFieldError(textError = error) }
