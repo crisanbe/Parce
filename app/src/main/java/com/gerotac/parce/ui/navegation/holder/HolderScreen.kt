@@ -157,10 +157,10 @@ fun ScaffoldSection(
                     StartUpView(controller)
                     BackHandler(true) {}
                 }
-                composable(route = AppScreens.PermissionScreen.route) {
+                /*composable(route = AppScreens.PermissionScreen.route) {
                     onStatusBarColorChange(MaterialTheme.colors.background)
                     PermissionScreen(permissionsStates = permissionsState, controller)
-                }
+                }*/
                 composable(
                     route = AppScreens.LoginScreen.route + "?email={email}",
                     arguments = listOf(navArgument(name = "email") {

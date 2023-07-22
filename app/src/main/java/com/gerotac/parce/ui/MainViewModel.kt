@@ -29,7 +29,7 @@ class MainViewModel : ViewModel() {
                                             val rolUser = MutableStateFlow(rol)
                                             if (stateTokenAuth.value == "" && prefsKey) {
                                                 navController.navigate(AppScreens.StartUp.route)
-                                                navController.navigate(AppScreens.PermissionScreen.route)
+                                                //navController.navigate(AppScreens.PermissionScreen.route)
                                             } else if (stateTokenAuth.value != "" && userState.value == "completed" && rolUser.value == "admin") {
                                                 navController.navigate(DrawerScreens.CompanyHome.route + "?user=$nameUser")
                                             }else if (stateTokenAuth.value != "" && userState.value == "completed" && rolUser.value == "empresa") {

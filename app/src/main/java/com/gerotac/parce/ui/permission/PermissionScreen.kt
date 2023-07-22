@@ -9,7 +9,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
-import com.gerotac.components_ui.componets.alertdialog.AlertNext
 import com.google.accompanist.permissions.*
 import com.gerotac.components_ui.componets.alertdialog.ExitAlertDialog
 import com.gerotac.components_ui.componets.alertdialog.ViewModelDialog
@@ -41,15 +40,6 @@ fun PermissionScreen(
             }
         }
     )
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        AlertNext(
-            text = "Continuar👌",
-            onClickYes = {
-                showDialog = !showDialog
-                navController.navigate(AppScreens.StartUp.route)
-            }
-        )
-    }else {
         permissionsStates.permissions.forEach { perm ->
             when (perm.permission) {
                 Manifest.permission.READ_EXTERNAL_STORAGE -> {
@@ -57,6 +47,7 @@ fun PermissionScreen(
                         perm.status.isGranted -> {
                             StartUpView(navController = navController)
                         }
+
                         perm.status.shouldShowRationale -> {
                             ExitAlertDialog(
                                 text = "se necesita permiso para acceder a la Galería",
@@ -67,9 +58,21 @@ fun PermissionScreen(
                                 {}
                             )
                         }
+
+                        perm.isPermanentlyDenied() -> {
+                            ExitAlertDialog(
+                                text = "se necesita permiso para acceder a la Galería." +
+                                        " Puedes habilitarlo en la aplicación" +
+                                        "  Ajustes > Aplicaciones > parce > Permisos > ",
+                                onClickYes = {
+                                    showDialog = !showDialog
+                                    navController.navigate(AppScreens.RequirementScreen.route)
+                                },
+                                {}
+                            )
+                        }
                     }
                 }
             }
         }
-    }
 }
