@@ -129,11 +129,7 @@ fun RequirementBody(
     var showDialog by remember { mutableStateOf(false) }
     val listPdf: MutableList<MultipartBody.Part> = mutableListOf()
     BackHandler(true) { viewModelDialog.showDialog() }
-    val permissionsState = rememberMultiplePermissionsState(
-        permissions = listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-    )
-    val launcher =
-        rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) {
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) {
             it.forEach { item ->
                 val inputStream = activity.contentResolver.openInputStream(item)
                 val temporalFile = File.createTempFile("file", ".pdf")
@@ -307,22 +303,7 @@ fun RequirementBody(
                         .background(Color(0xFFFFFFFF), CircleShape)
                         .padding(vertical = 20.dp)
                         .shadow(3.dp, CircleShape),
-                    onClick = {
-                        permissionsState.permissions.forEach { perm ->
-                            when (perm.permission) {
-                                Manifest.permission.READ_EXTERNAL_STORAGE -> {
-                                    when {
-                                        perm.status.isGranted -> {
-                                            launcher.launch("application/pdf")
-                                        }
-                                        !perm.status.isGranted -> {
-                                            navController.navigate(AppScreens.PermissionScreen.route)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    onClick = {launcher.launch("application/pdf") }
                 ) {
                     Icon(
                         Icons.Filled.Archive,

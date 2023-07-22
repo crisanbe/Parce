@@ -2,7 +2,7 @@ object Accompanist {
     //HorizontalPager
     private const val versionAccompanist = "0.25.1"
     //Permission
-    private const val versionAccompanistPermissions = "0.25.1"
+    private const val versionAccompanistPermissions = "0.31.5-beta"
     private const val versionAccompanistGlide = "0.4.2"
     private const val navigationComposeVersion = "2.4.0-alpha06"
     private const val accompanistNavigationAnimationVersion = "0.26.2-beta"
