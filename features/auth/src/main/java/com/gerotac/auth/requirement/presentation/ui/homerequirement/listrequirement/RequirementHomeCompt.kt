@@ -37,6 +37,7 @@ import com.gerotac.components_ui.componets.button.IconButtonDelete
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.progress.LinearProgressBar
 import com.gerotac.core.util.UiEvent
+import com.gerotac.components_ui.R
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -327,8 +328,8 @@ fun HomeInterventions(
                                     }
                                 }
                             },
-                            color1 = com.gerotac.components_ui.R.drawable.approve,
-                            color2 = com.gerotac.components_ui.R.drawable.disapprove,
+                            color1 = R.drawable.approve,
+                            color2 = R.drawable.disapprove,
                             statusIntervention = resultInterventions
                         )
                     } else {

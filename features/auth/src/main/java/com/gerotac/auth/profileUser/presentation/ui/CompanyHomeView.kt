@@ -47,7 +47,6 @@ import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirem
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.HomeBottomBar
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.HomeRequirements
 import com.gerotac.auth.requirement.presentation.viewmodel.RequirementViewModel
-import com.gerotac.components_ui.R
 import com.gerotac.components_ui.componets.TopBar
 import com.gerotac.components_ui.componets.alertdialog.ViewModelDialog
 import com.gerotac.components_ui.componets.drawer.AppScreens
@@ -55,6 +54,7 @@ import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.progress.CircularProgress
 import com.gerotac.core.util.UiEvent
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.gerotac.components_ui.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gerotac.auth.requirement.presentation.viewmodel.RequirementViewModel
+import com.gerotac.components_ui.R
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -56,7 +57,7 @@ fun SearchBar(
                 fontFamily = FontFamily.Serif,
                 textAlign = TextAlign.Center,
                 style = TextStyle(
-                    color = colorResource(id = com.gerotac.components_ui.R.color.primary)
+                    color = colorResource(id = R.color.primary)
                 ),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.ExtraBold,

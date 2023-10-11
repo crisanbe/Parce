@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.gerotac.auth.R
+import com.gerotac.components_ui.R
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.locationmodel.ResultX
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.locationmodel.Town
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.responsecompany.ResultCompany

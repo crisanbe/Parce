@@ -1,5 +1,6 @@
 package com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.dowloadfile
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.ContentValues
@@ -15,7 +16,7 @@ import androidx.core.net.toUri
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import com.gerotac.auth.R
+import com.gerotac.components_ui.R
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
@@ -26,6 +27,7 @@ class FileDownloadWorker(
     workerParameters: WorkerParameters
 ): CoroutineWorker(context, workerParameters) {
 
+    @SuppressLint("MissingPermission")
     override suspend fun doWork(): Result {
         val fileUrl = inputData.getString(FileParams.KEY_FILE_URL) ?: ""
         val fileName = inputData.getString(FileParams.KEY_FILE_NAME) ?: ""
@@ -56,7 +58,7 @@ class FileDownloadWorker(
         }
 
         val builder = NotificationCompat.Builder(context,NotificationConstants.CHANNEL_ID)
-            .setSmallIcon(R.drawable.company)
+            .setSmallIcon(R.drawable.cause)
             .setContentTitle("Downloading your file...")
             .setOngoing(true)
             .setProgress(0,0,true)
@@ -93,6 +95,7 @@ class FileDownloadWorker(
         const val NOTIFICATION_ID = 1
     }
 
+    @SuppressLint("MissingPermission")
     private fun getSavedFileUri(
         fileName:String,
         fileType:String,
@@ -158,7 +161,7 @@ class FileDownloadWorker(
         }
 
         val builder = NotificationCompat.Builder(context,NotificationConstants.CHANNEL_ID)
-            .setSmallIcon(R.drawable.company)
+            .setSmallIcon(R.drawable.cause)
             .setContentTitle("Downloading your file...")
             .setOngoing(true)
             .setProgress(0,0,true)
