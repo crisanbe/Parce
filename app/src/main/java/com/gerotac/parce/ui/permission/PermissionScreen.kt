@@ -1,6 +1,7 @@
 package com.gerotac.parce.ui.permission
 
 import android.Manifest
+import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -8,6 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
+import com.gerotac.components_ui.componets.alertdialog.AlertNext
 import com.google.accompanist.permissions.*
 import com.gerotac.components_ui.componets.alertdialog.ExitAlertDialog
 import com.gerotac.components_ui.componets.alertdialog.ViewModelDialog
@@ -39,38 +41,35 @@ fun PermissionScreen(
             }
         }
     )
-    permissionsStates.permissions.forEach { perm ->
-        when (perm.permission) {
-            Manifest.permission.READ_EXTERNAL_STORAGE -> {
-                when {
-                    perm.status.isGranted -> {
-                        StartUpView(navController = navController)
-                    }
-                    perm.status.shouldShowRationale -> {
-                        ExitAlertDialog(
-                            text = "se necesita permiso para acceder a la Galería",
-                            onClickYes = {
-                                showDialog = !showDialog
-                                navController.navigate(AppScreens.StartUp.route)
-                            },
-                            {}
-                        )
-                    }
-                    perm.isPermanentlyDenied() -> {
-                        ExitAlertDialog(
-                            text = "El permiso de la galería fue permanentemente denegado." +
-                                    " Puedes habilitarlo en la aplicación" +
-                                    " ajustes.",
-                            onClickYes = {
-                                showDialog = !showDialog
-                                navController.navigate(AppScreens.RequirementScreen.route)
-                            },
-                            {}
-                        )
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        AlertNext(
+            text = "Continuar👌",
+            onClickYes = {
+                showDialog = !showDialog
+                navController.navigate(AppScreens.StartUp.route)
+            }
+        )
+    }else {
+        permissionsStates.permissions.forEach { perm ->
+            when (perm.permission) {
+                Manifest.permission.READ_EXTERNAL_STORAGE -> {
+                    when {
+                        perm.status.isGranted -> {
+                            StartUpView(navController = navController)
+                        }
+                        perm.status.shouldShowRationale -> {
+                            ExitAlertDialog(
+                                text = "se necesita permiso para acceder a la Galería",
+                                onClickYes = {
+                                    showDialog = !showDialog
+                                    navController.navigate(AppScreens.StartUp.route)
+                                },
+                                {}
+                            )
+                        }
                     }
                 }
             }
         }
     }
-
 }

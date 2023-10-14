@@ -1,11 +1,16 @@
 package com.gerotac.parce.ui.view
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.os.Build
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,16 +21,34 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gerotac.parce.R
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import com.gerotac.components_ui.componets.alertdialog.ViewModelDialog
 import com.gerotac.components_ui.componets.drawer.AppScreens
+import com.gerotac.parce.R
 import com.gerotac.parce.ui.theme.Montserrat
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 
+@SuppressLint("PermissionLaunchedDuringComposition")
+@ExperimentalPermissionsApi
 @Composable
 fun StartUpView(
     navController: NavController
 ) {
+    val permissionsStatesReadStorage = rememberPermissionState(permission = Manifest.permission.READ_EXTERNAL_STORAGE)
+    val permissionsStatesNotification = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+    val viewModelDialog: ViewModelDialog = hiltViewModel()
+    BackHandler(true) { viewModelDialog.showDialog() }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        LaunchedEffect(true){
+            permissionsStatesNotification.launchPermissionRequest()
+        }
+    }else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
+        LaunchedEffect(true){
+            permissionsStatesReadStorage.launchPermissionRequest()
+        }
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -102,5 +125,5 @@ fun StartUpView(
 @Preview(showBackground = true)
 @Composable
 fun PreviewSlider() {
-    StartUpView(rememberNavController())
+    // StartUpView(rememberNavController())
 }
