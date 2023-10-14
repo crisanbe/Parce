@@ -103,7 +103,7 @@ fun SendEmailForgotPassword(
             modifier = Modifier
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Top
         ) {
             Text(
                 text = stringResource(R.string.Text_Forgot_Your_Password),
@@ -121,7 +121,7 @@ fun SendEmailForgotPassword(
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 70.dp)
             )
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(40.dp))
             Text(
                 text = stringResource(R.string.Text_Enter_your_email),
                 fontSize = 14.sp,
@@ -131,6 +131,7 @@ fun SendEmailForgotPassword(
             )
             Spacer(modifier = Modifier.height(8.dp))
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = email,
                 onValueChange = { email = it },
                 label = { Text(text = stringResource(R.string.TextField_Email_address)) },
@@ -143,14 +144,12 @@ fun SendEmailForgotPassword(
                     DividerIcon()
                 }
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             ButtonValidation(
                 text = stringResource(id = R.string.Button_Send_activation_code),
                 fontSize = 16.sp,
                 onClick = { onClickActivationCode.invoke(email) }
             )
-            Spacer(modifier = Modifier.height(5.dp))
-            Spacer(modifier = Modifier.height(80.dp))
         }
     }
 }

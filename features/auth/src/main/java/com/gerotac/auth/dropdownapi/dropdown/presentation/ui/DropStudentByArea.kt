@@ -136,6 +136,7 @@ fun DropStudentByArea(
                 ) {
                     options.forEachIndexed { index, selectionOption ->
                         LazyColumn(
+                            userScrollEnabled = false,
                             modifier = Modifier
                                 .clickable {
                                     selectOption = selectionOption.name
@@ -149,16 +150,16 @@ fun DropStudentByArea(
                                 items(
                                     options.filter {
                                         it.name.lowercase()
-                                            .contains(selectOption.lowercase()) || options[index].name.lowercase()
+                                            .contains(selectOption.lowercase()) || it.name.lowercase()
                                             .lowercase()
                                             .contains("others")
                                     }
                                         .sortedBy { it.name }
                                 ) {
-                                    StudentItems(name = it.name, id = options[index].id)
+                                    StudentItems(name = it.name, id = it.id)
                                     { _, _ ->
-                                        selectOption = selectionOption.name
-                                        selectOptionChange(selectionOption.id)
+                                        selectOption = it.name
+                                        selectOptionChange(it.id)
                                         expanded = false
                                     }
                                 }
@@ -166,10 +167,10 @@ fun DropStudentByArea(
                                 items(
                                     options.sortedBy { it.name }
                                 ) {
-                                    StudentItems(name = it.name, id = options[index].id)
+                                    StudentItems(name = it.name, id = it.id)
                                     { _, _ ->
-                                        selectOption = selectionOption.name
-                                        selectOptionChange(selectionOption.id)
+                                        selectOption = it.name
+                                        selectOptionChange(it.id)
                                         expanded = false
                                     }
                                 }

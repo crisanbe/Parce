@@ -1,3 +1,5 @@
+@file:Suppress("UselessCallOnNotNull")
+
 package com.gerotac.auth.updateuser.presentation.ui.updateUser.company
 
 import androidx.compose.foundation.layout.*
@@ -40,6 +42,7 @@ import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.dropdown.DropString
 import com.gerotac.components_ui.componets.progress.LinearProgressBar
 import com.gerotac.core.util.UiEvent
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -59,13 +62,18 @@ fun CompanyRegistrationPageView(
     phone: String?
 ) {
     val context = LocalContext.current
+    val systemUiController = rememberSystemUiController()
     val eventFlow = viewModel.uiEvent.receiveAsFlow()
     val scaffoldState = rememberScaffoldState()
     val lifecycleTokenScope = rememberCoroutineScope()
     val state = viewModel.state.collectAsState()
     val stateMunicipality = viewModelLocation.stateMuni.collectAsState()
     val stateLocation = viewModelLocation.stateLocation.collectAsState()
-
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = com.gerotac.auth.theme.ColorLogin,
+        )
+    }
     Scaffold(
         scaffoldState = scaffoldState,
         snackbarHost = {
@@ -95,13 +103,37 @@ fun CompanyRegistrationPageView(
                             lifecycleTokenScope.launch {
                                 viewModel.doUpdateUser(
                                     ParameterUpdateUserRequest(
-                                        name = companyName,
-                                        type_document = identificationType,
-                                        document = idNumber!!,
-                                        type_bussiness = companyType,
+                                        name = if (!companyName.isNullOrEmpty()) {
+                                            companyName
+                                        } else {
+                                            ""
+                                        },
+                                        type_document = if (!identificationType.isNullOrEmpty()) {
+                                            identificationType
+                                        } else {
+                                            ""
+                                        },
+                                        document = if (!idNumber.isNullOrEmpty()) {
+                                            idNumber
+                                        } else {
+                                            ""
+                                        },
+                                        type_bussiness = if (!companyType.isNullOrEmpty()) {
+                                            companyType
+                                        } else {
+                                            ""
+                                        },
                                         type_society = kindCompany?.toInt(),
-                                        activity_economy = economicActivity,
-                                        phone = phone!!,
+                                        activity_economy = if (!economicActivity.isNullOrEmpty()) {
+                                            economicActivity
+                                        } else {
+                                            ""
+                                        },
+                                        phone = if (!phone.isNullOrEmpty()) {
+                                            phone
+                                        } else {
+                                            ""
+                                        },
                                         person_contact = it[0],
                                         departament = it[1].toInt(),
                                         municipality = it[2].toInt(),
@@ -116,14 +148,25 @@ fun CompanyRegistrationPageView(
                                     when (event) {
                                         is UiEvent.Success -> {
                                             userRepo?.saveNameUser(companyName)
-                                            navController.navigate(
-                                                DrawerScreens.CompanyHome.route
-                                                        + "?user=$companyName"
-                                            )
-                                            scaffoldState.snackbarHostState.showSnackbar(
-                                                message = "Se guardo exitosamente🏅",
-                                                actionLabel = "Continue"
-                                            )
+                                            userRepo?.getTokenLoginState()?.collect { tokenLogin ->
+                                                withContext(Dispatchers.Main) {
+                                                    userRepo?.getUserStatus()
+                                                        ?.collect { userStatus ->
+                                                            withContext(Dispatchers.Main) {
+                                                                if (tokenLogin != "" && userStatus == "pending") {
+                                                                    userRepo?.saveUserStatus("completed")
+                                                                    navController.navigate(
+                                                                        DrawerScreens.CompanyHome.route + "?user=$companyName"
+                                                                    )
+                                                                    scaffoldState.snackbarHostState.showSnackbar(
+                                                                        message = "Se guardo exitosamente🏅",
+                                                                        actionLabel = "Continue"
+                                                                    )
+                                                                }
+                                                            }
+                                                        }
+                                                }
+                                            }
                                         }
                                         is UiEvent.ShowSnackBar -> {
                                             scaffoldState.snackbarHostState.showSnackbar(
@@ -201,6 +244,7 @@ fun CompanyRegistrationPage(
                 mainIcon = null
             )
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = contactPerson,
                 onValueChange = { contactPerson = it },
                 label = { Text("Contacto de persona") },
@@ -219,6 +263,7 @@ fun CompanyRegistrationPage(
                 }
             )
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = address,
                 onValueChange = { address = it },
                 label = { Text(stringResource(id = R.string.TextField_Address)) },
@@ -236,18 +281,18 @@ fun CompanyRegistrationPage(
                     )
                 }
             )
-            DataTimeString(dateState = {birthday = it}, value = birthday)
+            DataTimeString(dateState = { birthday = it }, value = birthday)
             Spacer(Modifier.height(5.dp))
             DropString(
-                ValueState = {genre = it},
-                text = "Tipo de genero",
+                ValueState = { genre = it },
+                text = "Tipo de género",
                 options = listOf("Hombre", "Mujer", "Prefiero no decir"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.genders)
             )
             Spacer(Modifier.height(5.dp))
             DropString(
-                ValueState = {ethnicGroup = it},
-                text = "Grupo etnico",
+                ValueState = { ethnicGroup = it },
+                text = "Grupo étnico",
                 options = listOf(
                     "Afrocolombiano",
                     "Sin Pertenencia a Grupo",
@@ -259,8 +304,8 @@ fun CompanyRegistrationPage(
             )
             Spacer(Modifier.height(5.dp))
             DropString(
-                ValueState = {presentsDisability = it},
-                text = "Tipo de discapasidad",
+                ValueState = { presentsDisability = it },
+                text = "Presenta discapacidad",
                 options = listOf("NO", "SI"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.ic_disability)
             )
@@ -269,19 +314,43 @@ fun CompanyRegistrationPage(
                 onClick = {
                     onClickSave.invoke(
                         listOf(
-                            contactPerson,
+                            if (!contactPerson.isNullOrEmpty()) {
+                                contactPerson
+                            } else {
+                                ""
+                            },
                             department.toString(),
                             municipality.toString(),
-                            address,
-                            birthday,
-                            genre,
-                            ethnicGroup,
-                            presentsDisability
-                        ) as List<String>
+                            if (!address.isNullOrEmpty()) {
+                                address
+                            } else {
+                                ""
+                            },
+                            if (!birthday.isNullOrEmpty()) {
+                                birthday
+                            } else {
+                                ""
+                            },
+                            if (!genre.isNullOrEmpty()) {
+                                genre
+                            } else {
+                                ""
+                            },
+                            if (!ethnicGroup.isNullOrEmpty()) {
+                                ethnicGroup
+                            } else {
+                                ""
+                            },
+                            if (!presentsDisability.isNullOrEmpty()) {
+                                presentsDisability
+                            } else {
+                                ""
+                            },
+                        )
                     )
                 },
                 shape = RoundedCornerShape(percent = 45),
-                modifier = Modifier.size(height = 55.dp, width = 300.dp),
+                modifier = Modifier.widthIn(350.dp),
                 colors = ButtonDefaults.textButtonColors(backgroundColor = Color.Black)
             ) {
                 Text(

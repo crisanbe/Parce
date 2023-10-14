@@ -3,6 +3,7 @@ package com.gerotac.auth.updateuser.presentation.ui.updateUser.student
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -25,6 +26,7 @@ import com.gerotac.components_ui.componets.state.ValueState
 fun FullNameStudent(fullName: TextFieldValueState = remember { ValueState() }) {
     val keyboardController = LocalSoftwareKeyboardController.current
     TextField(
+        modifier = Modifier.widthIn(350.dp),
         value = fullName.text,
         onValueChange = { fullName.text = it },
         label = { Text(stringResource(id = com.gerotac.auth.R.string.TextField_full_name)) },

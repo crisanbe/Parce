@@ -1,3 +1,5 @@
+@file:Suppress("UselessCallOnNotNull")
+
 package com.gerotac.auth.updateuser.presentation.ui.updateUser.student
 
 import android.annotation.SuppressLint
@@ -46,6 +48,7 @@ import com.gerotac.components_ui.componets.progress.ProgressIndicator
 import com.gerotac.components_ui.componets.state.TextFieldValueState
 import com.gerotac.components_ui.componets.state.ValueState
 import com.gerotac.core.util.UiEvent
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -66,6 +69,12 @@ fun StudentProfile(
     val state = viewModelUpdateUser.state.collectAsState()
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
+    val systemUiController = rememberSystemUiController()
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = com.gerotac.auth.theme.ColorLogin,
+        )
+    }
     BackHandler(true) { viewModelDialog.showDialog() }
     DialogExit(text = "Deseas salir sin actualizar tus datos!🤦‍♂", onClickYes = {
         showDialog = !showDialog
@@ -115,26 +124,28 @@ fun StudentProfile(
                                     birthday = it[5],
                                     phone = it[6],
                                     presents_disability = it[7],
-                                    academic_program = it[8].toInt(),
-                                    activity_economy = null,
-                                    type_bussiness = null,
-                                    type_society = null,
-                                    person_contact = null,
-                                    departament = null,
-                                    municipality = null,
-                                    address = null
+                                    academic_program = it[8].toInt()
                                 )
                             )
                             eventFlow.collect { event ->
                                 when (event) {
                                     is UiEvent.Success -> {
-                                        navController.navigate(
-                                            DrawerScreens.CompanyHome.route + "?user=Bienvenido!"
-                                        )
-                                        scaffoldState.snackbarHostState.showSnackbar(
-                                            message = "Se guardo exitosamente🏅",
-                                            actionLabel = "Continue"
-                                        )
+                                        userRepo?.saveUserStatus("completed")
+                                        userRepo?.getTokenLoginState()?.collect { tokenLogin ->
+                                            withContext(Dispatchers.Main) {
+                                                userRepo?.getUserStatus()?.collect { userStatus ->
+                                                    withContext(Dispatchers.Main) {
+                                                        if (tokenLogin != "" && userStatus == "completed") {
+                                                            navController.navigate(DrawerScreens.CompanyHome.route + "?user=Bienvenido!")
+                                                        }
+                                                        scaffoldState.snackbarHostState.showSnackbar(
+                                                            message = "Se guardo exitosamente🏅",
+                                                            actionLabel = "Continue"
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                     is UiEvent.ShowSnackBar -> {
                                         scaffoldState.snackbarHostState.showSnackbar(
@@ -208,20 +219,20 @@ fun StudentProfileView(
             DropDownAlternative(
                 ValueState = identificationType,
                 text = "Tipo de identificación",
-                options = listOf("NIT", "Cedula", "Pasaporte", "Cédula de Extranjería"),
+                options = listOf("NIT", "Cédula", "Pasaporte", "Cédula de Extranjería"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.identity)
             )
             Spacer(Modifier.height(5.dp))
             DropDownAlternative(
                 ValueState = gender,
-                text = "Tipo de genero",
+                text = "Tipo de género",
                 options = listOf("Hombre", "Mujer", "Prefiero no decir"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.genders)
             )
             Spacer(Modifier.height(5.dp))
             DropDownAlternative(
                 ValueState = ethnicGroup,
-                text = "Grupo etnico",
+                text = "Grupo étnico",
                 options = listOf(
                     "Afrocolombiano",
                     "Sin Pertenencia a Grupo",
@@ -234,7 +245,7 @@ fun StudentProfileView(
             Spacer(Modifier.height(5.dp))
             DropDownAlternative(
                 ValueState = hasDisability,
-                text = "Tipo de discapasidad",
+                text = "Presenta discapacidad",
                 options = listOf("NO", "SI"),
                 keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.ic_disability)
@@ -253,20 +264,56 @@ fun StudentProfileView(
                     hideKeyboard?.hide()
                     onClickSave.invoke(
                         listOf(
-                            fullName.text,
-                            identificationType.text,
-                            idNumber.text,
-                            gender.text,
-                            ethnicGroup.text,
-                            birthday.text,
-                            phone.text,
-                            hasDisability.text,
-                            academicProgram.toString()
+                            if (!fullName.text.isNullOrEmpty()) {
+                                fullName.text
+                            } else {
+                                ""
+                            },
+                            if (!identificationType.text.isNullOrEmpty()) {
+                                identificationType.text
+                            } else {
+                                ""
+                            },
+                            if (!idNumber.text.isNullOrEmpty()) {
+                                idNumber.text
+                            } else {
+                                ""
+                            },
+                            if (!gender.text.isNullOrEmpty()) {
+                                gender.text
+                            } else {
+                                ""
+                            },
+                            if (!ethnicGroup.text.isNullOrEmpty()) {
+                                ethnicGroup.text
+                            } else {
+                                ""
+                            },
+                            if (!birthday.text.isNullOrEmpty()) {
+                                birthday.text
+                            } else {
+                                ""
+                            },
+                            if (!phone.text.isNullOrEmpty()) {
+                                phone.text
+                            } else {
+                                ""
+                            },
+                            if (!hasDisability.text.isNullOrEmpty()) {
+                                hasDisability.text
+                            } else {
+                                ""
+                            },
+                            if (!academicProgram.toString().isNullOrEmpty()) {
+                                academicProgram.toString()
+                            } else {
+                                ""
+                            },
                         )
                     )
                 },
                 shape = RoundedCornerShape(percent = 45),
-                modifier = Modifier.size(height = 55.dp, width = 300.dp),
+                modifier = Modifier.widthIn(350.dp),
                 colors = ButtonDefaults.textButtonColors(backgroundColor = Color.Black)
             ) {
                 Text(

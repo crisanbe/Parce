@@ -37,6 +37,7 @@ fun DropACompany(
         modifier = Modifier.wrapContentSize()
     ) {
         OutlinedTextField(
+            modifier = Modifier.widthIn(350.dp),
             value = selectOption,
             maxLines = 1,
             onValueChange = {},

@@ -2,6 +2,7 @@ package com.gerotac.components_ui.componets.dropdown
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -100,7 +101,7 @@ fun DropDown(
                 }
             },
             modifier = Modifier
-                .width(280.dp)
+                .widthIn(350.dp)
                 .onGloballyPositioned { coordinates ->
                     textFieldSize = coordinates.size.toSize()
                 })

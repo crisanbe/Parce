@@ -1,3 +1,5 @@
+@file:Suppress("UselessCallOnNotNull")
+
 package com.gerotac.auth.updateuser.presentation.ui.updateUser.admin
 
 import android.annotation.SuppressLint
@@ -48,6 +50,7 @@ import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.dropdown.DropDownAlternative
 import com.gerotac.core.util.UiEvent
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -68,6 +71,12 @@ fun AdminProfile(
     val eventFlow = viewModelUpdateUser.uiEvent.receiveAsFlow()
     val state = viewModelUpdateUser.state.collectAsState()
     val stateAcademic = viewModelAcademic.stateAcademic.collectAsState()
+    val systemUiController = rememberSystemUiController()
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = com.gerotac.auth.theme.ColorLogin,
+        )
+    }
     BackHandler(true) { viewModelDialog.showDialog() }
     DialogExit(
         text = "Deseas salir sin actualizar tus datos!🤦‍♂",
@@ -211,20 +220,20 @@ fun EducationalProfileView(
             DropDownAlternative(
                 ValueState = identificationType,
                 text = "Tipo de identificación",
-                options = listOf("NIT", "Cedula", "Pasaporte", "Cédula de Extranjería"),
+                options = listOf("NIT", "Cédula", "Pasaporte", "Cédula de Extranjería"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.identity)
             )
             Spacer(Modifier.height(5.dp))
             DropDownAlternative(
                 ValueState = gender,
-                text = "Tipo de genero",
+                text = "Tipo de género",
                 options = listOf("Hombre", "Mujer", "Prefiero no decir"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.genders)
             )
             Spacer(Modifier.height(5.dp))
             DropDownAlternative(
                 ValueState = ethnicGroup,
-                text = "Grupo etnico",
+                text = "Grupo étnico",
                 options = listOf(
                     "Afrocolombiano",
                     "Sin Pertenencia a Grupo",
@@ -237,7 +246,7 @@ fun EducationalProfileView(
             Spacer(Modifier.height(5.dp))
             DropDownAlternative(
                 ValueState = hasDisability,
-                text = "Tipo de discapasidad",
+                text = "Presenta discapacidad",
                 options = listOf("NO", "SI"),
                 keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.ic_disability)
@@ -266,15 +275,15 @@ fun EducationalProfileView(
                     hideKeyboard?.hide()
                     onClickSave.invoke(
                         listOf(
-                            fullName.text,
-                            identificationType.text,
-                            idNumber.text,
-                            gender.text,
-                            ethnicGroup.text,
-                            birthday.text,
-                            phoneNumberState.text,
-                            hasDisability.text,
-                            rol.text,
+                            if(!fullName.text.isNullOrEmpty()){fullName.text}else{""},
+                            if(!identificationType.text.isNullOrEmpty()){identificationType.text}else{""},
+                            if(!idNumber.text.isNullOrEmpty()){idNumber.text}else{""},
+                            if(!gender.text.isNullOrEmpty()){gender.text}else{""},
+                            if(!ethnicGroup.text.isNullOrEmpty()){ethnicGroup.text}else{""},
+                            if(!birthday.text.isNullOrEmpty()){birthday.text}else{""},
+                            if(!phoneNumberState.text.isNullOrEmpty()){phoneNumberState.text}else{""},
+                            if(!hasDisability.text.isNullOrEmpty()){hasDisability.text}else{""},
+                            if(!rol.text.isNullOrEmpty()){rol.text}else{""},
                         )
                     )
                 },

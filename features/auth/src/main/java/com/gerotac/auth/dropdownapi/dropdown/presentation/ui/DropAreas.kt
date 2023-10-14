@@ -36,6 +36,7 @@ fun DropAreas(
         modifier = Modifier.wrapContentSize()
     ) {
         OutlinedTextField(
+            modifier = Modifier.widthIn(350.dp),
             value = selectOption,
             maxLines = 1,
             onValueChange = {},
@@ -86,7 +87,7 @@ fun DropAreas(
                         if (index != options.lastIndex) {
                             Spacer(modifier = Modifier.size(10.dp))
                             Divider(
-                                thickness = 2.dp, color = Color.Black
+                                thickness = 2.dp, color = Color.Transparent
                             )
                         }
                     }

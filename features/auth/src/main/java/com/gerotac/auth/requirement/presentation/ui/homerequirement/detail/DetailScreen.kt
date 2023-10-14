@@ -42,10 +42,12 @@ import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.work.*
 import coil.compose.rememberAsyncImagePainter
 import com.gerotac.auth.R
+import com.gerotac.auth.approveanddisapprove.presentation.viewmodel.RefreshViewModel
 import com.gerotac.auth.intervention.detailintervention.presentation.viewmodel.DetailInterventionViewModel
 import com.gerotac.auth.requirement.di.HeaderRequirement
 import com.gerotac.auth.requirement.domain.model.detailrequirement.Data
@@ -65,9 +67,14 @@ import com.gerotac.components_ui.componets.button.TextButtonPersonalized
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.ui.theme.ParceTheme
+import com.gerotac.shared.commons.Constant.URL_VIEW_PRODUCTION_FILE
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 
 @SuppressLint(
     "UnusedMaterialScaffoldPaddingParameter"
@@ -181,9 +188,8 @@ private fun Body(
         )
         androidx.compose.material.OutlinedTextField(
             modifier = Modifier
-                .width(280.dp)
-                .wrapContentSize()
-                .height(90.dp),
+                .width(350.dp)
+                .height(150.dp),
             value = data?.data?.description ?: "",
             onValueChange = { data?.data?.description },
             label = { Text(stringResource(id = R.string.TextField_Description_problem)) },
@@ -241,13 +247,41 @@ private fun Body(
                 ) {
                     ButtonWithShadow(
                         modifier = Modifier
-                            .width(300.dp)
+                            .width(350.dp)
                             .height(61.dp),
                         color = Color.Black,
                         shape = RoundedCornerShape(20.dp),
                         onClick = { navController.navigate(AppScreens.SaveInterventionScreen.route + "?code=${data?.data?.id}") },
                         textoBoton = "Crear intervención"
                     )
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    OutlinedButton(
+                        modifier = Modifier
+                            .widthIn(350.dp)
+                            .background(Color(0xFFFFFFFF), CircleShape)
+                            .padding(vertical = 20.dp)
+                            .shadow(3.dp, CircleShape),
+                        onClick = {
+                            viewState.onShowRequest()
+                        }
+                    ) {
+                        Icon(
+                            Icons.Filled.Archive,
+                            contentDescription = "Archivo"
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(
+                            "Intervenciones y archivos🗂️",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.ExtraBold
+                        )
+                    }
                 }
             }
             "empresa" -> {
@@ -257,7 +291,7 @@ private fun Body(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    ButtonWithShadow(
+                    /*ButtonWithShadow(
                         modifier = Modifier
                             .width(190.dp)
                             .height(61.dp),
@@ -265,12 +299,11 @@ private fun Body(
                         shape = RoundedCornerShape(20.dp),
                         onClick = { navController.navigate(AppScreens.SaveInterventionScreen.route + "?code=${data?.data?.id}") },
                         textoBoton = "Crear intervención"
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
+                    )*/
                     ButtonWithShadow(
                         modifier = Modifier
-                            .width(130.dp)
-                            .height(58.dp),
+                            .width(350.dp)
+                            .height(45.dp),
                         color = Color.Black,
                         shape = RoundedCornerShape(20.dp),
                         onClick = {
@@ -289,7 +322,7 @@ private fun Body(
                 ) {
                     OutlinedButton(
                         modifier = Modifier
-                            .widthIn(300.dp)
+                            .widthIn(350.dp)
                             .background(Color(0xFFFFFFFF), CircleShape)
                             .padding(vertical = 20.dp)
                             .shadow(3.dp, CircleShape),
@@ -429,7 +462,7 @@ private fun ListFileContent(
                         openFile = {
                             val intent = Intent(Intent.ACTION_VIEW)
                             intent.setDataAndType(
-                                "https://parces.gerotac.com/${it.url}".toUri(),
+                                "$URL_VIEW_PRODUCTION_FILE${it.url}".toUri(),
                                 "application/pdf"
                             )
                             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -441,15 +474,15 @@ private fun ListFileContent(
                             }
                         })
                 }
-            }
-        )
-        Column() {
-            repeat(7) {
-                if (isLoading) AnimationEffect()
-            }
+            })
+    }
+    Column() {
+        repeat(7) {
+            if (isLoading) AnimationEffect()
         }
     }
 }
+
 
 @Composable
 fun ItemFile(

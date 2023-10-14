@@ -10,4 +10,5 @@ message UserStore {
     string email_user = 4;
     string rol = 5;
     string nameUser = 6;
+    string userStatus = 7;
 }

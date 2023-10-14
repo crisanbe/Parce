@@ -166,9 +166,8 @@ private fun BodyUpdateRequirement(
         )
         OutlinedTextField(
             modifier = Modifier
-                .width(280.dp)
-                .wrapContentSize()
-                .height(90.dp),
+                .width(350.dp)
+                .height(150.dp),
             value = description,
             onValueChange = { description = it },
             label = { Text(stringResource(id = R.string.TextField_Description_problem)) },
@@ -223,8 +222,8 @@ private fun BodyUpdateRequirement(
             Spacer(modifier = Modifier.height(18.dp))
             ButtonWithShadow(
                 modifier = Modifier
-                    .width(300.dp)
-                    .height(61.dp),
+                    .width(350.dp)
+                    .height(60.dp),
                 color = Color.Black,
                 shape = RoundedCornerShape(20.dp),
                 onClick = {

@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.parce.parce",
+  "applicationId": "com.gerotac.parce",
   "variantName": "release",
   "elements": [
     {

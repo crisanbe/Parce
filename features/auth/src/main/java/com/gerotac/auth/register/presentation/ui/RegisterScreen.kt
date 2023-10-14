@@ -166,10 +166,9 @@ fun Register(
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
         IncomeRegister(modifier = modifier)
-        Spacer(modifier = Modifier.size(14.dp))
         Column(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -191,7 +190,7 @@ fun Register(
             Spacer(modifier = Modifier.size(10.dp))
             PasswordRegister(passwordState)
             passwordState.getErros()?.let { error -> TextFieldError(textError = error) }
-            Spacer(modifier = Modifier.size(10.dp))
+            Spacer(modifier = Modifier.size(5.dp))
             PasswordConfirmation(passwordConfirmationState)
             passwordConfirmationState.getErros()
                 ?.let { error -> TextFieldError(textError = error) }

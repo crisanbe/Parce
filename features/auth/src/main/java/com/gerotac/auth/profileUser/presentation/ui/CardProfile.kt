@@ -1,3 +1,5 @@
+@file:Suppress("UselessCallOnNotNull")
+
 package com.gerotac.auth.profileUser.presentation.ui
 
 import androidx.compose.foundation.BorderStroke
@@ -52,22 +54,25 @@ fun CardProfile(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = item.name,
+                        text = if(!item.name.isNullOrEmpty()){item.name}else{""},
                         style = MaterialTheme.typography.h6,
                         fontFamily = Montserrat,
                         color = Color.Black,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = item.role,
+                        text = if(!item.role.isNullOrEmpty()){item.role}else{""},
                         style = MaterialTheme.typography.body1,
                         fontWeight = FontWeight.SemiBold
                     )
                     CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
-                        Text(text = item.email, style = MaterialTheme.typography.body1)
+                        Text(
+                            text = if(!item.email.isNullOrEmpty()){item.email}else{""},
+                            style = MaterialTheme.typography.body1)
                     }
                 }
             }
+
             Column(
                 Modifier
                     .fillMaxWidth()
@@ -75,43 +80,43 @@ fun CardProfile(
                     .align(Alignment.CenterHorizontally)
             ) {
                 CardView(
-                    item = item.type_document,
+                    item = if(!item.type_document.isNullOrEmpty()){item.type_document}else{""},
                     elevation = 10.dp,
                     text = "Tipo de documento: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.document,
+                    item = if(!item.document.isNullOrEmpty()){item.document}else{""},
                     elevation = 10.dp,
                     text = "Documento: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.phone,
+                    item = if(!item.phone.isNullOrEmpty()){item.phone}else{""},
                     elevation = 10.dp,
                     text = "Teléfono: ",
-                    border = BorderStroke(1.dp, Color.Black)
+                    border = BorderStroke(2.dp, Color.Black)
                 )
                 CardView(
-                    item = item.birthday,
+                    item = if(!item.birthday.isNullOrEmpty()){item.birthday}else{""},
                     elevation = 10.dp,
                     text = "Fecha de nacimiento: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.gener,
+                    item = if(!item.gener.isNullOrEmpty()){item.gener}else{""},
                     elevation = 10.dp,
-                    text = "Genero: ",
+                    text = "Género: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.group_etnic,
+                    item = if(!item.group_etnic.isNullOrEmpty()){item.group_etnic}else{""},
                     elevation = 10.dp,
                     text = "Grupo étnico: ",
                     border = BorderStroke(1.dp, Color.Black)
                 )
                 CardView(
-                    item = item.presents_disability,
+                    item = if(!item.presents_disability.isNullOrEmpty()){item.presents_disability}else{""},
                     elevation = 10.dp,
                     text = "Discapacidad: ",
                     border = BorderStroke(1.dp, Color.Black)
@@ -119,9 +124,9 @@ fun CardProfile(
                 when {
                     !item.student?.academicprogram?.name.isNullOrEmpty() -> {
                         CardAlternative(
-                            item = item.student?.academicprogram?.name.toString(),
+                            item =  (if(!item.student?.academicprogram?.name.isNullOrEmpty()){item.student?.academicprogram?.name}else{""}).toString(),
                             elevation = 10.dp,
-                            text = "Programa académico: ",
+                            text = "Programa: ",
                             border = BorderStroke(1.dp, Color.Black)
                         )
                     }
@@ -130,7 +135,7 @@ fun CardProfile(
                 when {
                     !item.bussine?.activity_economy.isNullOrEmpty() -> {
                         CardView(
-                            item = item.bussine?.activity_economy.toString(),
+                            item = (if(!item.bussine?.activity_economy.isNullOrEmpty()){item.bussine?.activity_economy}else{""}).toString(),
                             elevation = 10.dp,
                             text = "Actividad económica: ",
                             border = BorderStroke(1.dp, Color.Black)
@@ -142,7 +147,7 @@ fun CardProfile(
                 when {
                     !item.bussine?.type_bussiness.isNullOrEmpty() -> {
                         CardView(
-                            item = item.bussine?.type_bussiness ?: "",
+                            item = (if(!item.bussine?.type_bussiness.isNullOrEmpty()){item.bussine?.type_bussiness}else{""}).toString(),
                             elevation = 10.dp,
                             text = "Tipo de empresa: ",
                             border = BorderStroke(1.dp, Color.Black)
@@ -153,7 +158,7 @@ fun CardProfile(
                 when {
                     !item.bussine?.person_contact.isNullOrEmpty() -> {
                         CardView(
-                            item = item.bussine?.person_contact ?: "",
+                            item = (if(!item.bussine?.person_contact.isNullOrEmpty()){item.bussine?.person_contact}else{""}).toString(),
                             elevation = 10.dp,
                             text = "Contacto: ",
                             border = BorderStroke(1.dp, Color.Black)
@@ -164,7 +169,7 @@ fun CardProfile(
                 when {
                     !item.bussine?.address.isNullOrEmpty() -> {
                         CardView(
-                            item = item.bussine?.address ?: "",
+                            item = (if(!item.bussine?.address.isNullOrEmpty()){item.bussine?.address}else{""}).toString(),
                             elevation = 10.dp,
                             text = "Dirección: ",
                             border = BorderStroke(1.dp, Color.Black)
@@ -175,7 +180,7 @@ fun CardProfile(
                 when {
                     !item.bussine?.typesociety?.name.isNullOrEmpty() -> {
                         CardView(
-                            item = item.bussine?.typesociety?.name ?: "",
+                            item = (if(!item.bussine?.typesociety?.name.isNullOrEmpty()){item.bussine?.typesociety?.name}else{""}).toString(),
                             elevation = 10.dp,
                             text = "Tipo de sociedad: ",
                             border = BorderStroke(1.dp, Color.Black)

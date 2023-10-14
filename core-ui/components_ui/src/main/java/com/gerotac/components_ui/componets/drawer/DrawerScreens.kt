@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Report
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -36,6 +37,15 @@ sealed class AppScreens(val route: String) {
     object AssignToStudentScreen : AppScreens(route = "AssignToStudentScreen")
     object AssignToTeacherScreen : AppScreens(route = "AssignToTeacherScreen")
     object DeleteRequirementScreen : AppScreens(route = "DeleteRequirementScreen")
+    object CompanyReportScreen : AppScreens(route = "CompanyReportScreen")
+    object GenderReportScreen : AppScreens(route = "GenderReportScreen")
+    object SocietiesReportScreen : AppScreens(route = "SocietiesReportScreen")
+    object EthnicGroupReportScreen : AppScreens(route = "EthnicGroupReportScreen")
+    object InterventionAreaReportScreen : AppScreens(route = "InterventionAreaReportScreen")
+    object DisabilityReportScreen : AppScreens(route = "DisabilityReportScreen")
+    object TypeInterventionReportScreen : AppScreens(route = "TypeInterventionReportScreen")
+    object DepartmentReportScreen : AppScreens(route = "DepartmentReportScreen")
+    object CityReportScreen : AppScreens(route = "CityReportScreen")
     object DetailScreen : AppScreens(route = "DetailScreen?id={id}") {
         fun passId(id: Int): String {
             return "DetailScreen?id=$id"
@@ -106,6 +116,12 @@ sealed class DrawerScreens(
         route = "CompanyProfile",
         title = "Perfil",
         IconDrawer = Icons.Outlined.Person
+    )
+
+    object Report : DrawerScreens(
+        route = "Report",
+        title = "Reportes",
+        IconDrawer = Icons.Outlined.Report
     )
 
     object EXIT :

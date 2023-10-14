@@ -211,6 +211,7 @@ fun UpdateTeacher(
         ) {
             Spacer(Modifier.height(12.dp))
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = teacherName.toString(),
                 onValueChange = { teacherName = it },
                 label = { Text(stringResource(id = R.string.TextField_full_name)) },
@@ -224,6 +225,7 @@ fun UpdateTeacher(
                 }
             )
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = idNumber.toString(),
                 onValueChange = { idNumber = it },
                 label = { Text(stringResource(id = R.string.TextField_Id_number)) },
@@ -237,6 +239,7 @@ fun UpdateTeacher(
                 }
             )
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = phone.toString(),
                 onValueChange = { phone = it },
                 label = { Text(stringResource(id = R.string.TextField_Phone)) },
@@ -253,7 +256,7 @@ fun UpdateTeacher(
             DropString(
                 ValueState = { identificationType = it },
                 text = identificationType.toString(),
-                options = listOf("NIT", "Cedula", "Pasaporte", "Cédula de Extranjería"),
+                options = listOf("NIT", "Cédula", "Pasaporte", "Cédula de Extranjería"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.identity)
             )
             Spacer(Modifier.height(5.dp))

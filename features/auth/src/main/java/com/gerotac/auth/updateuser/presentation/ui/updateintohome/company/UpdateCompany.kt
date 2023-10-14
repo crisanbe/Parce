@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.gerotac.auth.R
+import com.gerotac.components_ui.R
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.locationmodel.ResultX
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.locationmodel.Town
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.responsecompany.ResultCompany
@@ -267,6 +267,7 @@ fun UpdateCompany(
         ) {
             Spacer(Modifier.height(12.dp))
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = companyName.toString(),
                 onValueChange = { companyName = it },
                 label = { Text(stringResource(id = R.string.TextField_Company_name)) },
@@ -280,6 +281,7 @@ fun UpdateCompany(
                 }
             )
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = economicActivity.toString(),
                 onValueChange = { economicActivity = it },
                 label = { Text(stringResource(id = R.string.TextField_Economic_activity)) },
@@ -293,6 +295,7 @@ fun UpdateCompany(
                 }
             )
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = address.toString(),
                 onValueChange = { address = it },
                 label = { Text(stringResource(id = R.string.TextField_Address)) },
@@ -312,6 +315,7 @@ fun UpdateCompany(
             )
             Spacer(Modifier.height(5.dp))
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = contactPerson.toString(),
                 onValueChange = { contactPerson = it },
                 label = { Text("Contacto de persona") },
@@ -330,6 +334,7 @@ fun UpdateCompany(
                 }
             )
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = phone.toString(),
                 onValueChange = { phone = it },
                 label = { Text(stringResource(id = R.string.TextField_Phone)) },
@@ -343,6 +348,7 @@ fun UpdateCompany(
                 }
             )
             TextField(
+                modifier = Modifier.widthIn(350.dp),
                 value = idNumber.toString(),
                 onValueChange = { idNumber = it },
                 label = { Text(stringResource(id = R.string.TextField_Id_number)) },
@@ -358,7 +364,7 @@ fun UpdateCompany(
             DropString(
                 ValueState = { identificationType = it },
                 text = identificationType.toString(),
-                options = listOf("NIT", "Cedula", "Pasaporte", "Cédula de Extranjería"),
+                options = listOf("NIT", "Cédula", "Pasaporte", "Cédula de Extranjería"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.identity)
             )
             Spacer(Modifier.height(5.dp))
@@ -441,7 +447,7 @@ fun UpdateCompany(
                     )
                 },
                 shape = RoundedCornerShape(percent = 45),
-                modifier = Modifier.size(height = 55.dp, width = 300.dp),
+                modifier = Modifier.widthIn(350.dp),
                 colors = ButtonDefaults.textButtonColors(backgroundColor = Color.Black)
             ) {
                 Text(

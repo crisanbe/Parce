@@ -63,7 +63,7 @@ fun ProfileCompanyView(
     scaffoldState: ScaffoldState,
     onClickIconButton: (ScaffoldState) -> Unit,
     onClickDestination: (screen: String) -> Unit,
-    viewModelProfile: GetProfileViewModel = hiltViewModel(),
+    viewModelProfile: GetProfileViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val state = viewModelProfile.state.collectAsState()

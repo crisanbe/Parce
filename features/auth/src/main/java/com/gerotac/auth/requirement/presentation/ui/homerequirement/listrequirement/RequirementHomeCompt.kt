@@ -36,12 +36,11 @@ import com.gerotac.auth.theme.ShimmerColorShades
 import com.gerotac.components_ui.componets.button.IconButtonDelete
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.progress.LinearProgressBar
-import com.gerotac.components_ui.componets.progress.ProgressIndicator
 import com.gerotac.core.util.UiEvent
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
+import com.gerotac.components_ui.R
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+
 
 fun mToast(context: Context, text: String) {
     Toast.makeText(context, text, Toast.LENGTH_LONG).show()
@@ -112,7 +111,6 @@ fun HomeRequirements(
     resultRequirement: Result,
     onItemClicked: (Int) -> Unit
 ) {
-    val context = LocalContext.current
     Card(
         modifier = modifier,
         elevation = 5.dp,
@@ -206,7 +204,7 @@ fun HomeRequirements(
     Spacer(modifier = Modifier.height(8.dp))
 }
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "SuspiciousIndentation")
 @Composable
 fun HomeInterventions(
     modifier: Modifier = Modifier,
@@ -277,9 +275,12 @@ fun HomeInterventions(
                             overflow = TextOverflow.Ellipsis,
                             color = Color.Gray,
                         )
-                        LinearProgressBar(isDisplayed = state.value.isLoading, text = "Aprobando...")
+                        LinearProgressBar(isDisplayed = state.value.isLoading, text = "Procesando...")
                     }
-                    if (HeaderRequirement.getRol()["rol"] == "docente") {
+                    if (HeaderRequirement.getRol()["rol"] == "docente"
+                        || HeaderRequirement.getRol()["rol"] == "empresa"
+                        || HeaderRequirement.getRol()["rol"] == "estudiante")
+                    {
                         CheckedApproveAndDisapprove(
                             onclickApprove = {
                                 scope.launch {
@@ -287,15 +288,15 @@ fun HomeInterventions(
                                     eventFlow.collect() { event ->
                                         when (event) {
                                             is UiEvent.Success -> {
-                                                mToast(context,"La intervencion fue aprobada✔️!")
+                                                mToast(context, "La intervención fue aprobada ✔!")
                                                 scaffoldState.snackbarHostState.showSnackbar(
-                                                    message = "Se aprobo correctamente🏅",
-                                                    actionLabel = "Continue"
+                                                    message = "Se aprobó correctamente🏅",
+                                                    actionLabel = "Continue",
                                                 )
                                             }
                                             is UiEvent.ShowSnackBar -> {
                                                 scaffoldState.snackbarHostState.showSnackbar(
-                                                    message = event.message.asString(context)
+                                                    message = event.message.asString(context),
                                                 )
                                             }
                                             else -> Unit
@@ -311,22 +312,25 @@ fun HomeInterventions(
                                     eventFlow.collect() { event ->
                                         when (event) {
                                             is UiEvent.Success -> {
-                                                mToast(context,"La intervencion fue desaprobada ❌")
+                                                mToast(context, "La intervención no fue aprobada ❌")
                                                 scaffoldState.snackbarHostState.showSnackbar(
-                                                    message = "Se desaprobó🏅",
-                                                    actionLabel = "Continue"
+                                                    message = "No se aprobó🏅",
+                                                    actionLabel = "Continue",
                                                 )
                                             }
                                             is UiEvent.ShowSnackBar -> {
                                                 scaffoldState.snackbarHostState.showSnackbar(
-                                                    message = event.message.asString(context)
+                                                    message = event.message.asString(context),
                                                 )
                                             }
                                             else -> Unit
                                         }
                                     }
                                 }
-                            }
+                            },
+                            color1 = R.drawable.approve,
+                            color2 = R.drawable.disapprove,
+                            statusIntervention = resultInterventions
                         )
                     } else {
                         Button(

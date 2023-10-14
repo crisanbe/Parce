@@ -9,7 +9,9 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -19,8 +21,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Archive
-import androidx.compose.material.icons.filled.Badge
-import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -43,9 +43,8 @@ import androidx.navigation.NavController
 import androidx.work.*
 import coil.compose.rememberAsyncImagePainter
 import com.gerotac.auth.R
-import com.gerotac.auth.approveanddisapprove.presentation.ui.CheckedApproveAndDisapprove
-import com.gerotac.auth.intervention.detailintervention.domain.model.File
 import com.gerotac.auth.intervention.detailintervention.domain.model.DetailResponseIntervention
+import com.gerotac.auth.intervention.detailintervention.domain.model.File
 import com.gerotac.auth.intervention.detailintervention.presentation.viewmodel.DetailInterventionViewModel
 import com.gerotac.auth.intervention.getinterventionofdetailrequirement.intervention.MenuInferiorViewModel
 import com.gerotac.auth.intervention.getinterventionofdetailrequirement.intervention.component.DialogContent
@@ -56,12 +55,9 @@ import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirem
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
 import com.gerotac.components_ui.componets.TopPart
 import com.gerotac.components_ui.componets.button.BottomSheetDialog
-import com.gerotac.components_ui.componets.button.ButtonValidation
-import com.gerotac.components_ui.componets.button.ButtonWithShadow
-import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
+import com.gerotac.shared.commons.Constant.URL_VIEW_PRODUCTION_FILE
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -142,8 +138,7 @@ private fun Body(
         verticalArrangement = Arrangement.spacedBy(5.dp),
     ) {
         Text(
-            text = stringResource(R.string.TextField_Intervention) +
-                    " #️⃣${data?.data?.id} del requerimiento #️⃣${data?.data?.requierement}",
+            text = stringResource(R.string.TextField_Intervention) + " #️⃣${data?.data?.id}",
             fontSize = 22.sp,
             color = Color.Black,
             fontWeight = FontWeight.Bold,
@@ -158,9 +153,8 @@ private fun Body(
         )
         androidx.compose.material.OutlinedTextField(
             modifier = Modifier
-                .width(280.dp)
-                .wrapContentSize()
-                .height(90.dp),
+                .width(350.dp)
+                .height(150.dp),
             value = data?.data?.description ?: "",
             onValueChange = { data?.data?.description },
             label = { Text(stringResource(id = R.string.TextField_Description)) },
@@ -199,10 +193,11 @@ private fun Body(
                 model = com.gerotac.components_ui.R.drawable.user
             )
         )
-        Spacer(modifier = Modifier.height(18.dp))
-
+        Spacer(modifier = Modifier.height(1.dp))
          if (HeaderRequirement.getRol()["rol"] == "empresa" ||
-             HeaderRequirement.getRol()["rol"] == "docente") {
+             HeaderRequirement.getRol()["rol"] == "docente" ||
+             HeaderRequirement.getRol()["rol"] == "estudiante" ||
+             HeaderRequirement.getRol()["rol"] == "admin"){
             //TODO this is the intervention id
             if (!data?.data?.id.toString().isNullOrEmpty()) {
                 Row(
@@ -213,7 +208,7 @@ private fun Body(
                 ) {
                     OutlinedButton(
                         modifier = Modifier
-                            .widthIn(300.dp)
+                            .widthIn(350.dp)
                             .background(Color(0xFFFFFFFF), CircleShape)
                             .padding(vertical = 20.dp)
                             .shadow(3.dp, CircleShape),
@@ -288,7 +283,7 @@ private fun ListFileContent(
                         openFile = {
                             val intent = Intent(Intent.ACTION_VIEW)
                             intent.setDataAndType(
-                                "https://parces.gerotac.com/${it.url}".toUri(),
+                                "$URL_VIEW_PRODUCTION_FILE${it.url}".toUri(),
                                 "application/pdf"
                             )
                             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

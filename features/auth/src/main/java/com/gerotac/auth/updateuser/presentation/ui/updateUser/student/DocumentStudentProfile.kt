@@ -3,6 +3,7 @@ package com.gerotac.auth.updateuser.presentation.ui.updateUser.student
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -25,13 +26,15 @@ import com.gerotac.components_ui.componets.state.TextFieldValueState
 @Composable
 fun DocumentStudent(documentNumber : TextFieldValueState = remember { DocumentNumberState()}) {
     val focusManager = LocalFocusManager.current
-    TextField(value = documentNumber.text,
+    TextField(
+        value = documentNumber.text,
         onValueChange = {
             if (it.length <= 10) documentNumber.text = it
         },
         label = { Text(stringResource(id = com.gerotac.auth.R.string.TextField_Id_number)) },
         colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
-        modifier = Modifier.onFocusChanged { focusState ->
+        modifier = Modifier.widthIn(350.dp)
+            .onFocusChanged { focusState ->
             documentNumber.onFocusedChange(focusState.isFocused)
             if (!focusState.isFocused) {
                 documentNumber.enableShowErrors()

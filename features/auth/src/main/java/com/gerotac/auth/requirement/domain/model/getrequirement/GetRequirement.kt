@@ -46,6 +46,7 @@ data class Intervention(
     val id: Int,
     val relations: List<Any>,
     val requierement: Int,
+    val status: String? = null,
     val type_intervention: String,
     val user: User
 ) : Serializable

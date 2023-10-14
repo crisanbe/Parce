@@ -1,6 +1,7 @@
 package com.gerotac.auth.register.presentation.ui
 
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
@@ -51,6 +52,6 @@ fun NameRegister(name: TextFieldValueState = remember {ValueState()}) {
             )
             DividerIcon()
         },
-        modifier = Modifier.width(300.dp)
+        modifier = Modifier.widthIn(350.dp)
     )
 }

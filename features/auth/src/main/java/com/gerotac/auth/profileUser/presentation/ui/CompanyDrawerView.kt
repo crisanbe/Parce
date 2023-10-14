@@ -12,8 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -22,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.gerotac.auth.requirement.di.HeaderRequirement
+import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.mToast
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.drawer.screen
 
@@ -84,29 +87,62 @@ fun DrawerItem(
     selected: Boolean,
     onItemClick: (DrawerScreens) -> Unit,
 ) {
+    val context = LocalContext.current
     val background = if (selected) Color(0xFFFFCA4C) else Color.Transparent
     Divider()
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onItemClick(item) }
-            .height(45.dp)
-            .background(background)
-            .padding(start = 10.dp)
+    if (HeaderRequirement.getRol()["rol"] == "empresa"
+        || HeaderRequirement.getRol()["rol"] == "docente"
+        || HeaderRequirement.getRol()["rol"] == "estudiante"
     ) {
-        Icon(
-            tint = Color.White,
-            imageVector = item.IconDrawer,
-            contentDescription = null
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = item.title,
-            fontSize = 16.sp,
-            color = Color.White,
-            fontWeight = FontWeight.ExtraBold
-        )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        if (item.route == "Report"){mToast(context,"No posee permisos de administrador🔑")}else{
+                            onItemClick(item)
+                        }
+                    }
+                    .height(45.dp)
+                    .background(background)
+                    .padding(start = 10.dp)
+            ) {
+                Icon(
+                    tint = Color.White,
+                    imageVector = item.IconDrawer,
+                    contentDescription = null
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = item.title,
+                    fontSize = 16.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.ExtraBold
+                )
+        }
+    }else{
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onItemClick(item) }
+                .height(45.dp)
+                .background(background)
+                .padding(start = 10.dp)
+        ) {
+            Icon(
+                tint = Color.White,
+                imageVector = item.IconDrawer,
+                contentDescription = null
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = item.title,
+                fontSize = 16.sp,
+                color = Color.White,
+                fontWeight = FontWeight.ExtraBold
+            )
+        }
     }
     Divider()
 }

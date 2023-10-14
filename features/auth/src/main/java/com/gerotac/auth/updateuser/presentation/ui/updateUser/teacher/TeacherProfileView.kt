@@ -1,3 +1,5 @@
+@file:Suppress("UselessCallOnNotNull")
+
 package com.gerotac.auth.updateuser.presentation.ui.updateUser.teacher
 
 import android.annotation.SuppressLint
@@ -48,6 +50,7 @@ import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.dropdown.DropDownAlternative
 import com.gerotac.core.util.UiEvent
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -67,7 +70,12 @@ fun TeacherProfile(
     val context = LocalContext.current
     val eventFlow = viewModelUpdateUser.uiEvent.receiveAsFlow()
     val state = viewModelUpdateUser.state.collectAsState()
-    val stateAcademic = viewModelAcademic.stateAcademic.collectAsState()
+    val systemUiController = rememberSystemUiController()
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = com.gerotac.auth.theme.ColorLogin,
+        )
+    }
     BackHandler(true) { viewModelDialog.showDialog() }
     DialogExit(
         text = "Deseas salir sin actualizar tus datos!🤦‍♂",
@@ -122,28 +130,29 @@ fun TeacherProfile(
                                     group_etnic = it[4],
                                     birthday = it[5],
                                     phone = it[6],
-                                    presents_disability = it[7],
-                                    academic_program = null,
-                                    activity_economy = null,
-                                    type_bussiness = null,
-                                    type_society = null,
-                                    person_contact = null,
-                                    departament = null,
-                                    municipality = null,
-                                    address = null
+                                    presents_disability = it[7]
                                 )
                             )
                             eventFlow.collect { event ->
                                 when (event) {
                                     is UiEvent.Success -> {
-                                        navController.navigate(
-                                            DrawerScreens.CompanyHome.route
-                                                    + "?user=Bienvenido!"
-                                        )
-                                        scaffoldState.snackbarHostState.showSnackbar(
-                                            message = "Se guardo exitosamente🏅",
-                                            actionLabel = "Continue"
-                                        )
+                                        userRepo?.saveUserStatus("completed")
+                                        userRepo?.getTokenLoginState()?.collect { tokenLogin ->
+                                            withContext(Dispatchers.Main) {
+                                                userRepo?.getUserStatus()?.collect { userStatus ->
+                                                    withContext(Dispatchers.Main) {
+                                                        if (tokenLogin != "" && userStatus == "completed") {
+                                                            navController.navigate(DrawerScreens.CompanyHome.route + "?user=Bienvenido!")
+                                                        }
+
+                                                        scaffoldState.snackbarHostState.showSnackbar(
+                                                            message = "Se guardo exitosamente🏅",
+                                                            actionLabel = "Continue"
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                     is UiEvent.ShowSnackBar -> {
                                         scaffoldState.snackbarHostState.showSnackbar(
@@ -217,13 +226,13 @@ fun EducationalProfileView(
             DropDownAlternative(
                 ValueState = identificationType,
                 text = "Tipo de identificación",
-                options = listOf("NIT", "Cedula", "Pasaporte", "Cédula de Extranjería"),
+                options = listOf("NIT", "Cédula", "Pasaporte", "Cédula de Extranjería"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.identity)
             )
             Spacer(Modifier.height(5.dp))
             DropDownAlternative(
                 ValueState = gender,
-                text = "Tipo de genero",
+                text = "Tipo de género",
                 options = listOf("Hombre", "Mujer", "Prefiero no decir"),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.genders)
             )
@@ -243,7 +252,7 @@ fun EducationalProfileView(
             Spacer(Modifier.height(5.dp))
             DropDownAlternative(
                 ValueState = hasDisability,
-                text = "Tipo de discapasidad",
+                text = "Presenta discapacidad",
                 options = listOf("NO", "SI"),
                 keyboardActions = KeyboardActions(onDone = { hideKeyboard?.hide() }),
                 mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.ic_disability)
@@ -252,8 +261,7 @@ fun EducationalProfileView(
             DataTimeAlternative(birthday)
             Spacer(Modifier.height(10.dp))
             Button(
-                modifier = Modifier
-                    .size(height = 55.dp, width = 300.dp)
+                modifier = Modifier.widthIn(350.dp)
                     .onFocusChanged { focusState ->
                         idNumber.onFocusedChange(focusState.isFocused)
                         phoneNumberState.onFocusedChange(focusState.isFocused)
@@ -266,14 +274,46 @@ fun EducationalProfileView(
                     hideKeyboard?.hide()
                     onClickSave.invoke(
                         listOf(
-                            fullName.text,
-                            identificationType.text,
-                            idNumber.text,
-                            gender.text,
-                            ethnicGroup.text,
-                            birthday.text,
-                            phoneNumberState.text,
-                            hasDisability.text
+                            if (!fullName.text.isNullOrEmpty()) {
+                                fullName.text
+                            } else {
+                                ""
+                            },
+                            if (!identificationType.text.isNullOrEmpty()) {
+                                identificationType.text
+                            } else {
+                                ""
+                            },
+                            if (!idNumber.text.isNullOrEmpty()) {
+                                idNumber.text
+                            } else {
+                                ""
+                            },
+                            if (!gender.text.isNullOrEmpty()) {
+                                gender.text
+                            } else {
+                                ""
+                            },
+                            if (!ethnicGroup.text.isNullOrEmpty()) {
+                                ethnicGroup.text
+                            } else {
+                                ""
+                            },
+                            if (!birthday.text.isNullOrEmpty()) {
+                                birthday.text
+                            } else {
+                                ""
+                            },
+                            if (!phoneNumberState.text.isNullOrEmpty()) {
+                                phoneNumberState.text
+                            } else {
+                                ""
+                            },
+                            if (!hasDisability.text.isNullOrEmpty()) {
+                                hasDisability.text
+                            } else {
+                                ""
+                            },
                         )
                     )
                 },

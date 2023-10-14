@@ -24,7 +24,7 @@ fun FieldValue(
 ) {
     val focusManager = LocalFocusManager.current
     TextField(
-        modifier = Modifier.width(280.dp),
+        modifier = Modifier.widthIn(350.dp),
         value = text,
         onValueChange = {
             if (it.length <= 10) ValueState(it)

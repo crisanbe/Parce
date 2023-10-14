@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -52,7 +53,7 @@ fun DataTimeAlternative(dateState: TextFieldValueState = remember { ValueState()
     )
 
     OutlinedTextField(
-        modifier = Modifier
+        modifier = Modifier.widthIn(350.dp)
             .clickable { datePickerDialog.show() },
         value = dateState.text,
         enabled = false,

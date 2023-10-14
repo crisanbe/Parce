@@ -167,4 +167,25 @@ class ProtoUserRepoImpl(
                 protoBuilder.nameUser
             }
     }
+
+    override suspend fun saveUserStatus(status: String?) {
+        protoDataStore.updateData {
+            it.toBuilder()
+                .setUserStatus(status)
+                .build()
+        }
+    }
+
+    override suspend fun getUserStatus(): Flow<String> {
+        return protoDataStore.data
+            .catch { exp ->
+                if (exp is IOException) {
+                    emit(UserStore.getDefaultInstance())
+                } else {
+                    throw exp
+                }
+            }.map { protoBuilder ->
+                protoBuilder.userStatus
+            }
+    }
 }

@@ -26,7 +26,7 @@ fun CardAlternative(
         border = border,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = 0.dp)
     ) {
         Row(
             Modifier

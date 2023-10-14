@@ -1,3 +1,5 @@
+@file:Suppress("UselessCallOnNotNull")
+
 package com.gerotac.auth.updateuser.presentation.ui.updateUser.company
 
 import androidx.activity.compose.BackHandler
@@ -25,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.gerotac.auth.R
+import com.gerotac.components_ui.R
 import com.gerotac.auth.dropdownapi.dropdown.domain.model.responsecompany.ResultCompany
 import com.gerotac.auth.dropdownapi.dropdown.presentation.ui.DropACompany
 import com.gerotac.auth.dropdownapi.dropdown.presentation.viewmodel.GetApisDropViewModel
@@ -38,6 +40,7 @@ import com.gerotac.components_ui.componets.alertdialog.DialogExit
 import com.gerotac.components_ui.componets.alertdialog.ViewModelDialog
 import com.gerotac.components_ui.componets.drawer.AppScreens
 import com.gerotac.components_ui.componets.dropdown.DropString
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -51,6 +54,10 @@ fun CompanyRegistrationView(
     val lifecycleTokenScope = rememberCoroutineScope()
     val viemodel: ViewModelDialog = hiltViewModel()
     var showDialog by remember { mutableStateOf(false) }
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(
+        color = com.gerotac.auth.theme.ColorLogin,
+    )
     BackHandler(true) { viemodel.showDialog() }
     DialogExit(
         text = "Desea salir sin actualizar tus datos?🚨",
@@ -76,9 +83,13 @@ fun CompanyRegistrationView(
                 lifecycleTokenScope.launch {
                     navController.navigate(
                         route = AppScreens.CompanyProfileViewPagination.route +
-                                "?companyName=${it[0]}&identificationType=${it[1]}&idNumber=${it[2]}"
-                                + "&companyType=${it[3]}&kindCompany=${it[4]}&economicActivity=${it[5]}"
-                                + "&phone=${it[6]}"
+                                "?companyName=${it[0]}" +
+                                "&identificationType=${it[1]}" +
+                                "&idNumber=${it[2]}" +
+                                "&companyType=${it[3]}" +
+                                "&kindCompany=${it[4]}" +
+                                "&economicActivity=${it[5]}"+
+                                "&phone=${it[6]}"
                     )
                 }
             }
@@ -136,10 +147,11 @@ fun CompanyRegistration(
                 DropString(
                     ValueState = {identificationType = it},
                     text = "Tipo de identificación",
-                    options = listOf("NIT", "Cedula", "Pasaporte", "Cédula de Extranjería"),
+                    options = listOf("NIT", "Cédula", "Pasaporte", "Cédula de Extranjería"),
                     mainIcon = painterResource(id = com.gerotac.components_ui.R.drawable.identity)
                 )
                 TextField(
+                    modifier = Modifier.widthIn(350.dp),
                     value = idNumber,
                     onValueChange = { idNumber = it },
                     label = { Text(stringResource(id = R.string.TextField_Id_number)) },
@@ -153,6 +165,7 @@ fun CompanyRegistration(
                     }
                 )
                 TextField(
+                    modifier = Modifier.widthIn(350.dp),
                     value = companyName,
                     onValueChange = { companyName = it },
                     label = { Text(stringResource(id = R.string.TextField_Company_name)) },
@@ -166,6 +179,7 @@ fun CompanyRegistration(
                     }
                 )
                 TextField(
+                    modifier = Modifier.widthIn(350.dp),
                     value = phone,
                     onValueChange = { phone = it },
                     label = { Text(stringResource(id = R.string.TextField_Phone)) },
@@ -179,6 +193,7 @@ fun CompanyRegistration(
                     }
                 )
                 TextField(
+                    modifier = Modifier.widthIn(350.dp),
                     value = economicActivity,
                     onValueChange = { economicActivity = it },
                     label = { Text(stringResource(id = R.string.TextField_Economic_activity)) },
@@ -210,18 +225,18 @@ fun CompanyRegistration(
                     onClick = {
                         onClickNext.invoke(
                             listOf(
-                                companyName,
-                                identificationType,
-                                idNumber,
-                                companyType,
-                                kindCompany.toString(),
-                                economicActivity,
-                                phone
+                                if(!companyName.isNullOrEmpty()){companyName}else{""},
+                                if(!identificationType.isNullOrEmpty()){identificationType}else{""},
+                                if(!idNumber.isNullOrEmpty()){idNumber}else{""},
+                                if(!companyType.isNullOrEmpty()){companyType}else{""},
+                                if(!kindCompany.toString().isNullOrEmpty()){kindCompany.toString()}else{""},
+                                if(!economicActivity.isNullOrEmpty()){economicActivity}else{""},
+                                if(!phone.isNullOrEmpty()){phone}else{""},
                             )
                         )
                     },
                     shape = RoundedCornerShape(percent = 45),
-                    modifier = Modifier.size(height = 55.dp, width = 300.dp),
+                    modifier = Modifier.widthIn(350.dp),
                     colors = ButtonDefaults.textButtonColors(backgroundColor = Color.Black)
                 ) {
                     Text(

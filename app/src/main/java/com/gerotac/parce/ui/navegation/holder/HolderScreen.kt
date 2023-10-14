@@ -36,6 +36,8 @@ import com.gerotac.auth.assignrequirement.presentation.ui.assign.AssignToStudent
 import com.gerotac.auth.assignrequirement.presentation.ui.assign.AssignToTeacherScreen
 import com.gerotac.auth.intervention.createintervention.presentation.ui.SaveInterventionScreen
 import com.gerotac.auth.intervention.detailintervention.presentation.ui.DetailInterventionScreen
+import com.gerotac.auth.reports.presentation.ui.ReportScreen
+import com.gerotac.auth.reports.presentation.ui.viewreport.*
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.detail.DetailScreen
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.ExitAlert
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.RequirementScreen
@@ -88,11 +90,11 @@ fun HolderScreen(
                     controller.navigate(it) {
                         controller.graph.startDestinationRoute?.let { route ->
                             popUpTo(route) {
-                                saveState = false
+                                saveState = true
                             }
                         }
                         launchSingleTop = true
-                        restoreState = true
+                        restoreState = false
                     }
                     scope.launch {
                         scaffoldState.drawerState.close()
@@ -155,10 +157,10 @@ fun ScaffoldSection(
                     StartUpView(controller)
                     BackHandler(true) {}
                 }
-                composable(route = AppScreens.PermissionScreen.route) {
+                /*composable(route = AppScreens.PermissionScreen.route) {
                     onStatusBarColorChange(MaterialTheme.colors.background)
                     PermissionScreen(permissionsStates = permissionsState, controller)
-                }
+                }*/
                 composable(
                     route = AppScreens.LoginScreen.route + "?email={email}",
                     arguments = listOf(navArgument(name = "email") {
@@ -633,6 +635,7 @@ fun ScaffoldSection(
                         onStatusBarColorChange(MaterialTheme.colors.background)
                         SaveInterventionScreen(
                             controller,
+                            scaffoldState = scaffoldState,
                             code = backStackEntry.arguments?.getString("code").toString(),
                         )
                     }
@@ -738,7 +741,6 @@ fun ScaffoldSection(
                         title = DrawerScreens.CompanyHome,
                         navController = controller,
                         scaffoldState = scaffoldState,
-                        nameUser = it.arguments?.getString("user"),
                         onClickIconButton = { itScaffold ->
                             onClickIconButton(itScaffold)
                         },
@@ -762,6 +764,176 @@ fun ScaffoldSection(
                             onClickDestination = {
                                 onClickDestination(it)
                             }
+                        )
+                    }
+                }
+                composable(
+                    route = DrawerScreens.Report.route,
+                ) {
+                    EnterAnimation {
+                        ReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            }
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.CompanyReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        CompanyReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.GenderReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        GenderReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.DisabilityReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        DisabilityReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.SocietiesReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        SocietiesReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.EthnicGroupReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        EthnicGroupReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.InterventionAreaReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        InterventionAreaReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.TypeInterventionReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        TypeInterventionReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.DepartmentReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        DepartmentReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
+                        )
+                    }
+                }
+                composable(
+                    route = AppScreens.CityReportScreen.route,
+                ) {
+                    EnterAnimation {
+                        CityReportScreen(
+                            title = DrawerScreens.Report,
+                            navController = controller,
+                            scaffoldState = scaffoldState,
+                            onClickIconButton = {
+                                onClickIconButton(it)
+                            },
+                            onClickDestination = {
+                                onClickDestination(it)
+                            },
                         )
                     }
                 }

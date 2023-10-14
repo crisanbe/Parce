@@ -1,6 +1,6 @@
 package com.gerotac.auth.register.presentation.ui
 
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -40,7 +40,7 @@ fun PasswordConfirmation(passwordConfirmationState: TextFieldValueState = rememb
             )
         },
         modifier = Modifier
-            .width(300.dp)
+            .widthIn(350.dp)
             .onFocusChanged { focusState ->
                 passwordConfirmationState.onFocusedChange(focusState.isFocused)
                 if (!focusState.isFocused) {
@@ -81,4 +81,13 @@ fun PasswordConfirmation(passwordConfirmationState: TextFieldValueState = rememb
             }
         }
     )
+    val assistiveElementText = "* Obligatorio mínimo 6 caracteres"
+    val assistiveElementColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
+    Text(
+        text = assistiveElementText,
+        color = assistiveElementColor,
+        style = MaterialTheme.typography.caption,
+        modifier = Modifier.offset(x = (-1).dp)
+    )
+    Spacer(Modifier.size(5.dp))
 }

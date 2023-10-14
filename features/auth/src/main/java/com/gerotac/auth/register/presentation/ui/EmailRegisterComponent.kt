@@ -1,6 +1,7 @@
 package com.gerotac.auth.register.presentation.ui
 
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -38,7 +39,7 @@ fun EmailRegister(emailState: TextFieldValueState = remember { ValueState() }) {
             }
         },
         modifier = Modifier
-            .width(300.dp)
+            .widthIn(350.dp)
             .onFocusChanged { focusState ->
                 emailState.onFocusedChange(focusState.isFocused)
                 if (!focusState.isFocused) {

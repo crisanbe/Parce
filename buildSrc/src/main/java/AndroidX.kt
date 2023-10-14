@@ -7,6 +7,8 @@ object AndroidX {
     private const val savedStateVersion = "1.2.0"
     private const val datastore_coreVersion = "1.0.0"
     private const val datastore_preferencesVersion = "1.0.0"
+    private const val androidxPreferenceVersion = "1.2.0"
+    private const val androidxWorkVersion = "2.7.1"
     const val coreKtx = "androidx.core:core-ktx:$coreKtxVersion"
     const val appCompat = "androidx.appcompat:appcompat:$appCompatVersion"
     const val runtimeKtx = "androidx.lifecycle:lifecycle-runtime-ktx:$runtimeKtxVersion"
@@ -15,6 +17,6 @@ object AndroidX {
     const val savedState = "androidx.savedstate:savedstate-ktx:$savedStateVersion"
     const val datastore_core = "androidx.datastore:datastore-core:$datastore_coreVersion"
     const val datastore_preferences = "androidx.datastore:datastore-preferences:$datastore_preferencesVersion"
-
-
+    const val androidxPreference = "androidx.preference:preference-ktx:$androidxPreferenceVersion"
+    const val androidxWork = "androidx.work:work-runtime-ktx:$androidxWorkVersion"
 }

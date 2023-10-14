@@ -13,9 +13,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -23,27 +21,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Menu
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.autofill.AutofillNode
-import androidx.compose.ui.autofill.AutofillType
-import androidx.compose.ui.composed
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.boundsInWindow
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalAutofill
-import androidx.compose.ui.platform.LocalAutofillTree
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -61,7 +47,6 @@ import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirem
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.HomeBottomBar
 import com.gerotac.auth.requirement.presentation.ui.homerequirement.listrequirement.HomeRequirements
 import com.gerotac.auth.requirement.presentation.viewmodel.RequirementViewModel
-import com.gerotac.components_ui.R
 import com.gerotac.components_ui.componets.TopBar
 import com.gerotac.components_ui.componets.alertdialog.ViewModelDialog
 import com.gerotac.components_ui.componets.drawer.AppScreens
@@ -69,6 +54,7 @@ import com.gerotac.components_ui.componets.drawer.DrawerScreens
 import com.gerotac.components_ui.componets.progress.CircularProgress
 import com.gerotac.core.util.UiEvent
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.gerotac.components_ui.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -82,7 +68,6 @@ fun HomeCompany(
     title: DrawerScreens,
     navController: NavController,
     scaffoldState: ScaffoldState,
-    nameUser: String?,
     onItemClicked: (Int) -> Unit,
     onClickIconButton: (ScaffoldState) -> Unit,
     onClickDestination: (screen: String) -> Unit,
@@ -115,7 +100,7 @@ fun HomeCompany(
         }
     }
     com.gerotac.components_ui.componets.alertdialog.DialogExit(
-        text = "Deseas salir de la sesión ?",
+        text = "Deseas salir de la sesión?",
         onClickYes = {
             showDialog = !showDialog
             lifecycleTokenScope.launch {

@@ -72,7 +72,7 @@ fun AssignToTeacherScreen(
         },
         content = {
             Box(Modifier.fillMaxSize()) {
-                HeaderAssign(navController, upPress)
+                HeaderTeacherScreen(navController, upPress)
                 stateGetTeacher.value.teacherState.let { listTeacher ->
                     BodyAssign(Modifier.align(Alignment.Center),
                         navController = navController,
@@ -135,7 +135,7 @@ fun AssignToTeacherScreen(
 }
 
 @Composable
-fun HeaderAssign(navController: NavController, upPress: () -> Unit) {
+fun HeaderTeacherScreen(navController: NavController, upPress: () -> Unit) {
     TopPart(onClickAction = { upPress() })
 }
 
@@ -151,6 +151,7 @@ fun BodyAssign(
 ) {
     var teacher: List<Int> by remember { mutableStateOf(listOf()) }
     val state = viewModel.state.collectAsState()
+    val stateDeassign = viewModel.stateDeassign.collectAsState()
     val systemUiController = rememberSystemUiController()
     SideEffect {
         systemUiController.setSystemBarsColor(
@@ -190,10 +191,11 @@ fun BodyAssign(
         Spacer(modifier = Modifier.height(70.dp))
     }
     LinearProgressBar(state.value.isLoading, "Asignando...")
+    LinearProgressBar(stateDeassign.value.isLoading, "Desasignando...")
 }
 
 @Composable
-fun FooterAssign(modifier: Modifier, onClickRegister: () -> Unit) {
+fun FooterTeacherScreen(modifier: Modifier, onClickRegister: () -> Unit) {
     Row(
         modifier,
         verticalAlignment = Alignment.CenterVertically,
@@ -209,7 +211,7 @@ fun FooterAssign(modifier: Modifier, onClickRegister: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-fun AssignPreview() {
+fun AssignTeacherScreenPreview() {
     AssignToTeacherScreen(
         navController = rememberNavController(),
         "",
